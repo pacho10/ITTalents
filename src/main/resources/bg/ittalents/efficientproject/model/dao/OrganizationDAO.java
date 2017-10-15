@@ -8,6 +8,7 @@ import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
@@ -15,6 +16,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
 
 public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationDAO {
 
+	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 	private static final String INSERT_INTO_ORGANIZATIONS = "INSERT into organizations values (null,?,?);";
 	private static final String SELECT_NAME_FROM_ID = "SELECT *  from organizations where id=?;";
 	
@@ -52,7 +54,7 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 
-			User admin = IUserDAO.getDAO("db").getUserById(rs.getInt(3));
+			User admin = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(3));
 			return new Organization(rs.getInt(1), rs.getString(2), admin);
 		} catch (SQLException e) {
 			e.printStackTrace();

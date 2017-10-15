@@ -8,6 +8,7 @@ import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
@@ -15,6 +16,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
 
 public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 
+	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 	private static final String INSERT_USER_INTO_DB = "INSERT into users values(null,?,?,?,?,?,?);";
 	private static final String SELECT_FROM_USERS_BY_EMAIL = "Select * from users where email=?;";
 	private static final String SELECT_FROM_USERS_BY_ID = "Select * from users where id=?;";
@@ -58,7 +60,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 			ps.setInt(1, userID);
 
 			ResultSet rs = ps.executeQuery();
-			Organization organization =IOrganizationDAO.getDAO("db").getOrgById(rs.getInt(7));
+			Organization organization =IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(7));
 
 			if (rs.next()) {
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
@@ -84,7 +86,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 			ps.setString(1, email);
 
 			ResultSet rs = ps.executeQuery();
-			Organization organization =IOrganizationDAO.getDAO("db").getOrgById(rs.getInt(7));
+			Organization organization =IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(7));
 
 			if (rs.next()) {
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),

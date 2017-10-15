@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
 
@@ -18,6 +19,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
 public class SignUpServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -51,7 +53,7 @@ public class SignUpServlet extends HttpServlet {
 		if (!fullName.contains(" ")) {
 			request.setAttribute("errorMessage", "Full Name without space separotor is not allowed");
 			dispatcher.forward(request, response);
-			return;
+			return;														//TODO navsqkyde?????????
 		}
 
 		if (!isMailValid(email)) {
@@ -69,8 +71,7 @@ public class SignUpServlet extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 
-		// TODO method in the dao:
-		if (IUserDAO.getDAO("db").isThereSuchAnUser(email)) {
+		if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAnUser(email)) {
 			request.setAttribute("errorMessage", "User with such email already exists, use another email !!!");
 			dispatcher.forward(request, response);
 		}
@@ -78,8 +79,7 @@ public class SignUpServlet extends HttpServlet {
 		User user = new User(fullName,email,password,true);
 
 		request.getSession().setAttribute("user", user);
-		response.sendRedirect("./moreDetails.jsp");//!!!!!!!!!!!!!!!!!!!!!!!!create moredetails JSP!!!!!--->avatar and organization
-
+		response.sendRedirect("./signupDetails.jsp");
 	}
 
 	public static boolean isPaswordStrong(String pass) {

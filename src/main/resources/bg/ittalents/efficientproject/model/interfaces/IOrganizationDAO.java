@@ -8,8 +8,8 @@ import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 
 public interface IOrganizationDAO {
-	public static OrganizationDAO getDAO(String storage) throws UnsupportedDataTypeException {
-		if (storage.equalsIgnoreCase("db")) {
+	public static OrganizationDAO getDAO(DAOStorageSourse storage) throws UnsupportedDataTypeException {
+		if (storage.equals(DAOStorageSourse.DATABASE)) {
 			return new OrganizationDAO();
 		}
 		throw new UnsupportedDataTypeException();

@@ -9,8 +9,8 @@ import bg.ittalents.efficientproject.model.pojo.User;
 
 public interface IUserDAO {
 	
-	public static UserDAO getDAO(String storage) throws UnsupportedDataTypeException {
-		if (storage.equalsIgnoreCase("db")) {
+	public static UserDAO getDAO(DAOStorageSourse storage) throws UnsupportedDataTypeException {
+		if (storage.equals(DAOStorageSourse.DATABASE)) {
 			return new UserDAO();
 		}
 		throw new UnsupportedDataTypeException();
