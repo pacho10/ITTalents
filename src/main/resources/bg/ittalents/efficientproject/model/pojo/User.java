@@ -5,9 +5,25 @@ public class User {
 	private String fullName;
 	private String email;
 	private String password;
-	private String avatar_path;
+	private String avatarPath;
 	private boolean admin;
 	private Organization organization;
+
+	public User(int id, String fullName, String email, String password, String avatarPath, boolean admin,
+			Organization organization) {
+		this(fullName, email, password, admin);
+		this.id = id;
+		this.avatarPath = avatarPath;
+		this.organization = organization;
+	}
+
+	public User(String fullName, String email, String password, boolean admin) {
+		super();
+		this.fullName = fullName;
+		this.email = email;
+		this.password = password;
+		this.admin = admin;
+	}
 
 	// execute query:
 	// alter table users change companies_id organization_id int(11);
@@ -43,12 +59,12 @@ public class User {
 		this.password = password;
 	}
 
-	public String getAvatar_path() {
-		return avatar_path;
+	public String getAvatarPath() {
+		return avatarPath;
 	}
 
-	public void setAvatar_path(String avatar_path) {
-		this.avatar_path = avatar_path;
+	public void setAvatarPath(String avatarPath) {
+		this.avatarPath = avatarPath;
 	}
 
 	public boolean isAdmin() {

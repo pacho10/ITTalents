@@ -28,5 +28,8 @@ hs_err_pid*
 # maven stuff to ignore
 # target/classes/META-INF/maven/ittalents/couchshare/pom.properties
 # target/classes/META-INF/MANIFEST.MF
-# src/ittalents/couchshare/model/DAO/DBConnection.java
+ 
 /target/
+
+
+src/main/resources/bg/ittalents/efficientproject/model/dao/DBConnection.java

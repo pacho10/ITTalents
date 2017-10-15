@@ -5,6 +5,12 @@ public class Organization {
 	private String name;
 	private User admin;
 
+	public Organization(int id, String name, User admin) {
+		this.id = id;
+		this.name = name;
+		this.admin = admin;
+	}
+
 	public String getName() {
 		return name;
 	}
