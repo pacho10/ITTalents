@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ page isELIgnored="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -53,7 +53,7 @@
 	<div id="loginbox" style="margin-top: 50px;"
 		class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 
-		<div class="panel panel-info">
+		<div class="panel panel-danger">
 			<div class="panel-heading">
 
 				<div class="panel-title">Free Sign Up To Efficient Project</div>

@@ -1,13 +1,24 @@
 package bg.ittalents.efficientproject.model.pojo;
 
-import java.sql.Timestamp;
+import java.sql.Date;
+import java.util.Calendar;
 
 public class Sprint {
 	private int id;
 	private String name;
-	private Project project;
-	private Timestamp startDate;
+	private Date startDate;
 	private int duration;
+
+	public Sprint(String name, int duration) {
+		this.name = name;
+		this.duration = duration;
+		this.startDate = new Date(Calendar.getInstance().getTime().getTime());// TODO ????
+	}
+
+	public Sprint(int id, String name, Date startDate, int duration) {
+		this(name, duration);
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;
@@ -25,19 +36,11 @@ public class Sprint {
 		this.name = name;
 	}
 
-	public Project getProject() {
-		return project;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
-	public Timestamp getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Timestamp startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 

@@ -1,4 +1,4 @@
-package bg.ittalents.efficientproject.controller.servlets;
+package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -36,25 +36,23 @@ public class SignUpServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String fullName = request.getParameter("full-name");
+		String firstName = request.getParameter("first-name");
+		String lastName = request.getParameter("first-name");
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String reppassword = request.getParameter("repPassword");
 
-		response.getWriter().println(fullName + ":" + email + ":" + password + ":" + reppassword);
+		response.getWriter().println(firstName+ lastName+ ":" + email + ":" + password + ":" + reppassword);//TODO tuj za ko e?
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
 
-		if (fullName.trim().length() < 5) {
-			request.setAttribute("errorMessage", "Full Name must me at least 5 symbols");
-			dispatcher.forward(request, response);
-		}
+	
 
-		if (!fullName.contains(" ")) {
-			request.setAttribute("errorMessage", "Full Name without space separotor is not allowed");
-			dispatcher.forward(request, response);
-			return;														//TODO navsqkyde?????????
-		}
+//		if (!fullName.contains(" ")) {
+//			request.setAttribute("errorMessage", "Full Name without space separotor is not allowed");
+//			dispatcher.forward(request, response);
+//			return;														//TODO navsqkyde?????????
+//		}
 
 		if (!isMailValid(email)) {
 			request.setAttribute("errorMessage", "Invalid e-mail! Try Again");
@@ -76,7 +74,7 @@ public class SignUpServlet extends HttpServlet {
 			dispatcher.forward(request, response);
 		}
 
-		User user = new User(fullName,email,password,true);
+		User user = new User(firstName,lastName,email,password,true);
 
 		request.getSession().setAttribute("user", user);
 		response.sendRedirect("./signupDetails.jsp");

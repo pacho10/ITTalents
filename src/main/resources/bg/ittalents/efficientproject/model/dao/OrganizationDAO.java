@@ -17,7 +17,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
 public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationDAO {
 
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
-	private static final String INSERT_INTO_ORGANIZATIONS = "INSERT into organizations values (null,?,?);";
+	private static final String INSERT_INTO_ORGANIZATIONS = "INSERT into organizations values (null,?);";
 	private static final String SELECT_NAME_FROM_ID = "SELECT *  from organizations where id=?;";
 	
 	@Override
@@ -31,7 +31,6 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 					PreparedStatement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, organization.getName());
-			ps.setInt(2, organization.getAdmin().getId());
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			rs.next();
@@ -54,8 +53,7 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 			ResultSet rs = ps.executeQuery();
 			rs.next();
 
-			User admin = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(3));
-			return new Organization(rs.getInt(1), rs.getString(2), admin);
+			return new Organization(rs.getInt(1), rs.getString(2));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DBException("No  organization for this id !Try again later!");

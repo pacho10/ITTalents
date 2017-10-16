@@ -2,31 +2,33 @@ package bg.ittalents.efficientproject.model.pojo;
 
 public class User {
 	private int id;
-	private String fullName;
+	private String firstName;
+	private String lastName;
 	private String email;
 	private String password;
 	private String avatarPath;
 	private boolean admin;
 	private Organization organization;
+	private boolean isEmployed;
 
-	public User(int id, String fullName, String email, String password, String avatarPath, boolean admin,
-			Organization organization) {
-		this(fullName, email, password, admin);
+	public User(int id, String firstName, String lastName, String email, String password, String avatarPath, boolean admin,
+			Organization organization,boolean isEmployed) {
+		this(firstName,lastName, email, password, admin);
 		this.id = id;
 		this.avatarPath = avatarPath;
 		this.organization = organization;
+		this.isEmployed=isEmployed;
 	}
 
-	public User(String fullName, String email, String password, boolean admin) {
+	public User(String firstName, String lastName, String email, String password, boolean admin) {
 		super();
-		this.fullName = fullName;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.admin = admin;
 	}
 
-	// execute query:
-	// alter table users change companies_id organization_id int(11);
 	public int getId() {
 		return id;
 	}
@@ -35,13 +37,6 @@ public class User {
 		this.id = id;
 	}
 
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
 
 	public String getEmail() {
 		return email;
@@ -81,6 +76,30 @@ public class User {
 
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public boolean isEmployed() {
+		return isEmployed;
+	}
+
+	public void setEmployed(boolean isEmployed) {
+		this.isEmployed = isEmployed;
 	}
 
 }

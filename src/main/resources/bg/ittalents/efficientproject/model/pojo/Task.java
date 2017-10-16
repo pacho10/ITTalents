@@ -2,21 +2,47 @@ package bg.ittalents.efficientproject.model.pojo;
 
 import java.sql.Timestamp;
 
-public class Issue {
+public class Task {
+
 	private int id;
+	private String type;// types:bug,task,...
 	private String summary;
 	private String descripion;
 	private float estimate;// estimate time in days
 	private Timestamp creationDate;
 	private Timestamp addetToSprintDate;
-	private Sprint sprint;
-	private Project project;
-	private User assignee;
-	private User reporter;
-	private String type;// types:
-	private String status;// statuses:started,todo,inprogress,finished,stopped
-	private int epicId; // ???
 	private Timestamp assignedDate;
+	private Timestamp finishedDate;
+	private Timestamp stoppedDate;
+	// statuses:open,todo,inprogress,resolved,closed //TODO enum? and how to handle it in db and here
+	private Sprint sprint;
+	private User reporter;
+	private User assignee;
+	private Epic epic;
+
+	public Task(String type, String summary, String descripion, float estimate, User reporter, Epic epic) {
+		this.type = type;
+		this.summary = summary;
+		this.descripion = descripion;
+		this.estimate = estimate;
+		this.reporter = reporter;
+		this.epic = epic;
+		this.creationDate = new Timestamp(System.currentTimeMillis());//TODO tuj tyj li e????
+	}
+
+	public Task(int id, String type, String summary, String descripion, float estimate, Timestamp creationDate,
+			Timestamp addetToSprintDate, Timestamp assignedDate, Timestamp finishedDate, Timestamp stoppedDate
+			, Sprint sprint, User reporter, User assignee, Epic epic) {
+		this(type, summary, descripion, estimate, reporter, epic);
+		this.id = id;
+		this.creationDate = creationDate;
+		this.addetToSprintDate = addetToSprintDate;
+		this.assignedDate = assignedDate;
+		this.finishedDate = finishedDate;
+		this.stoppedDate = stoppedDate;
+		this.sprint = sprint;
+		this.assignee = assignee;
+	}
 
 	public String getSummary() {
 		return summary;
@@ -66,14 +92,6 @@ public class Issue {
 		this.sprint = sprint;
 	}
 
-	public Project getProject() {
-		return project;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
 	public User getAssignee() {
 		return assignee;
 	}
@@ -98,21 +116,6 @@ public class Issue {
 		this.type = type;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public int getEpicId() {
-		return epicId;
-	}
-
-	public void setEpicId(int epicId) {
-		this.epicId = epicId;
-	}
 
 	public Timestamp getAssignedDate() {
 		return assignedDate;
@@ -130,14 +133,28 @@ public class Issue {
 		this.finishedDate = finishedDate;
 	}
 
-	private Timestamp finishedDate;
-
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public Timestamp getStoppedDate() {
+		return stoppedDate;
+	}
+
+	public void setStoppedDate(Timestamp stoppedDate) {
+		this.stoppedDate = stoppedDate;
+	}
+
+	public Epic getEpic() {
+		return epic;
+	}
+
+	public void setEpic(Epic epic) {
+		this.epic = epic;
 	}
 
 }

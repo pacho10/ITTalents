@@ -1,4 +1,4 @@
-package bg.ittalents.efficientproject.controller.servlets;
+package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

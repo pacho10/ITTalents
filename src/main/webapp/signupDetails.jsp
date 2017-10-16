@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>More Details</title>
+<title>Efficient Project</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <link rel="stylesheet" type="text/css"
@@ -67,7 +67,7 @@
 					</c:if>
 
 					<div class="form-group">
-						<label for="email" class="col-md-3 control-label"> Upload
+						<label for="avatar" class="col-md-3 control-label"> Upload
 							your profile picture</label>
 						<div class="col-md-9">
 							<input type="file" class="form-control" name="avatar">

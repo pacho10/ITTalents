@@ -17,7 +17,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
 public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
-	private static final String INSERT_USER_INTO_DB = "INSERT into users values(null,?,?,?,?,?,?);";
+	private static final String INSERT_USER_INTO_DB = "INSERT into users values(null,?,?,?,?,null,?,?,?);";
 	private static final String SELECT_FROM_USERS_BY_EMAIL = "Select * from users where email=?;";
 	private static final String SELECT_FROM_USERS_BY_ID = "Select * from users where id=?;";
 	
@@ -29,12 +29,13 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 			try {
 				PreparedStatement ps = getCon().prepareStatement(INSERT_USER_INTO_DB,
 						PreparedStatement.RETURN_GENERATED_KEYS);
-				ps.setString(1, user.getFullName());
-				ps.setString(2, user.getEmail());
-				ps.setString(3, user.getPassword());
-				ps.setString(4, user.getAvatarPath());
+				ps.setString(1, user.getFirstName());
+				ps.setString(2, user.getLastName());
+				ps.setString(3, user.getEmail());
+				ps.setString(4, user.getPassword());
 				ps.setBoolean(5, user.isAdmin());
 				ps.setInt(6, user.getOrganization().getId());
+				ps.setBoolean(7, user.isEmployed());
 
 				ps.executeUpdate();
 				ResultSet rs = ps.getGeneratedKeys();
@@ -47,7 +48,8 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 		}
 	
 	
-	public int updateUser(User user) {
+	public int updateUser(int id) {
+		return 0;
 		
 	}
 	
@@ -60,11 +62,11 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 			ps.setInt(1, userID);
 
 			ResultSet rs = ps.executeQuery();
-			Organization organization =IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(7));
+			Organization organization =IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(8));
 
 			if (rs.next()) {
-				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getBoolean(6), organization);
+				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),rs.getString(6),
+						rs.getBoolean(7), organization,rs.getBoolean(9));
 
 			}
 			return null;//TODO throw exception!
@@ -86,11 +88,11 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 			ps.setString(1, email);
 
 			ResultSet rs = ps.executeQuery();
-			Organization organization =IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(7));
+			Organization organization =IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(8));
 
 			if (rs.next()) {
-				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getBoolean(6), organization);
+				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),rs.getString(6),
+						rs.getBoolean(7), organization,rs.getBoolean(9));
 
 			}
 			return null;//TODO throw exception!
