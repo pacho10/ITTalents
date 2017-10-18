@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Task {
 
 	private int id;
-	private String type;// types:bug,task,...
+	private Type type;// types:bug,task,...
 	private String summary;
 	private String descripion;
 	private float estimate;// estimate time in days
