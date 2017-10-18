@@ -4,13 +4,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.activation.UnsupportedDataTypeException;
+
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
-import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
+import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
+import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
+import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Epic;
-import bg.ittalents.efficientproject.model.pojo.Organization;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task;
 import bg.ittalents.efficientproject.model.pojo.User;
@@ -46,7 +49,8 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		}
 	}
 
-	public Task getTaskById(int id) {
+	@Override
+	public Task getTaskById(int id) throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
 
 		try {
 
@@ -54,11 +58,10 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 			ps.setInt(1, id);
 
 			ResultSet rs = ps.executeQuery();
-//			Organization organization =IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(8));
-			Sprint sprint;
-			User reporter;
-			User assignee;
-			Epic epic;
+			Sprint sprint=ISprintDAO.getDAO(SOURCE_DATABASE).getSprintBId(rs.getInt(11));
+			User reporter=IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(12));
+			User assignee=IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(13));
+			Epic epic= IEpicDAO.getDAO(SOURCE_DATABASE).getEpicById(rs.getInt(14));
 			if (rs.next()) {
 				return new Task(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getFloat(5),rs.getTimestamp(6),
 						rs.getTimestamp(7), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10),sprint,reporter,assignee,epic);
@@ -69,33 +72,37 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 
-			throw new DBException("Cannot check for user right now!Try again later", e);
+			throw new DBException("Cannot check for task right now!Try again later", e);
 
 		}
 	}
-	
+	@Override
 	public boolean addTaskToSprint(Task task) {
 		return false;
 		
 	}
-
+	@Override
 	public boolean assignTask(int taskId, int userId) {
 		return false;
 		
 	}
-
+	@Override
 	public boolean finishTask(int taskId) {
 		return false;
 		
 	}
-	
+	@Override
 	public boolean closeTask(int taskId) {
 		return false;
 		
 	}
-
+	@Override
 	public boolean updateTask(int taskId) {
 		return false;
 		
 	}
+	
+	
+
+
 }
