@@ -20,7 +20,7 @@ public class Task {
 	private User assignee;
 	private Epic epic;
 
-	public Task(String type, String summary, String descripion, float estimate, User reporter, Epic epic) {
+	public Task(Type type, String summary, String descripion, float estimate, User reporter, Epic epic) {
 		this.type = type;
 		this.summary = summary;
 		this.descripion = descripion;
@@ -30,7 +30,7 @@ public class Task {
 		this.creationDate = new Timestamp(System.currentTimeMillis());//TODO tuj tyj li e????
 	}
 
-	public Task(int id, String type, String summary, String descripion, float estimate, Timestamp creationDate,
+	public Task(int id, Type type, String summary, String descripion, float estimate, Timestamp creationDate,
 			Timestamp addetToSprintDate, Timestamp assignedDate, Timestamp finishedDate, Timestamp stoppedDate
 			, Sprint sprint, User reporter, User assignee, Epic epic) {
 		this(type, summary, descripion, estimate, reporter, epic);
@@ -108,11 +108,11 @@ public class Task {
 		this.reporter = reporter;
 	}
 
-	public String getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Type type) {
 		this.type = type;
 	}
 

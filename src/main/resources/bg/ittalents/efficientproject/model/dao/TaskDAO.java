@@ -12,10 +12,12 @@ import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
+import bg.ittalents.efficientproject.model.interfaces.ITypeDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Epic;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task;
+import bg.ittalents.efficientproject.model.pojo.Type;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
@@ -31,7 +33,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		try {
 			PreparedStatement ps = getCon().prepareStatement(INSERT_USER_INTO_DB,
 					PreparedStatement.RETURN_GENERATED_KEYS);
-			ps.setString(1,task.getType() );
+			ps.setInt(1,task.getType().getId() );
 			ps.setString(2,task.getSummary());
 			ps.setString(3,task.getDescripion()  );
 			ps.setFloat(4, task.getEstimate());
@@ -58,12 +60,13 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 			ps.setInt(1, id);
 
 			ResultSet rs = ps.executeQuery();
+			Type type =ITypeDAO.getDAO(SOURCE_DATABASE).getTypeById(rs.getInt(2));
 			Sprint sprint=ISprintDAO.getDAO(SOURCE_DATABASE).getSprintBId(rs.getInt(11));
 			User reporter=IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(12));
 			User assignee=IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(13));
 			Epic epic= IEpicDAO.getDAO(SOURCE_DATABASE).getEpicById(rs.getInt(14));
 			if (rs.next()) {
-				return new Task(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getFloat(5),rs.getTimestamp(6),
+				return new Task(rs.getInt(1), type, rs.getString(3), rs.getString(4), rs.getFloat(5),rs.getTimestamp(6),
 						rs.getTimestamp(7), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10),sprint,reporter,assignee,epic);
 
 			}
