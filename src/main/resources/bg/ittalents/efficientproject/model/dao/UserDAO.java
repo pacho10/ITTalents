@@ -13,6 +13,7 @@ import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 import bg.ittalents.efficientproject.model.pojo.User;
+import bg.ittalents.efficientproject.util.Encrypter;
 
 public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 
@@ -32,7 +33,8 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 				ps.setString(1, user.getFirstName());
 				ps.setString(2, user.getLastName());
 				ps.setString(3, user.getEmail());
-				ps.setString(4, user.getPassword());
+				//encripting the password with sha 256:
+				ps.setString(4, Encrypter.encrypt(user.getPassword()));
 				ps.setBoolean(5, user.isAdmin());
 				ps.setInt(6, user.getOrganization().getId());
 				ps.setBoolean(7, user.isEmployed());
@@ -108,6 +110,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 	
 	
 	public boolean isThereSuchAnUser(String email) {
+		//ps.setString(2, Encrypter.encrypt(password));
 		// TODO Auto-generated method stub
 		return false;
 	}
