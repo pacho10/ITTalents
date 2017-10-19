@@ -18,12 +18,57 @@ import bg.ittalents.efficientproject.util.Encrypter;
 public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
-	private static final String INSERT_USER_INTO_DB = "INSERT into users values(null,?,?,?,?,null,?,?,?);";
+	private static final String INSERT_ADMIN_INTO_DB = "INSERT into users values(null,?,?,?,?,?,?,?,?);";
+	private static final String INSERT_USER_INTO_DB = "INSERT into users values(null,?,?,?,?,?,?,null,?);";
 	private static final String SELECT_FROM_USERS_BY_EMAIL = "Select * from users where email=?;";
 	private static final String SELECT_FROM_USERS_BY_ID = "Select * from users where id=?;";
 	
 	@Override
-	public int addUser(User user) throws EffPrjDAOException, DBException {
+	public int addUserAdmin(User user) throws EffPrjDAOException, DBException, UnsupportedDataTypeException, SQLException {
+		if (user == null) {
+			throw new EffPrjDAOException("There is no user to add!");
+			}
+			try {
+				getCon().setAutoCommit(false);
+				PreparedStatement ps = getCon().prepareStatement(INSERT_ADMIN_INTO_DB,
+						PreparedStatement.RETURN_GENERATED_KEYS);
+				
+				ps.setString(1, user.getFirstName());
+				ps.setString(2, user.getLastName());
+				ps.setString(3, user.getEmail());
+				//encripting the password with sha 256:
+				ps.setString(4, Encrypter.encrypt(user.getPassword()));
+				ps.setString(5, user.getAvatarPath());
+				ps.setBoolean(6, user.isAdmin());
+				
+				
+				// transaction!
+				int orgId=IOrganizationDAO.getDAO(DAOStorageSourse.DATABASE).addOrganization(user.getOrganization());
+				ps.setInt(7, orgId);
+				ps.setBoolean(8, user.isEmployed());
+
+				ps.executeUpdate();
+				getCon().commit();
+				
+				ResultSet rs = ps.getGeneratedKeys();
+				rs.next();
+				return rs.getInt(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+                try {
+                	System.err.print("Transaction is being rolled back");
+					getCon().rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				throw new DBException("The user cannot be added right now!Try again later!", e);
+			}finally {
+				getCon().setAutoCommit(true);
+		    }
+		}
+	
+	@Override
+	public int addUserWorker(User user) throws EffPrjDAOException, DBException, UnsupportedDataTypeException {
 		if (user == null) {
 			throw new EffPrjDAOException("There is no user to add!");
 			}
@@ -35,9 +80,10 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 				ps.setString(3, user.getEmail());
 				//encripting the password with sha 256:
 				ps.setString(4, Encrypter.encrypt(user.getPassword()));
-				ps.setBoolean(5, user.isAdmin());
-				ps.setInt(6, user.getOrganization().getId());
+				ps.setString(5, user.getAvatarPath());
+				ps.setBoolean(6, user.isAdmin());
 				ps.setBoolean(7, user.isEmployed());
+				
 
 				ps.executeUpdate();
 				ResultSet rs = ps.getGeneratedKeys();
@@ -47,8 +93,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO{
 				e.printStackTrace();
 				throw new DBException("The user cannot be added right now!Try again later!", e);
 			}
-		}
-	
+	}
 	
 	public int updateUser(int id) {
 		return 0;

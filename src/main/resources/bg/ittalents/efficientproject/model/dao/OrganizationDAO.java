@@ -61,4 +61,9 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 
 	}
 
+	public boolean isThereSuchOrganization(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

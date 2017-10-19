@@ -1,6 +1,8 @@
 package bg.ittalents.efficientproject.model.pojo;
 
 public class User {
+	private static final String DEFAUL_AVATAR_PATH = "./img/avatar-default.png";
+	
 	private int id;
 	private String firstName;
 	private String lastName;
@@ -9,14 +11,13 @@ public class User {
 	private String avatarPath;
 	private boolean admin;
 	private Organization organization;
-	private boolean isEmployed;
+	private boolean isEmployed=false;
 
 	public User(int id, String firstName, String lastName, String email, String password, String avatarPath, boolean admin,
 			Organization organization,boolean isEmployed) {
-		this(firstName,lastName, email, password, admin);
+		this(firstName,lastName, email, password, admin,organization);
 		this.id = id;
 		this.avatarPath = avatarPath;
-		this.organization = organization;
 		this.isEmployed=isEmployed;
 	}
 
@@ -27,8 +28,14 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.admin = admin;
+		this.avatarPath=DEFAUL_AVATAR_PATH;
 	}
-
+	
+	public User(String firstName, String lastName, String email, String password, boolean admin,Organization organization) {
+		this(firstName, lastName, email, password, admin);
+		this.organization=organization;
+	}
+	
 	public int getId() {
 		return id;
 	}

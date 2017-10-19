@@ -1,5 +1,7 @@
 package bg.ittalents.efficientproject.model.interfaces;
 
+import java.sql.SQLException;
+
 import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.dao.UserDAO;
@@ -20,5 +22,8 @@ public interface IUserDAO {
 
 	User getUserByEmail(String email) throws UnsupportedDataTypeException, EffPrjDAOException, DBException;
 
-	int addUser(User user) throws EffPrjDAOException, DBException;
+
+	int addUserAdmin(User user) throws EffPrjDAOException, DBException, UnsupportedDataTypeException, SQLException;
+
+	int addUserWorker(User user) throws EffPrjDAOException, DBException, UnsupportedDataTypeException;
 }

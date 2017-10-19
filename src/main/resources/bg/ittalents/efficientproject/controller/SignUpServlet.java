@@ -1,6 +1,7 @@
 package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
@@ -10,74 +11,98 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bg.ittalents.efficientproject.model.exception.DBException;
+import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
+import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
+import bg.ittalents.efficientproject.model.pojo.Organization;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 @WebServlet("/SignUp")
 
 public class SignUpServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		request.getRequestDispatcher("./signUp.jsp").forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String firstName = request.getParameter("first-name");
-		String lastName = request.getParameter("first-name");
+		String lastName = request.getParameter("last-name");
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String reppassword = request.getParameter("repPassword");
+		String organization = request.getParameter("organization").trim();
 
-		response.getWriter().println(firstName+ lastName+ ":" + email + ":" + password + ":" + reppassword);//TODO tuj za ko e?
+		// response.getWriter().println(firstName+" "+ lastName+ ":" + email + ":" +
+		// password + ":" + reppassword);//TODO tuj za ko e?
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
-
-	
-
-//		if (!fullName.contains(" ")) {
-//			request.setAttribute("errorMessage", "Full Name without space separotor is not allowed");
-//			dispatcher.forward(request, response);
-//			return;														//TODO navsqkyde?????????
-//		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("./signUp.jsp");
 
 		if (!isMailValid(email)) {
 			request.setAttribute("errorMessage", "Invalid e-mail! Try Again");
 			dispatcher.forward(request, response);
+			return;
 		}
 
 		if (!password.equals(reppassword)) {
-			request.setAttribute("errorMessage", "Passwords do no match please use the button!");
+			request.setAttribute("errorMessage", "Passwords do no match please make sure they do!");
 			dispatcher.forward(request, response);
+			return;
 		}
 
 		if (!isPaswordStrong(password)) {
 			request.setAttribute("errorMessage", "Password must contain 5 symbols and at least one number and leter");
 			dispatcher.forward(request, response);
+			return;
 		}
 
 		if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAnUser(email)) {
-			request.setAttribute("errorMessage", "User with such email already exists, use another email !!!");
+			request.setAttribute("errorMessage", "User with such email already exists, use another email !");
 			dispatcher.forward(request, response);
+			return;
 		}
 
-		User user = new User(firstName,lastName,email,password,true);
+		// TODO check if this organization exists
+		if (IOrganizationDAO.getDAO(SOURCE_DATABASE).isThereSuchOrganization(organization)) {
+			request.setAttribute("errorMessage", "This organization is already registered !");
+			dispatcher.forward(request, response);
+			return;
+		}
+
+		// a user can register an organization later in the profile page???
+		//check if the organization name is legid :trim
+		// adding the user to the database:
+		User user = null;
+		try {
+//			if (organization == "") {
+			boolean isAdmin=Boolean.parseBoolean( request.getParameter("isAdmin") );
+			System.out.println(isAdmin);
+			if (!isAdmin) {
+				user = new User(firstName, lastName, email, password, false);
+
+				IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserWorker(user);
+
+			} else {
+				user = new User(firstName, lastName, email, password, true, new Organization(organization));
+				IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserAdmin(user);
+			}
+		} catch (EffPrjDAOException | DBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		request.getSession().setAttribute("user", user);
-		response.sendRedirect("./signupDetails.jsp");
+		response.sendRedirect("./ProfileEdit");
 	}
 
 	public static boolean isPaswordStrong(String pass) {
