@@ -6,15 +6,25 @@ public class Project {
 	private int id;
 	private String name;
 	private Date deadline;
+	private Organization organization;
 
-	public Project(String name, Date deadline) {
+	public Project(String name, Date deadline, Organization organization) {
 		this.name = name;
 		this.deadline = deadline;
+		this.organization = organization;
 	}
 
-	public Project(int id, String name, Date deadline) {
-		this(name, deadline);
+	public Project(int id, String name, Date deadline, Organization organization) {
+		this(name, deadline, organization);
 		this.id = id;
+	}
+
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 	public String getName() {
