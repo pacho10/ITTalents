@@ -39,6 +39,8 @@ public class SignUpServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		String reppassword = request.getParameter("repPassword");
 		String organization = request.getParameter("organization").trim();
+		boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
+		System.out.println(isAdmin);
 
 		// response.getWriter().println(firstName+" "+ lastName+ ":" + email + ":" +
 		// password + ":" + reppassword);//TODO tuj za ko e?
@@ -57,33 +59,52 @@ public class SignUpServlet extends HttpServlet {
 			return;
 		}
 
+		
 		if (!isPaswordStrong(password)) {
 			request.setAttribute("errorMessage", "Password must contain 5 symbols and at least one number and leter");
 			dispatcher.forward(request, response);
 			return;
 		}
 
-		if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAnUser(email)) {
-			request.setAttribute("errorMessage", "User with such email already exists, use another email !");
+		try {
+			if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAnUser(email)) {
+				
+				request.setAttribute("errorMessage", "User with such email already exists, use another email !");
+				// TODO how to show the organization label?
+				// request.setAttribute("organization.style.display", "block");
+				dispatcher.forward(request, response);
+				return;
+			}
+		} catch (DBException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (EffPrjDAOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		try {
+			if (IOrganizationDAO.getDAO(SOURCE_DATABASE).isThereSuchOrganization(organization)) {
+				request.setAttribute("errorMessage", "This organization is already registered !");
+				dispatcher.forward(request, response);
+				return;
+			}
+		} catch (EffPrjDAOException e1) {
+			e1.getMessage();
+			e1.printStackTrace();
+		}
+
+		// TODO a user can register an organization later in the profile page???
+		if(isAdmin && organization.equals("")) {
+			request.setAttribute("errorMessage", "This organization name is empty !");
 			dispatcher.forward(request, response);
 			return;
 		}
 
-		// TODO check if this organization exists
-		if (IOrganizationDAO.getDAO(SOURCE_DATABASE).isThereSuchOrganization(organization)) {
-			request.setAttribute("errorMessage", "This organization is already registered !");
-			dispatcher.forward(request, response);
-			return;
-		}
-
-		// a user can register an organization later in the profile page???
-		//check if the organization name is legid :trim
 		// adding the user to the database:
 		User user = null;
 		try {
-//			if (organization == "") {
-			boolean isAdmin=Boolean.parseBoolean( request.getParameter("isAdmin") );
-			System.out.println(isAdmin);
+
 			if (!isAdmin) {
 				user = new User(firstName, lastName, email, password, false);
 

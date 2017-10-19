@@ -18,8 +18,9 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 	private static final String INSERT_INTO_ORGANIZATIONS = "INSERT into organizations values (null,?);";
-	private static final String SELECT_NAME_FROM_ID = "SELECT *  from organizations where id=?;";
-	
+	private static final String SELECT_ORGANIZATION_BY_ID = "SELECT *  from organizations where id=?;";
+	private static final String SELECT_ORGANIZATION_BY_NAME = "SELECT *  from organizations where name=?;";
+
 	@Override
 	public int addOrganization(Organization organization) throws EffPrjDAOException, DBException {
 
@@ -47,7 +48,7 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 			throw new EffPrjDAOException("There is no organization to get!");
 		}
 		try {
-			PreparedStatement ps = getCon().prepareStatement(SELECT_NAME_FROM_ID);
+			PreparedStatement ps = getCon().prepareStatement(SELECT_ORGANIZATION_BY_ID);
 
 			ps.setInt(1, orgId);
 			ResultSet rs = ps.executeQuery();
@@ -60,9 +61,26 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 		}
 
 	}
+	
+	@Override
+	public boolean isThereSuchOrganization(String name) throws EffPrjDAOException {
+		if (name == null) {
+			throw new EffPrjDAOException("There is no name input!");
+		}
+		PreparedStatement ps;
+		try {
+			ps = getCon().prepareStatement(SELECT_ORGANIZATION_BY_NAME);
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				return true;
+			}
 
-	public boolean isThereSuchOrganization(String name) {
-		// TODO Auto-generated method stub
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return false;
 	}
 
