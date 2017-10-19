@@ -1,5 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ page isELIgnored="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -30,7 +32,7 @@
 		<h1>Efficient Project</h1>
 		<h2>Get productive and efficient in a few simple steps!</h2>
 		<img src="img/agilescrum.png" class="img-rounded" width="620"
-			height="300">
+			height=auto>
 
 	</div>
 
