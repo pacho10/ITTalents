@@ -127,19 +127,20 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 	@Override
 	public User getUserByEmail(String email) throws UnsupportedDataTypeException, EffPrjDAOException, DBException {
-
+		System.out.println("dao param: " + email);
 		try {
-
 			PreparedStatement ps = getCon().prepareStatement(SELECT_FROM_USERS_BY_EMAIL);
 			ps.setString(1, email);
 
 			ResultSet rs = ps.executeQuery();
-			Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(8));
 
 			if (rs.next()) {
+				Organization organization = null;
+				if (rs.getBoolean(7)) {
+					organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(8));
+				}
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
-
 			}
 			return null;// TODO throw exception!
 

@@ -109,4 +109,11 @@ public class User {
 		this.isEmployed = isEmployed;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", password=" + password + ", avatarPath=" + avatarPath + ", admin=" + admin + ", organization="
+				+ organization + ", isEmployed=" + isEmployed + "]";
+	}
+
 }
