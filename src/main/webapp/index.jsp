@@ -1,5 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ page isELIgnored="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -30,14 +32,14 @@
 		<h1>Efficient Project</h1>
 		<h2>Get productive and efficient in a few simple steps!</h2>
 		<img src="img/agilescrum.png" class="img-rounded" width="620"
-			height="300">
+			height=auto>
 
 	</div>
 
 	<div id="loginbox" style="margin-top: 50px;"
 		class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 
-		<div class="panel panel-info">
+		<div class="panel panel-default">
 			<div class="panel-heading">
 
 				<div class="panel-title">Login in Efficient Project</div>
