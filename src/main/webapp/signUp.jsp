@@ -33,10 +33,14 @@
 
 	function myFunction2() {
 		var x = document.getElementById("organization");
+		 var y = document.getElementById("isAdmin"); 
+		
 		if (x.style.display === "block") {
 			x.style.display = "none";
+		 	y.value="false" 
 		} else {
 			x.style.display = "block";
+		 	y.value="true"
 		}
 	}
 </script>
@@ -123,8 +127,8 @@
 					</div>
 
 					<div class="checkbox">
-						<label><input  type="checkbox"  name="isAdmin" onclick="myFunction2()" 
-							value="false">Register organization</label>
+						<label><input  type="checkbox"  id="isAdmin" value ="false" name="isAdmin" onclick="myFunction2()" 
+							>Register organization</label>
 					</div>
 
 					<div class="form-group" style="display: none;" id="organization">
