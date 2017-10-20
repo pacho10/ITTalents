@@ -61,7 +61,6 @@ public class CreateProjectServlet extends HttpServlet {
 			Project projectToAdd = new Project(name, date, org);
 			
 			int id = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).addProject(projectToAdd);
-			System.out.println("poject is: " + id);
 		} catch (ParseException | EffPrjDAOException | DBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

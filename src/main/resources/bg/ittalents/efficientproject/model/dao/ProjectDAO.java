@@ -3,6 +3,8 @@ package bg.ittalents.efficientproject.model.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.activation.UnsupportedDataTypeException;
 
@@ -17,7 +19,8 @@ import bg.ittalents.efficientproject.model.pojo.Project;
 public class ProjectDAO  extends AbstractDBConnDAO implements IProjectDAO{
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 	private static final String INSERT_PROJECT_INTO_DB = "INSERT into projects values(null,?,?,?);";
-	private static final String GET_USER_BY_ID = "SELECT * FROM projects WHERE id =?;";
+	private static final String GET_PROJECT_BY_ID = "SELECT * FROM projects WHERE id =?;";
+	private static final String GET_ALLPROJECTS_FROM_0RGANIZATION = "SELECT * from projects WHERE id=?";
 	
 	public int addProject(Project project) throws EffPrjDAOException, DBException {
 		if (project == null) {
@@ -25,7 +28,7 @@ public class ProjectDAO  extends AbstractDBConnDAO implements IProjectDAO{
 		}
 		
 		try {
-			PreparedStatement ps = super.getCon().prepareStatement(INSERT_PROJECT_INTO_DB, 
+			PreparedStatement ps = getCon().prepareStatement(INSERT_PROJECT_INTO_DB, 
 					PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, project.getName());
@@ -46,13 +49,13 @@ public class ProjectDAO  extends AbstractDBConnDAO implements IProjectDAO{
 	
 	public Project getProjectByID(int id) throws DBException, EffPrjDAOException, UnsupportedDataTypeException {
 		try {
-			PreparedStatement ps = getCon().prepareStatement(GET_USER_BY_ID);
+			PreparedStatement ps = getCon().prepareStatement(GET_PROJECT_BY_ID);
 			ps.setInt(1, id);
 			
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				Organization org = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(3));
-				return new Project(rs.getString(1), rs.getDate(2), org);
+				Organization org = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(4));
+				return new Project(rs.getInt(1), rs.getString(2), rs.getDate(3), org);
 			}else {
 				throw new EffPrjDAOException("this project not exist!");
 			}
@@ -62,5 +65,26 @@ public class ProjectDAO  extends AbstractDBConnDAO implements IProjectDAO{
 			
 			throw new DBException("Cannot check for user right now!Try again later", e);
 		} 		
+	}
+	
+	public List<Project> getAllProjectsFromOrganization(int id) throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+		List<Project> projects = new ArrayList<>();
+		
+		try {
+			PreparedStatement ps = getCon().prepareStatement(GET_ALLPROJECTS_FROM_0RGANIZATION);
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(id);
+			
+			while (rs.next()) {
+				projects.add(new Project(rs.getInt(1), rs.getString(2), rs.getDate(3), organization));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DBException("projects can not be selected!");
+		}		
+		return projects;
 	}
 }
