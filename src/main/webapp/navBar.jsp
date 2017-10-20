@@ -18,6 +18,7 @@
 	href="bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css"
 	href="font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="customCSS/styles.css">
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
@@ -39,7 +40,7 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">Brand</a>
+			<a class="navbar-brand" >Efficient Project</a>
 		</div>
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
@@ -50,7 +51,7 @@
 				<li><a href="#">Link</a></li>
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
-					aria-expanded="false">Dropdown <span class="caret"></span></a>
+					aria-expanded="false">Project <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="#">Action</a></li>
 						<li><a href="#">Another action</a></li>
@@ -79,6 +80,9 @@
 						<li role="separator" class="divider"></li>
 						<li><a href="#">Separated link</a></li>
 					</ul></li>
+				<li><a href="./Logout">Log out</a></li>
+				<li><img  id="avatar" src=${ sessionScope.user.avatarPath }>
+				</li>
 			</ul>
 		</div>
 		<!-- /.navbar-collapse -->

@@ -35,18 +35,22 @@
 	</div>
 	<div class="span4">
 		<blockquote>
-			<p>${ sessionScope.user.firstName }${ sessionScope.user.lastName }</p>
-			<!-- small><cite title="Source Title">Gotham, United Kingdom  <i class="icon-map-marker"></i></cite></small> -->
+			<c:out
+				value="${sessionScope.user.firstName }  ${ sessionScope.user.lastName }"></c:out>
 		</blockquote>
 		<p>
 
 			<i class="fa fa-envelope"></i> ${ sessionScope.user.email } <br>
-			<!-- <i class="icon-globe"></i> www.bootsnipp.com <br> -->
-			<!-- <i class="icon-gift"></i> January 30, 1974 -->
+			<c:if test="${ sessionScope.user.admin == true }">
+			<c:out
+				value="admin at: ${ sessionScope.user.organization.name }"></c:out>
+			</c:if>
+
 		</p>
 	</div>
 
-	<a href="navBar.jsp"> <input type="button" value="Edit profile" />
+	<a href="./ProfileEdit"> <input type="button" value="Edit profile" />
+	
 	</a>
 </body>
 </html>
