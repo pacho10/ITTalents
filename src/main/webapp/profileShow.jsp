@@ -28,9 +28,10 @@
 	<c:if test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
+	
 	<jsp:include page="navBar.jsp"></jsp:include>
 	<div class="span2">
-		<img src=${ sessionScope.user.avatarPath } alt="" class="img-rounded"
+		<img src="${ sessionScope.user.avatarPath }" alt="" class="img-rounded"
 			width="200" height=auto>
 	</div>
 	<div class="span4">

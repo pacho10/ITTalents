@@ -27,12 +27,23 @@ public class SignUpServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+	
+		//dissable cache:
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+		response.setHeader("Expires", "0"); // Proxies.
 
 		request.getRequestDispatcher("./signUp.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		//dissable cache:
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+		response.setHeader("Expires", "0"); // Proxies.
+		
 		String firstName = request.getParameter("first-name");
 		String lastName = request.getParameter("last-name");
 		String email = request.getParameter("email");
@@ -61,7 +72,7 @@ public class SignUpServlet extends HttpServlet {
 
 		
 		if (!isPaswordStrong(password)) {
-			request.setAttribute("errorMessage", "Password must contain 5 symbols and at least one number and leter");
+			request.setAttribute("errorMessage", "Password must contain 5 symbols and at least one number and letter");
 			dispatcher.forward(request, response);
 			return;
 		}

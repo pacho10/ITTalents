@@ -22,6 +22,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	private static final String INSERT_USER_INTO_DB = "INSERT into users values(null,?,?,?,?,?,?,null,?);";
 	private static final String SELECT_FROM_USERS_BY_EMAIL = "Select * from users where email=?;";
 	private static final String SELECT_FROM_USERS_BY_ID = "Select * from users where id=?;";
+	private static final String UPDATE_USER_DETAILS = "update users set first_name =? , last_name=? ,email=? , password=? , avatar_path=? where id=?;";
 
 	@Override
 	public int addUserAdmin(User user)
@@ -174,6 +175,28 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			throw new DBException("Cannot check for user right now!Try again later", e);
 
 		}
+
+	}
+
+	public boolean updateUsersDetails(User user) throws DBException {
+		PreparedStatement ps;
+		try {
+			ps = getCon().prepareStatement(UPDATE_USER_DETAILS);
+			ps.setString(1, user.getFirstName());
+			ps.setString(2, user.getLastName());
+			ps.setString(3, user.getEmail());
+			ps.setString(4, user.getPassword());
+			ps.setString(5, user.getAvatarPath());
+			
+			ps.setInt(6, user.getId());
+
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DBException("Cannot update users details right now!Try again later", e);
+		}
+		
 
 	}
 

@@ -50,15 +50,13 @@
 
 
 
-<body>
-
-	<div class="text-center">
-		<h1>Efficient Project</h1>
-		<h2>Get productive and efficient in a few simple steps!</h2>
-
-		<img src="./img/agilescrum.png" class="img-rounded" width="620"
-			height=auto>
-
+<body style="background-color: #F0F8FF">
+	<div class="text-info">
+		<div class="text-center">
+			<h1>Efficient Project</h1>
+			<h2>Get productive and efficient in a few simple steps!</h2>
+			<img src="img/pm.png" class="img-rounded" width="620" height=auto>
+		</div>
 	</div>
 
 	<div id="loginbox" style="margin-top: 50px;"

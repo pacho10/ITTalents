@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page isELIgnored="false"%>
+<%@ page errorPage="error.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -55,8 +56,8 @@
 			<div class="panel-body">
 
 
-				<form method="post" action="./ProfileEdit" id="login-form"
-					class="form-horizontal">
+				<form method="post" action="./ProfileEdit" id="login-form" enctype="multipart/form-data"
+					class="form-horizontal" >
 
 					<div id="signupalert" style="display: none"
 						class="alert alert-danger">
@@ -69,7 +70,7 @@
 					</div>
 
 					<div class="form-group">
-						<label for="avatar" class="col-md-3 control-label"> upload
+						<label for="avatar" class="col-md-3 control-label"> Upload
 							new avatar</label>
 						<div class="col-md-9">
 							<input type="file" class="form-control" name="avatar">
@@ -81,8 +82,8 @@
 						<label for="first-name" class="col-md-3 control-label">First
 							Name</label>
 						<div class="col-md-9">
-							<input type="text" class="form-control" name="first-name"
-								placeholder="First Name" required>
+							<input type="text" class="form-control" name="first-name" value=${ sessionScope.user.firstName }
+								placeholder="First Name" >
 						</div>
 					</div>
 
@@ -91,8 +92,8 @@
 						<label for="last-name" class="col-md-3 control-label">Last
 							Name</label>
 						<div class="col-md-9">
-							<input type="last-name" class="form-control" name="last-name"
-								placeholder="Last name" required>
+							<input type="last-name" class="form-control" name="last-name" value=${ sessionScope.user.lastName }
+								placeholder="Last name" >
 						</div>
 					</div>
 
@@ -100,8 +101,8 @@
 					<div class="form-group">
 						<label for="email" class="col-md-3 control-label">Email</label>
 						<div class="col-md-9">
-							<input type="email" class="form-control" name="email"
-								placeholder="Email Address" required>
+							<input type="email" class="form-control" name="email" value=${ sessionScope.user.email}
+								placeholder="Email Address" >
 						</div>
 					</div>
 
@@ -110,7 +111,7 @@
 							password</label>
 						<div class="col-md-9">
 							<input type="password" id="pass1" class="form-control"
-								name="password" placeholder="Password" required>
+								name="old-password" placeholder="Old Password" >
 						</div>
 					</div>
 
@@ -120,7 +121,7 @@
 							password</label>
 						<div class="col-md-9">
 							<input type="password" id="pass1" class="form-control"
-								name="password" placeholder="Password" required>
+								name="new-password" placeholder="New Password" >
 						</div>
 					</div>
 
@@ -129,20 +130,11 @@
 							Repeat new password</label>
 						<div class="col-md-9">
 							<input type="password" id="pass2" class="form-control"
-								name="repPassword" placeholder=" Repeat Password" required>
+								name="rep-new-password" placeholder=" Repeat New Password" >
 						</div>
 					</div>
 
 
-
-					<div class="form-group" style="display: none;" id="organization">
-						<label for="organization" class="col-md-3 control-label">
-							Organization name</label>
-						<div class="col-md-9">
-							<input type="text" id="organization" class="form-control"
-								name="organization" placeholder=" Name">
-						</div>
-					</div>
 
 
 					<c:if test="${not empty errorMessage }">
@@ -160,11 +152,11 @@
 						<div class="col-md-offset-3 col-md-9">
 							<button onclick="myFunction()" id="btn-signup" type="submit"
 								class="btn btn-success">Submit</button>
-
-
 						</div>
 					</div>
+					
 				</form>
+				
 			</div>
 		</div>
 	</div>
