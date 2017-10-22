@@ -26,13 +26,11 @@
 		<div class="panel panel-info">
 			<div class="panel-heading">
 
-				<div class="panel-title">Create New Project</div>
+				<div class="panel-title">Create New Epic</div>
 
 			</div>
-			<div class="panel-body">
-
-				
-				<form method="post" action="./CreateProject" id="create-project"
+			<div class="panel-body">				
+				<form method="post" action="./createepic" id="create-epic"
 					class="form-horizontal" role="form">
 
 					<!--<div id="signupalert" style="display: none"
@@ -51,13 +49,31 @@
 
 
 					<div class="form-group">
-						<label for="password" class="col-md-3 control-label">Deadline</label>
+						<label for="estimate" class="col-md-3 control-label">Estimate</label>
 						<div class="col-md-9">
-							<input type="date" id="deadline" class="form-control"
-								name="deadline" placeholder="Deadline" required>
+							<input type="text" id="estimate" class="form-control"
+								name="estimate" placeholder="Estimate" required>
 						</div>
 					</div>
-
+					
+					<div class="form-group">
+						<label for="description" class="col-md-3 control-label">Description</label>
+						<div class="col-md-9">
+							<input type="text" id="description" class="form-control"
+								name="description" placeholder="Description" required>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="all-projects" class="col-md-3 control-label">All projects</label>
+						<div class="col-md-9">
+							<select class="col-md-9" id="all-projects" name="projects">
+								<c:forEach var="p" items="${projects}">
+									<option value="${p.id}">${p.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
 					<c:if test="${not empty errorMessage }">
 						<div class="form-group">
 							<div class="col-md-offset-3 col-md-9">
@@ -71,7 +87,7 @@
 					<div class="form-group">
 						<!-- Button -->
 						<div class="col-md-offset-3 col-md-9">
-							<button id="btn-create-project" type="submit" class="btn btn-info">
+							<button id="btn-create-epic" type="submit" class="btn btn-info">
 								<i class="icon-hand-right"></i> Create
 							</button>
 						</div>

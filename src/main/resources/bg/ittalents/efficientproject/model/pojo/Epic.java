@@ -4,7 +4,7 @@ public class Epic {
 	private int id;
 	private String name;
 	private int estimate;// estimate time in days
-	private String descripion;
+	private String description;
 	private Project project;
 	
 	
@@ -13,12 +13,12 @@ public class Epic {
 		super();
 		this.name = name;
 		this.estimate = estimate;
-		this.descripion = descripion;
+		this.description = descripion;
 		this.project = project;
 	}
 
-	public Epic(int id, String name, int estimate, String descripion, Project project) {
-		this(name, estimate, descripion, project);
+	public Epic(int id, String name, int estimate, String description, Project project) {
+		this(name, estimate, description, project);
 		this.id = id;
 	}
 
@@ -46,12 +46,12 @@ public class Epic {
 		this.estimate = estimate;
 	}
 
-	public String getDescripion() {
-		return descripion;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescripion(String descripion) {
-		this.descripion = descripion;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Project getProject() {
