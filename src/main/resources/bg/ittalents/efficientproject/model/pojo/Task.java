@@ -7,7 +7,7 @@ public class Task {
 	private int id;
 	private Type type;// types:bug,task,...
 	private String summary;
-	private String descripion;
+	private String description;
 	private float estimate;// estimate time in days
 	private Timestamp creationDate;
 	private Timestamp addetToSprintDate;
@@ -20,20 +20,20 @@ public class Task {
 	private User assignee;
 	private Epic epic;
 
-	public Task(Type type, String summary, String descripion, float estimate, User reporter, Epic epic) {
+	public Task(Type type, String summary, String description, float estimate, User reporter, Epic epic) {
 		this.type = type;
 		this.summary = summary;
-		this.descripion = descripion;
+		this.description = description;
 		this.estimate = estimate;
 		this.reporter = reporter;
 		this.epic = epic;
 		this.creationDate = new Timestamp(System.currentTimeMillis());//TODO tuj tyj li e????
 	}
 
-	public Task(int id, Type type, String summary, String descripion, float estimate, Timestamp creationDate,
+	public Task(int id, Type type, String summary, String description, float estimate, Timestamp creationDate,
 			Timestamp addetToSprintDate, Timestamp assignedDate, Timestamp finishedDate, Timestamp stoppedDate
 			, Sprint sprint, User reporter, User assignee, Epic epic) {
-		this(type, summary, descripion, estimate, reporter, epic);
+		this(type, summary, description, estimate, reporter, epic);
 		this.id = id;
 		this.creationDate = creationDate;
 		this.addetToSprintDate = addetToSprintDate;
@@ -52,12 +52,12 @@ public class Task {
 		this.summary = summary;
 	}
 
-	public String getDescripion() {
-		return descripion;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescripion(String descripion) {
-		this.descripion = descripion;
+	public void setDescription(String descripion) {
+		this.description = descripion;
 	}
 
 	public float getEstimate() {
