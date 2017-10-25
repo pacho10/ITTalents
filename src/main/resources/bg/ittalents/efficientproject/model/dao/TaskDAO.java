@@ -35,7 +35,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 					PreparedStatement.RETURN_GENERATED_KEYS);
 			ps.setInt(1,task.getType().getId() );
 			ps.setString(2,task.getSummary());
-			ps.setString(3,task.getDescripion()  );
+			ps.setString(3,task.getDescription()  );
 			ps.setFloat(4, task.getEstimate());
 			ps.setTimestamp(5, task.getCreationDate());
 			ps.setInt(6, task.getReporter().getId());
