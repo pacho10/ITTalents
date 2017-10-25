@@ -26,15 +26,14 @@ import bg.ittalents.efficientproject.util.Encrypter;
 
 public class ProfileEditServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public static final String IMAGES_PATH = "F:"  + File.separator + "Java" + File.separator + "final-project-img";
 
-	// abslolute path directory for avatar images :
-	public static final String AVATAR_URL = "/img/";
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// dissable cache:
+		// disable cache:
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
 		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
 		response.setHeader("Expires", "0"); // Proxies.
@@ -45,8 +44,12 @@ public class ProfileEditServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
+		if( request.getSession(false)==null) {
+			response.sendRedirect("/LogIn");
+		}
 		User user = (User) request.getSession().getAttribute("user");
+		int userId=user.getId();
 
 		String firstName = request.getParameter("first-name");
 		String lastName = request.getParameter("last-name");
@@ -56,16 +59,14 @@ public class ProfileEditServlet extends HttpServlet {
 		String reNewPass = request.getParameter("rep-new-password");
 		Part avatarPart = request.getPart("avatar");
 
-		String avatarPath = AVATAR_URL + user.getId() + ".jpg";
+
 		InputStream fis = avatarPart.getInputStream();
+		//F:\Java\final-project-img
+		String avatarPath=IMAGES_PATH + File.separator +userId+".jpg";
 		File myFile = new File(avatarPath);
 		if (!myFile.exists()) {
 			myFile.createNewFile();
-			System.out.println("done1");
-			System.out.println(myFile.getPath());
 		}
-		System.out.println("done2");
-		System.out.println(myFile.getPath());
 		FileOutputStream fos = new FileOutputStream(myFile);
 		int b = fis.read();
 		while (b != -1) {

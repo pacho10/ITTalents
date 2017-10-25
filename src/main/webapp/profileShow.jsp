@@ -9,7 +9,6 @@
 <title>Efficient Project</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- TODO  ????disable the browser cache????? -->
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
@@ -31,9 +30,13 @@
 	
 	<jsp:include page="navBar.jsp"></jsp:include>
 	<div class="span2">
-		<img src="${ sessionScope.user.avatarPath }" alt="" class="img-rounded"
-			width="200" height=auto>
-	</div>
+	
+	<%-- <img src="${ sessionScope.user.avatarPath }" alt="" class="img-rounded"
+			width="200" height=auto>	 --%>
+	 <img src="/ImgOutputServlet" alt="" class="img-rounded"
+			width="200" height=auto>	 
+
+	 </div>
 	<div class="span4">
 		<blockquote>
 			<c:out
