@@ -25,13 +25,11 @@
 
 		<div class="panel panel-info">
 			<div class="panel-heading">
-
-				<div class="panel-title">Create New Project</div>
-
+				<div class="panel-title">Create New Sprint</div>
 			</div>
-			<div class="panel-body">
-				<form method="post" action="./CreateProject" id="create-project"
-					class="form-horizontal" role="form">
+			<div class="panel-body">	
+				<form method="post" action="./createsprint" id="create-sprint"
+					class="form-horizontal">
 
 					<!--<div id="signupalert" style="display: none"
 						class="alert alert-danger">
@@ -41,15 +39,15 @@
 					<div class="form-group">
 						<label for="name" class="col-md-3 control-label">Name</label>
 						<div class="col-md-9">
-							<input type="text" class="form-control" name="name"
-								placeholder="Name" required>
+							<input type="text" class="form-control" name="name" 
+							placeholder="Name" required>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="deadline" class="col-md-3 control-label">Deadline</label>
+						<label for="duration" class="col-md-3 control-label">Duration</label>
 						<div class="col-md-9">
-							<input type="date" id="deadline" class="form-control"
-								name="deadline" placeholder="Deadline" required>
+							<input type="text" id="duration" class="form-control"
+								name="duration" placeholder="Duration" required>
 						</div>
 					</div>
 					<c:if test="${not empty errorMessage }">

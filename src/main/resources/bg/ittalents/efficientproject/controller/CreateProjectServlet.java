@@ -24,7 +24,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
 /**
  * Servlet implementation class CreateCategoryServlet
  */
-@WebServlet("/CreateProject")
+@WebServlet("/createproject")
 public class CreateProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
