@@ -13,15 +13,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bg.ittalents.efficientproject.model.dao.INFO;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 @WebServlet("/ImgOutputServlet") // TODO ne iskam da e dostypno ot url????
-@MultipartConfig
-
 public class ReadPictureFromFileSysServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	public static final String IMAGES_PATH = "F:" + File.separator + "Java" + File.separator + "final-project-img";
+	public static final String IMAGES_PATH = INFO.IMAGES_PATH;;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -29,6 +28,7 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 			response.sendRedirect("/LogIn");
 		}
 		User user = (User) request.getSession().getAttribute("user");
+		response.addHeader("Content-Type", "image/jpeg");
 		String avatarPath = user.getAvatarPath();
 		File imgFile = new File(avatarPath);
 		try (InputStream fis = new FileInputStream(imgFile); ServletOutputStream fos = response.getOutputStream()) {

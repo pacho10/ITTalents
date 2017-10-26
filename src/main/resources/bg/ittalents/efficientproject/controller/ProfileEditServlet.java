@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import bg.ittalents.efficientproject.model.dao.INFO;
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
@@ -26,7 +27,7 @@ import bg.ittalents.efficientproject.util.Encrypter;
 
 public class ProfileEditServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static final String IMAGES_PATH = "F:"  + File.separator + "Java" + File.separator + "final-project-img";
+	public static final String IMAGES_PATH = INFO.IMAGES_PATH;
 
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 
