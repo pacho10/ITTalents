@@ -1,14 +1,56 @@
 package bg.ittalents.efficientproject.model.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 
 public class SprintDAO  extends AbstractDBConnDAO implements ISprintDAO{
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
-
-	public Sprint getSprintBId(int int1) {
-		// TODO Auto-generated method stub
-		return null;
+	private static final String CREATE_SPRINT = "INSERT into sprints values(null,?,?,?);";
+	private static final String GET_SPRINT_BY_ID = "SELECT * from sprints where id=?;";
+	
+	public int createSprint(Sprint sprint) throws DBException {
+		try {
+			PreparedStatement ps = getCon().prepareStatement(CREATE_SPRINT, PreparedStatement.RETURN_GENERATED_KEYS);
+			ps.setString(1, sprint.getName());
+			ps.setDate(2, sprint.getStartDate());
+			ps.setInt(3, sprint.getDuration());
+			
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			rs.next();
+			
+			return rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			throw new DBException("sprint can not be created");
+		}
+	}
+	
+	public Sprint getSprintBId(int id) throws DBException {
+		Sprint sprint = null;
+		
+		try {
+			PreparedStatement ps = getCon().prepareStatement(GET_SPRINT_BY_ID);
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				sprint = new Sprint(rs.getInt(1), rs.getString(2), rs.getDate(3), rs.getInt(4));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			throw new DBException("sprint can not be found");
+		}
+		
+		return sprint;
 	}
 }
