@@ -10,7 +10,7 @@
 <title>Efficient Project</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- TODO  ????disable the browser cache????? -->
+<!-- disable the browser cache -->
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
@@ -22,7 +22,6 @@
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<link href="css/bootstrap.min.css" rel="stylesheet">
 
 
 </head>

@@ -4,32 +4,29 @@
 <%@ page isELIgnored="false"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Efficient Project</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- TODO  ????disable the browser cache????? -->
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Cache-Control" content="no-cache">
-<meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
-
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css"
 	href="font-awesome/css/font-awesome.min.css" />
-	<link rel="stylesheet" type="text/css" href="customCSS/styles.css">
+<link rel="stylesheet" type="text/css" href="customCSS/styles.css">
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<link href="css/bootstrap.min.css" rel="stylesheet">
 
 <title>Insert title here</title>
 </head>
+
+
 <body>
 
 
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default navbar-fixed-top">
 	<div class="container-fluid">
 		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
@@ -40,18 +37,19 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" >Efficient Project</a>
+			<a class="navbar-brand">Efficient Project</a>
 		</div>
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+				<li class="active"><a href="#">Dashboard <span
+						class="sr-only">(current)</span></a></li>
 				<li><a href="#">Link</a></li>
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
-					aria-expanded="false">Project <span class="caret"></span></a>
+					aria-expanded="false">Projects <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="#">Action</a></li>
 						<li><a href="#">Another action</a></li>
@@ -81,8 +79,8 @@
 						<li><a href="#">Separated link</a></li>
 					</ul></li>
 				<li><a href="./Logout">Log out</a></li>
-				<li><img  id="avatar" src=${ sessionScope.user.avatarPath }>
-				</li>
+				<li><a href="./Profile">${ sessionScope.user.firstName }</a></li>
+				<li><img id="avatar" src="./ImgOutputServlet"></li>
 			</ul>
 		</div>
 		<!-- /.navbar-collapse -->

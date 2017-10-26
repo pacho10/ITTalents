@@ -95,10 +95,10 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 		}
 	}
 
-	public int updateUser(int id) {
-		return 0;
-
-	}
+//	public int updateUser(int id) {
+//		return 0;
+//
+//	}
 
 	@Override
 	public User getUserById(int userID) throws UnsupportedDataTypeException, EffPrjDAOException, DBException {
@@ -200,4 +200,8 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 	}
 
+	public void addUserToProject() {
+		
+	}
+	
 }

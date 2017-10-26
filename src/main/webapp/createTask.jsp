@@ -26,7 +26,7 @@
 		<div class="panel panel-info">
 			<div class="panel-heading">
 
-				<div class="panel-title">Create New Epic</div>
+				<div class="panel-title">Create New Task</div>
 
 			</div>
 			<div class="panel-body">				

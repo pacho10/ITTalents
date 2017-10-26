@@ -20,42 +20,57 @@
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="bootstrap/css/simple-sidebar.css" rel="stylesheet">
 </head>
 
 <body>
-	<c:if test="${ sessionScope.user == null }">
+	<%-- 	<c:if test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
-	</c:if>
-	
-	<jsp:include page="navBar.jsp"></jsp:include>
-	<div class="span2">
-	
-	<%-- <img src="${ sessionScope.user.avatarPath }" alt="" class="img-rounded"
-			width="200" height=auto>	 --%>
-	<!--  <img src="./ImgOutputServlet?image=user.jpg" alt="" class="img-rounded"
+	</c:if> --%>
+
+	<c:choose>
+		<c:when test="${sessionScope.user.admin}">
+			<jsp:include page="navBarAdmin.jsp"></jsp:include>
+			<jsp:include page="sidebarAdmin.jsp"></jsp:include>
+		</c:when>
+		<c:otherwise>
+			<jsp:include page="navBarWorker.jsp"></jsp:include>
+			<jsp:include page="sidebarWorker.jsp"></jsp:include>
+		</c:otherwise>
+	</c:choose>
+
+	<div id="wrapper" class="toggled">
+		<div id="page-content-wrapper">
+			<div class="container-fluid">
+				<div class="span2">
+
+					<!--  <img src="./ImgOutputServlet?image=user.jpg" alt="" class="img-rounded"
 			width="200" height=auto>	  -->
- <img src="./ImgOutputServlet" alt="" class="img-rounded"
-			width="200" height=auto>
-	 </div>
-	<div class="span4">
-		<blockquote>
-			<c:out
-				value="${sessionScope.user.firstName }  ${ sessionScope.user.lastName }"></c:out>
-		</blockquote>
-		<p>
 
-			<i class="fa fa-envelope"></i> ${ sessionScope.user.email } <br>
-			<c:if test="${ sessionScope.user.admin == true }">
-			<c:out
-				value="admin at: ${ sessionScope.user.organization.name }"></c:out>
-			</c:if>
+					<img src="./ImgOutputServlet" alt="" class="img-rounded"
+						width="200" height=auto>
+				</div>
+				<div class="span4">
+					<blockquote>
+						<c:out
+							value="${sessionScope.user.firstName }  ${ sessionScope.user.lastName }"></c:out>
+					</blockquote>
+					<p>
 
-		</p>
+						<i class="fa fa-envelope"></i> ${ sessionScope.user.email } <br>
+						<c:if test="${ sessionScope.user.admin == true }">
+							<c:out value="admin at: ${ sessionScope.user.organization.name }"></c:out>
+						</c:if>
+
+					</p>
+				</div>
+
+				<a href="./ProfileEdit"> <input type="button"
+					value="Edit profile" />
+
+				</a>
+			</div>
+		</div>
 	</div>
-
-	<a href="./ProfileEdit"> <input type="button" value="Edit profile" />
-	
-	</a>
 </body>
 </html>
