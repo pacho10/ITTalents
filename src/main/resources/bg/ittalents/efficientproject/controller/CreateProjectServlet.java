@@ -66,6 +66,8 @@ public class CreateProjectServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+		//everything went well:
+		response.sendRedirect("./dashboard");
 		
 	}
 

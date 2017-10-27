@@ -38,9 +38,7 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getSession().isNew()) {
-			response.sendRedirect("./LogIn");
-		} else {
+		if (request.getSession(false) != null && request.getSession().getAttribute("user") != null) {
 
 			if ((boolean) request.getSession().getAttribute("isAdmin")) {
 				User user = (User) request.getSession().getAttribute("user");
@@ -66,7 +64,8 @@ public class DashboardServlet extends HttpServlet {
 				request.getRequestDispatcher("./dashboardWorker.jsp").forward(request, response);
 
 			}
-
+		} else {
+			response.sendRedirect("./LogIn");
 		}
 	}
 

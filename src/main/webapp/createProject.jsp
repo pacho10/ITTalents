@@ -30,7 +30,7 @@
 
 			</div>
 			<div class="panel-body">
-				<form method="post" action="./CreateProject" id="create-project"
+				<form method="post" action="./createproject" id="create-project"
 					class="form-horizontal" role="form">
 
 					<!--<div id="signupalert" style="display: none"
