@@ -15,31 +15,40 @@
 
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
+<link href="bootstrap/css/simple-sidebar.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="customCSS/styles.css">
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<link href="bootstrap/css/simple-sidebar.css" rel="stylesheet">
 </head>
 
 <body>
-	<%-- 	<c:if test="${ sessionScope.user == null }">
+	<c:if test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
-	</c:if> --%>
+	</c:if>
 
 	<c:choose>
 		<c:when test="${sessionScope.user.admin}">
 			<jsp:include page="navBarAdmin.jsp"></jsp:include>
-			<jsp:include page="sidebarAdmin.jsp"></jsp:include>
 		</c:when>
 		<c:otherwise>
 			<jsp:include page="navBarWorker.jsp"></jsp:include>
-			<jsp:include page="sidebarWorker.jsp"></jsp:include>
 		</c:otherwise>
 	</c:choose>
 
 	<div id="wrapper" class="toggled">
+
+		<c:choose>
+			<c:when test="${sessionScope.user.admin}">
+				<jsp:include page="sidebarAdmin.jsp"></jsp:include>
+			</c:when>
+			<c:otherwise>
+				<jsp:include page="sidebarWorker.jsp"></jsp:include>
+			</c:otherwise>
+		</c:choose>
+
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
 				<div class="span2">

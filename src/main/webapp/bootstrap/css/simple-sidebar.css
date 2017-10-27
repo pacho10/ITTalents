@@ -26,6 +26,7 @@ body {
 	width: 0;
 	height: 100%;
 	margin-left: -250px;
+	margin-top: 50px;
 	overflow-y: auto;
 	background: #0d616f;;
 	-webkit-transition: all 0.5s ease;
@@ -41,12 +42,14 @@ body {
 #page-content-wrapper {
 	width: 100%;
 	position: absolute;
+	padding-top: 50px;
 	padding: 15px;
 }
 
 #wrapper.toggled #page-content-wrapper {
 	position: absolute;
 	margin-right: -250px;
+	margin-top: 0px;
 }
 
 /* Sidebar Styles */
@@ -111,6 +114,7 @@ body {
 	}
 	#page-content-wrapper {
 		padding: 20px;
+		padding-top: 70px;
 		position: relative;
 	}
 	#wrapper.toggled #page-content-wrapper {

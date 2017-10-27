@@ -78,6 +78,7 @@ public class LogInServlet extends HttpServlet {
 		
 		// everythig went well:
 		request.getSession().setAttribute("user", user);
+		request.getSession().setAttribute("isAdmin", user.isAdmin());
 			response.sendRedirect("./dashboard");
 
 	}

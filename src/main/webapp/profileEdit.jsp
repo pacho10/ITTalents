@@ -11,10 +11,13 @@
 <title>Efficient Project</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
+<link href="bootstrap/css/simple-sidebar.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="customCSS/styles.css">
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
@@ -36,29 +39,33 @@
 </head>
 
 <body>
-	<%-- 	<c:if test="${ sessionScope.user == null }">
+	<c:if test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
-	</c:if> --%>
-
-
+	</c:if>
 
 	<c:choose>
-		<c:when test="${sessionScope.user.isAdmin}">
+		<c:when test="${sessionScope.user.admin}">
 			<jsp:include page="navBarAdmin.jsp"></jsp:include>
-			<jsp:include page="sidebarAdmin.jsp"></jsp:include>
 		</c:when>
 		<c:otherwise>
 			<jsp:include page="navBarWorker.jsp"></jsp:include>
-			<jsp:include page="sidebarWorker.jsp"></jsp:include>
 		</c:otherwise>
 	</c:choose>
 
 	<div id="wrapper" class="toggled">
+
+		<c:choose>
+			<c:when test="${sessionScope.user.admin}">
+				<jsp:include page="sidebarAdmin.jsp"></jsp:include>
+			</c:when>
+			<c:otherwise>
+				<jsp:include page="sidebarWorker.jsp"></jsp:include>
+			</c:otherwise>
+		</c:choose>
+
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
-				<div id="loginbox" style="margin-top: 50px;"
-					class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-
+				<div id="loginbox" 	class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 
 					<div class="panel panel-success">
 						<div class="panel-heading">
@@ -177,6 +184,5 @@
 			</div>
 		</div>
 	</div>
-
 </body>
 </html>

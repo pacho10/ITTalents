@@ -9,64 +9,30 @@
 <title>Efficient Project</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Cache-Control" content="no-cache">
-<meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
-
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
 <link href="bootstrap/css/simple-sidebar.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css"
+	href="font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="customCSS/styles.css">
+
+<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
+	<c:if test="${ sessionScope.user == null }">
+		<c:redirect url="/LogIn"></c:redirect>
+	</c:if>
 
-	<div id="wrapper"class="toggled">
+	
+	<jsp:include page="navBarAdmin.jsp"></jsp:include>
 
-		<!-- Sidebar -->
-		<div id="sidebar-wrapper">
-
-			<ul class="sidebar-nav">
-				<li class="sidebar-brand"><a href="#"> Start Bootstrap </a></li>
-				<li><a href="#">Admin</a></li>
-				<li><a href="#">Shortcuts</a></li>
-				<li><a href="#">Overview</a></li>
-				<li><a href="#">Events</a></li>
-				<li><a href="#">About</a></li>
-				<li><a href="#">Services</a></li>
-				<li><a href="#">Contact</a></li>
-			</ul>
-		</div>
-		<!-- /#sidebar-wrapper -->
-
-	 	<!-- Page Content -->
-		<div id="page-content-wrapper">
-			<div class="container-fluid">
-			
-			
-			
-			
-			
-<%-- 				<h1>Simple Sidebar</h1>
-				<p>This template has a responsive menu toggling system. The menu
-					will appear collapsed on smaller screens, and will appear
-					non-collapsed on larger screens. When toggled using the button
-					below, the menu will appear/disappear. On small screens, the page
-					content will be pushed off canvas.</p>
-				<p>
-					Make sure to keep all page content within the
-					<code>#page-content-wrapper</code>
-					.
-				</p> --%>
-
-			</div>
-		</div>
-		<!-- /#page-content-wrapper --> 
+	<div id="wrapper" class="toggled">
+		<jsp:include page="sidebarAdmin.jsp"></jsp:include>
 
 	</div>
 	<!-- /#wrapper -->
-
-
-
 
 </body>
 </html>
