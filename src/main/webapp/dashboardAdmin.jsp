@@ -64,7 +64,7 @@
 					.
 				</p> --%>
 
-				<h1 class="text-center">${organizationName}</h1>
+				<h1 class="text-center text-success">${organizationName}</h1>
 				<hr>
 				<div class="table-responsive">
 					<table class="table">
