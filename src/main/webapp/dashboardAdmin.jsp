@@ -20,10 +20,20 @@
 
 <body>
 
-	<div id="wrapper"class="toggled">
+	<div id="wrapper" class="toggled">
+		<c:choose>
+			<c:when test="${sessionScope.user.admin}">
+				<jsp:include page="navBarAdmin.jsp"></jsp:include>
+				<jsp:include page="sidebarAdmin.jsp"></jsp:include>
+			</c:when>
+			<c:otherwise>
+				<jsp:include page="navBarWorker.jsp"></jsp:include>
+				<jsp:include page="sidebarWorker.jsp"></jsp:include>
+			</c:otherwise>
+		</c:choose>
 
 		<!-- Sidebar -->
-		<div id="sidebar-wrapper">
+		<!-- <div id="sidebar-wrapper">
 
 			<ul class="sidebar-nav">
 				<li class="sidebar-brand"><a href="#"> Start Bootstrap </a></li>
@@ -35,18 +45,14 @@
 				<li><a href="#">Services</a></li>
 				<li><a href="#">Contact</a></li>
 			</ul>
-		</div>
+		</div> -->
 		<!-- /#sidebar-wrapper -->
 
-	 	<!-- Page Content -->
+		<!-- Page Content -->
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
-			
-			
-			
-			
-			
-<%-- 				<h1>Simple Sidebar</h1>
+
+				<%-- 				<h1>Simple Sidebar</h1>
 				<p>This template has a responsive menu toggling system. The menu
 					will appear collapsed on smaller screens, and will appear
 					non-collapsed on larger screens. When toggled using the button
@@ -58,15 +64,43 @@
 					.
 				</p> --%>
 
+				<h1 class="text-center">${organizationName}</h1>
+				<hr>
+				<div class="table-responsive">
+					<table class="table">
+					<thead>
+					<td>
+					Project Id
+					</td>
+					<td>
+					Project Name
+					</td>
+					<td>
+					Project deadline
+					</td>
+					</thead>
+					<c:forEach var="p" items="${projects}">
+					<tr>
+						<td>
+						${p.id}
+						</td>
+						<td>
+							<a href="/final_project/projectdetail?projectId=${p.id}">${p.name}</a>
+						</td>
+						<td>
+						${p.deadline}
+						</td>
+					</tr>
+				</c:forEach>
+				</table>
+				</div>
+				
 			</div>
 		</div>
-		<!-- /#page-content-wrapper --> 
+		<!-- /#page-content-wrapper -->
 
 	</div>
 	<!-- /#wrapper -->
-
-
-
 
 </body>
 </html>
