@@ -45,7 +45,7 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 	@Override
 	public Organization getOrgById(int orgId) throws EffPrjDAOException, DBException, UnsupportedDataTypeException {
 		if (orgId == 0) {
-			throw new EffPrjDAOException("There is no organization to get!");
+			return null;
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(SELECT_ORGANIZATION_BY_ID);

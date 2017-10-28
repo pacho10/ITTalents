@@ -109,9 +109,10 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			ps.setInt(1, userID);
 
 			ResultSet rs = ps.executeQuery();
-			Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(8));
 
 			if (rs.next()) {
+				Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(8));
+				
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 

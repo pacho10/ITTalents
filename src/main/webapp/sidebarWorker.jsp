@@ -4,8 +4,8 @@
 	<ul class="sidebar-nav">
 		<li class="sidebar-brand" onclick="SidebarChangeConent()"><a>Dashboard</a></li>
 		<!-- <a href="./dashboard"> Dashboard </a> -->
-		<li><a href="#">My open tasks</a></li>
-		<li><a href="#">All project tasks</a></li>
+		<li><a href="/final_project/workertasksservlet">My open tasks</a></li>
+		<li><a href="/final_project/alltasksfromproject">All project tasks</a></li>
 		<li><a href="#">Current Sprint</a></li>
 		<li><a href="#">Create task</a></li>
 		<li><a href="#">Statistics</a></li>

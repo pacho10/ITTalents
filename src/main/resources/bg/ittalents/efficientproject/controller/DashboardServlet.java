@@ -58,10 +58,10 @@ public class DashboardServlet extends HttpServlet {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				request.getRequestDispatcher("./contentDashboardAdmin.jsp").forward(request, response);
+				request.getRequestDispatcher("/contentDashboardAdmin.jsp").forward(request, response);
 				response.setContentType("text/html"); 
 			} else {
-				request.getRequestDispatcher("./contentDashboardWorker.jsp").forward(request, response);
+				request.getRequestDispatcher("/contentDashboardWorker.jsp").forward(request, response);
 
 			}
 		} else {
