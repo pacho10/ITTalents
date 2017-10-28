@@ -19,56 +19,45 @@
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+	function SidebarChangeConent() {
+		$("#content").empty();
+		$.ajax({
+			url : './dashboard',
+			type : 'GET',
+			success : function(response) {
+				$("#content").append(response);
+			}
+
+		});
+
+	}
+</script>
+
+
 </head>
 
-<body>
-	<c:if test="${ sessionScope.user == null }"><!-- and user is admin -->
+<body onload="SidebarChangeConent();">
+
+
+	<c:if test="${ sessionScope.user == null }">
+		<!-- and user is admin -->
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
 
-	
+	<%-- Navbar  --%>
 	<jsp:include page="navBarAdmin.jsp"></jsp:include>
 
+	<!-- Page  -->
 	<div id="wrapper" class="toggled">
+	
+		<!-- Sidebar --><%-- REMOVE JSP FROM HERE!!!!! --%>
 		<jsp:include page="sidebarAdmin.jsp"></jsp:include>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-			<div class="container-fluid">
-
-
-				<h1 class="text-center text-success">${organizationName}</h1>
-				<hr>
-				<div class="table-responsive">
-					<table class="table">
-					<thead>
-					<td>
-					Project Id
-					</td>
-					<td>
-					Project Name
-					</td>
-					<td>
-					Project deadline
-					</td>
-					</thead>
-					<c:forEach var="p" items="${projects}">
-					<tr>
-						<td>
-						${p.id}
-						</td>
-						<td>
-							<a href="/final_project/projectdetail?projectId=${p.id}">${p.name}</a>
-						</td>
-						<td>
-						${p.deadline}
-						</td>
-					</tr>
-				</c:forEach>
-				</table>
-				</div>
-				
-			</div>
+			<div id="content"></div>
 		</div>
 		<!-- /#page-content-wrapper -->
 

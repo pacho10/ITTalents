@@ -20,7 +20,7 @@ public class ProjectDAO  extends AbstractDBConnDAO implements IProjectDAO{
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 	private static final String INSERT_PROJECT_INTO_DB = "INSERT into projects values(null,?,?,?);";
 	private static final String GET_PROJECT_BY_ID = "SELECT * FROM projects WHERE id =?;";
-	private static final String GET_ALLPROJECTS_FROM_0RGANIZATION = "SELECT * from projects WHERE id=?";
+	private static final String GET_ALLPROJECTS_FROM_0RGANIZATION = "SELECT * from projects WHERE organization_id=?";
 	
 	public int addProject(Project project) throws EffPrjDAOException, DBException {
 		if (project == null) {
@@ -69,14 +69,14 @@ public class ProjectDAO  extends AbstractDBConnDAO implements IProjectDAO{
 	
 	public List<Project> getAllProjectsFromOrganization(int id) throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
 		List<Project> projects = new ArrayList<>();
-		
+
 		try {
 			PreparedStatement ps = getCon().prepareStatement(GET_ALLPROJECTS_FROM_0RGANIZATION);
 			ps.setInt(1, id);
 			
 			ResultSet rs = ps.executeQuery();
 			Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(id);
-			
+			System.out.println(organization);
 			while (rs.next()) {
 				projects.add(new Project(rs.getInt(1), rs.getString(2), rs.getDate(3), organization));
 			}
@@ -85,6 +85,7 @@ public class ProjectDAO  extends AbstractDBConnDAO implements IProjectDAO{
 			e.printStackTrace();
 			throw new DBException("projects can not be selected!");
 		}		
+		
 		return projects;
 	}
 }

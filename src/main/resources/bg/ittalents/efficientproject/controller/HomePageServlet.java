@@ -20,14 +20,14 @@ import bg.ittalents.efficientproject.model.pojo.User;
 /**
  * Servlet implementation class DashboardServlet
  */
-@WebServlet("/dashboard")
-public class DashboardServlet extends HttpServlet {
+@WebServlet("/home")
+public class HomePageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public DashboardServlet() {
+	public HomePageServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -42,26 +42,12 @@ public class DashboardServlet extends HttpServlet {
 
 			User user = (User) request.getSession().getAttribute("user");
 			if (user.isAdmin()) {
-				int intorganizationId = user.getOrganization().getId();
-				System.out.println("servlet "+intorganizationId);
-				try {
-					List<Project> projects = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
-							.getAllProjectsFromOrganization(intorganizationId);
-					request.setAttribute("projects", projects);
 
-					String organizationName = user.getOrganization().getName();
-					request.setAttribute("organizationName", organizationName);
-				} catch (DBException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (EffPrjDAOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				request.getRequestDispatcher("./contentDashboardAdmin.jsp").forward(request, response);
-				response.setContentType("text/html"); 
+				request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
+
 			} else {
-//				request.getRequestDispatcher("./dashboardWorker.jsp").forward(request, response);
+				// request.getRequestDispatcher("./dashboardWorker.jsp").forward(request,
+				// response);
 
 			}
 		} else {

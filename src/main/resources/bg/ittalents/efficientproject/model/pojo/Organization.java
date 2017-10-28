@@ -31,5 +31,10 @@ public class Organization {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		return "Organization [id=" + id + ", name=" + name + "]";
+	}
+
 
 }

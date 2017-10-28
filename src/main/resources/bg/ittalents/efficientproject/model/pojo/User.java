@@ -1,7 +1,12 @@
 package bg.ittalents.efficientproject.model.pojo;
 
+
+import java.io.File;
+
+import bg.ittalents.efficientproject.model.dao.INFO;
+
 public class User {
-	private static final String DEFAUL_AVATAR_PATH = "./img/avatar-default.png";
+	private static final String DEFAUL_AVATAR_PATH = INFO.IMAGES_PATH + File.separator+"avatar-default.jpg";
 	
 	private int id;
 	private String firstName;

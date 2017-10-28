@@ -65,14 +65,17 @@
 					<div class="form-group">
 						<!-- Button -->
 						<div class="col-md-offset-3 col-md-9">
-							<button id="btn-create-project" type="submit" class="btn btn-info">
+							<button id="btn-create-project" type="submit"
+								class="btn btn-info">
 								<i class="icon-hand-right"></i> Create
 							</button>
+							<button onclick="location.href = './dashboard';"
+								id="cancelButton" class="btn btn-info">Cancel</button>
 						</div>
 					</div>
 				</form>
 			</div>
 		</div>
-	</div>	
+	</div>
 </body>
 </html>
