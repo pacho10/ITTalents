@@ -61,7 +61,7 @@ public class DashboardServlet extends HttpServlet {
 				request.getRequestDispatcher("./contentDashboardAdmin.jsp").forward(request, response);
 				response.setContentType("text/html"); 
 			} else {
-//				request.getRequestDispatcher("./dashboardWorker.jsp").forward(request, response);
+				request.getRequestDispatcher("./contentDashboardWorker.jsp").forward(request, response);
 
 			}
 		} else {

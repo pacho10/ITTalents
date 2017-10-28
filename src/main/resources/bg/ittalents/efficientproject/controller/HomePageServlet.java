@@ -46,8 +46,8 @@ public class HomePageServlet extends HttpServlet {
 				request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
 
 			} else {
-				// request.getRequestDispatcher("./dashboardWorker.jsp").forward(request,
-				// response);
+				 request.getRequestDispatcher("./homePageWorker.jsp").forward(request,
+				 response);
 
 			}
 		} else {

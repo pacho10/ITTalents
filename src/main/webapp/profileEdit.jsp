@@ -65,9 +65,10 @@
 
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
-				<div id="loginbox" 	class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+				<div id="loginbox"
+					class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 
-					<div class="panel panel-success">
+					<div class="panel panel-info">
 						<div class="panel-heading">
 
 							<div class="panel-title">Edit your profile</div>
@@ -86,7 +87,10 @@
 								</div>
 
 								<div class="form-group">
-									<img id="avatar2" src="./ImgOutputServlet">
+									<div class="text-center">
+										<img id="avatar2" src="./ImgOutputServlet" class="img-rounded"
+											width="300" height=auto>
+									</div>
 								</div>
 
 								<div class="form-group">
@@ -172,7 +176,7 @@
 									<!-- Button -->
 									<div class="col-md-offset-3 col-md-9">
 										<button onclick="myFunction()" id="btn-signup" type="submit"
-											class="btn btn-success">Submit</button>
+											class="btn btn-info">Submit</button>
 									</div>
 								</div>
 
