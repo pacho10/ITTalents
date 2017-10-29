@@ -55,7 +55,7 @@
 								<td>Project Name</td>
 								<td>Project deadline</td>
 							</thead>
-							<c:forEach var="p" items="${sessionScope.projects}">
+							<c:forEach var="p" items="${projects}">
 								<tr>
 									<td>${p.id}</td>
 									<td><a

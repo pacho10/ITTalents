@@ -40,11 +40,9 @@ public class CreateTaskServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-		//int projectId = Integer.parseInt(request.getParameter("projectId"));
+		int projectId = Integer.parseInt(request.getParameter("projectId"));
 		try {
-			List<Epic> epics = IEpicDAO.getDAO(DAOStorageSourse.DATABASE).getAllEpicsByProject(2);
+			List<Epic> epics = IEpicDAO.getDAO(DAOStorageSourse.DATABASE).getAllEpicsByProject(projectId);
 			List<Type> types = ITypeDAO.getDAO(DAOStorageSourse.DATABASE).getAllTypes();
 			
 			request.setAttribute("epics", epics);

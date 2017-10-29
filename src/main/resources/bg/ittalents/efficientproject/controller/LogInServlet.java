@@ -39,7 +39,7 @@ public class LogInServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String email = request.getParameter("email");
-		System.out.println(email);
+//		System.out.println(email);
 		String password = request.getParameter("password");
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
@@ -61,7 +61,7 @@ public class LogInServlet extends HttpServlet {
 		User user = null;
 		try {
 			user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserByEmail(email);
-			System.out.println(user);
+//			System.out.println(user);
 			// System.out.println(user);
 		} catch (EffPrjDAOException e) {
 			// TODO Auto-generated catch block

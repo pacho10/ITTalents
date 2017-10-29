@@ -8,7 +8,6 @@ $('#search').keyup(function(){
 		var output = '<thead><td></td><td>Name</td><td>email</td><td></td></thead>';
 		$.each(workers, function(key, val){
 			if((val.firstName.search(myExp) != -1) || (val.lastName.search(myExp) != -1) || (val.email.search(myExp) != -1)) {
-				/* output +='<h2>' + val.firstName + '</h2>'; */
 				output +='<tr>';
 				output +='<td>' +'<img  src="./ImgOutputServlet?userid=' + val.id + '" class="img-rounded" id="avatar2" >'+ '</td>';
 				output +='<td>' + val.firstName+' '+val.lastName + '</td>';

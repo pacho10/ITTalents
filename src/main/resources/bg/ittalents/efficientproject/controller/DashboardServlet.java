@@ -43,14 +43,17 @@ public class DashboardServlet extends HttpServlet {
 			User user = (User) request.getSession().getAttribute("user");
 			if (user.isAdmin()) {
 				int intorganizationId = user.getOrganization().getId();
-				System.out.println("servlet "+intorganizationId);
+//				System.out.println("servlet "+intorganizationId);
 				try {
 					List<Project> projects = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
 							.getAllProjectsFromOrganization(intorganizationId);
-					request.getSession().setAttribute("projects", projects);
+//					request.getSession().setAttribute("projects", projects);
+					request.setAttribute("projects", projects);
 
 					String organizationName = user.getOrganization().getName();
-					request.getSession().setAttribute("organizationName", organizationName);
+//					request.getSession().setAttribute("organizationName", organizationName);
+					request.setAttribute("organizationName", organizationName);
+					
 				} catch (DBException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
