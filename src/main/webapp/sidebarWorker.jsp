@@ -2,8 +2,7 @@
 <div id="sidebar-wrapper">
 
 	<ul class="sidebar-nav">
-		<li class="sidebar-brand" onclick="SidebarChangeConent()"><a>Dashboard</a></li>
-		<!-- <a href="./dashboard"> Dashboard </a> -->
+		<li class="sidebar-brand"><a href="./dashboard"> Dashboard </a></li>
 		<li><a href="#">My open tasks</a></li>
 		<li><a href="#">All project tasks</a></li>
 		<li><a href="#">Current Sprint</a></li>
