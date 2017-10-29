@@ -13,32 +13,35 @@ import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
+import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 import bg.ittalents.efficientproject.model.pojo.Project;
+import bg.ittalents.efficientproject.model.pojo.User;
 
-public class ProjectDAO  extends AbstractDBConnDAO implements IProjectDAO{
+public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 	private static final String INSERT_PROJECT_INTO_DB = "INSERT into projects values(null,?,?,?);";
 	private static final String GET_PROJECT_BY_ID = "SELECT * FROM projects WHERE id =?;";
 	private static final String GET_ALLPROJECTS_FROM_0RGANIZATION = "SELECT * from projects WHERE organization_id=?";
-	
+	private static final String GET_ALLUSERS_FROM_PROJECT = "Select * from users_projects_history where project_id=?;";
+
 	public int addProject(Project project) throws EffPrjDAOException, DBException {
 		if (project == null) {
 			throw new EffPrjDAOException("project can not be null!");
 		}
-		
+
 		try {
-			PreparedStatement ps = getCon().prepareStatement(INSERT_PROJECT_INTO_DB, 
+			PreparedStatement ps = getCon().prepareStatement(INSERT_PROJECT_INTO_DB,
 					PreparedStatement.RETURN_GENERATED_KEYS);
-			
+
 			ps.setString(1, project.getName());
 			ps.setDate(2, project.getDeadline());
 			ps.setInt(3, project.getOrganization().getId());
-			
+
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			rs.next();
-			
+
 			return rs.getInt(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -46,46 +49,71 @@ public class ProjectDAO  extends AbstractDBConnDAO implements IProjectDAO{
 			throw new DBException("project can not be added now!");
 		}
 	}
-	
+
 	public Project getProjectByID(int id) throws DBException, EffPrjDAOException, UnsupportedDataTypeException {
 		try {
 			PreparedStatement ps = getCon().prepareStatement(GET_PROJECT_BY_ID);
 			ps.setInt(1, id);
-			
+
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				Organization org = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(4));
 				return new Project(rs.getInt(1), rs.getString(2), rs.getDate(3), org);
-			}else {
+			} else {
 				throw new EffPrjDAOException("this project not exist!");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+
 			throw new DBException("Cannot check for user right now!Try again later", e);
-		} 		
+		}
 	}
-	
-	public List<Project> getAllProjectsFromOrganization(int id) throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+
+	public List<Project> getAllProjectsFromOrganization(int id)
+			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
 		List<Project> projects = new ArrayList<>();
 
 		try {
 			PreparedStatement ps = getCon().prepareStatement(GET_ALLPROJECTS_FROM_0RGANIZATION);
 			ps.setInt(1, id);
-			
+
 			ResultSet rs = ps.executeQuery();
 			Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(id);
 			System.out.println(organization);
 			while (rs.next()) {
 				projects.add(new Project(rs.getInt(1), rs.getString(2), rs.getDate(3), organization));
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DBException("projects can not be selected!");
-		}		
-		
+		}
+
 		return projects;
 	}
+
+	public List<User> getAllWorkersWorkingOnAProject(int projectId)
+			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+		List<User> workers = new ArrayList<>();
+
+		try {
+			PreparedStatement ps = getCon().prepareStatement(GET_ALLUSERS_FROM_PROJECT);
+			ps.setInt(1, projectId);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				User worker = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(1));
+				workers.add(worker);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DBException("projects can not be selected!");
+		}
+
+		return workers;
+	}
+
 }
