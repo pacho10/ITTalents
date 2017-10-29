@@ -3,6 +3,7 @@ package bg.ittalents.efficientproject.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,6 +41,9 @@ public class WorkerTasksServlet extends HttpServlet {
 			try {
 				List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksByUser(user.getId());
 				request.setAttribute("tasks", tasks);
+				
+				RequestDispatcher rd = request.getRequestDispatcher("./workerTasks.jsp");
+				rd.forward(request, response);
 			} catch (DBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
