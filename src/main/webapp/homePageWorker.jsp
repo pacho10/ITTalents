@@ -21,7 +21,7 @@
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-	function SidebarChangeConent() {
+/* 	function SidebarChangeConent() {
 		$("#content").empty();
 		$.ajax({
 			url : './dashboard',
@@ -32,7 +32,7 @@
 
 		});
 
-	}
+	} */
 </script>
 
 
@@ -51,13 +51,17 @@
 
 	<!-- Page  -->
 	<div id="wrapper" class="toggled">
-	
-		<!-- Sidebar --><%-- REMOVE JSP FROM HERE!!!!! --%>
+
+		<!-- Sidebar -->
+		<%-- REMOVE JSP FROM HERE!!!!! --%>
 		<jsp:include page="sidebarWorker.jsp"></jsp:include>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-			<div id="content"></div>
+			<div id="content">
+				<div class="container-fluid" id="dashboard">TEXT</div>
+
+			</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 

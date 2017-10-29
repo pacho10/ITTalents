@@ -78,7 +78,7 @@ public class LogInServlet extends HttpServlet {
 		
 		// everythig went well:
 		request.getSession().setAttribute("user", user);
-		response.sendRedirect("./home");
+		response.sendRedirect("./dashboard");
 
 	}
 

@@ -21,7 +21,7 @@
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-	function SidebarChangeConent() {
+/* 	function SidebarChangeConent() {
 		$("#content").empty();
 		$.ajax({
 			url : './dashboard',
@@ -32,7 +32,17 @@
 
 		});
 
-	}
+	}  */
+
+/* 	$(document).ready(function() {
+		$("a").click(function() {
+			var myhref = $(this).attr('href');
+			$('#content').load(myhref);
+			return false;
+		});
+	}); */
+
+
 </script>
 
 
@@ -51,13 +61,39 @@
 
 	<!-- Page  -->
 	<div id="wrapper" class="toggled">
-	
-		<!-- Sidebar --><%-- REMOVE JSP FROM HERE!!!!! --%>
+
+		<!-- Sidebar -->
+		<%-- REMOVE JSP FROM HERE!!!!! --%>
 		<jsp:include page="sidebarAdmin.jsp"></jsp:include>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-			<div id="content"></div>
+			<div id="content">
+				<div class="container-fluid" id="dashboard">
+					<h1 class="text-center text-success">${organizationName}</h1>
+					<hr>
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<td>Project Id</td>
+								<td>Project Name</td>
+								<td>Project deadline</td>
+							</thead>
+							<c:forEach var="p" items="${sessionScope.projects}">
+								<tr>
+									<td>${p.id}</td>
+									<td><a
+										href="/final_project/projectdetail?projectId=${p.id}">${p.name}</a>
+									</td>
+									<td>${p.deadline}</td>
+								</tr>
+							</c:forEach>
+						</table>
+					</div>
+
+				</div>
+
+			</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 
