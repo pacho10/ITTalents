@@ -20,30 +20,6 @@
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
-/* 	function SidebarChangeConent() {
-		$("#content").empty();
-		$.ajax({
-			url : './dashboard',
-			type : 'GET',
-			success : function(response) {
-				$("#content").append(response);
-			}
-
-		});
-
-	}  */
-
-/* 	$(document).ready(function() {
-		$("a").click(function() {
-			var myhref = $(this).attr('href');
-			$('#content').load(myhref);
-			return false;
-		});
-	}); */
-
-
-</script>
 
 
 </head>
@@ -57,14 +33,14 @@
 	</c:if>
 
 	<%-- Navbar  --%>
-	<jsp:include page="navBarAdmin.jsp"></jsp:include>
+	<jsp:include page="navBarWorker.jsp"></jsp:include>
 
 	<!-- Page  -->
 	<div id="wrapper" class="toggled">
 
 		<!-- Sidebar -->
 		<%-- REMOVE JSP FROM HERE!!!!! --%>
-		<jsp:include page="sidebarAdmin.jsp"></jsp:include>
+		<jsp:include page="sidebarWorker.jsp"></jsp:include>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
