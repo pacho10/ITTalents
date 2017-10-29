@@ -38,8 +38,8 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		response.addHeader("Content-Type", "image/jpeg");
-		//String avatarPath = user.getAvatarPath();
-		String avatarPath = IMAGES_PATH;
+		String avatarPath = user.getAvatarPath();
+		//String avatarPath = IMAGES_PATH;
 		File imgFile = new File(avatarPath);
 		try (InputStream fis = new FileInputStream(imgFile); ServletOutputStream fos = response.getOutputStream()) {
 			int b = fis.read();
