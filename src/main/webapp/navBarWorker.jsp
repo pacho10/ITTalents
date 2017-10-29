@@ -26,7 +26,7 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="./Logout">Log out</a></li>
 				<li><a href="./Profile">${ sessionScope.user.firstName }</a></li>
-				<li><img id="avatar" src="./ImgOutputServlet"></li>
+				<li><img id="avatar" src="./ImgOutputServlet?userid=${sessionScope.user.id}"></li>
 			</ul>
 		</div>
 		<!-- /.navbar-collapse -->

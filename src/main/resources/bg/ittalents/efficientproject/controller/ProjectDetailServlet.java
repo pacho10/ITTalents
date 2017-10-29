@@ -2,6 +2,7 @@ package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,8 +16,10 @@ import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
+import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Epic;
 import bg.ittalents.efficientproject.model.pojo.Project;
+import bg.ittalents.efficientproject.model.pojo.User;
 
 /**
  * Servlet implementation class projectDetail
@@ -37,13 +40,17 @@ public class ProjectDetailServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int projectId = Integer.parseInt(request.getParameter("projectId"));;
+		int projectId = Integer.parseInt(request.getParameter("projectId"));
 		try {
 			Project currentProject = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 			request.setAttribute("project", currentProject);
 			
 			List<Epic> epics = IEpicDAO.getDAO(DAOStorageSourse.DATABASE).getAllEpicsByProject(projectId);
 			request.setAttribute("epics", epics);
+			
+			List<User> users = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getAllWorkersWorkingOnAProject(projectId);
+			request.setAttribute("workers", users);
+			
 		} catch (DBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

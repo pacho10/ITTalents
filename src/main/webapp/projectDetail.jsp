@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page isELIgnored="false"%>
-<%@ page errorPage="error.jsp"%>
+<%-- <%@ page errorPage="error.jsp"%> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -37,14 +37,14 @@
 
 	 }  */
 
- 	$(document).ready(function() {
-	 $("a.noReLoad").click(function() {
-	 var myhref = $(this).attr('href');
-	 $("#content").empty();
-	 $('#content').load(myhref);
-	 return false;
-	 });
-	 });
+	$(document).ready(function() {
+		$("a.noReLoad").click(function() {
+			var myhref = $(this).attr('href');
+			$("#content").empty();
+			$('#content').load(myhref);
+			return false;
+		});
+	});
 </script>
 
 
@@ -60,11 +60,11 @@
 	<jsp:include page="navBarAdmin.jsp"></jsp:include>
 
 	<div id="wrapper" class="toggled">
-
 		<jsp:include page="sidebarProject.jsp"></jsp:include>
 
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
+
 				<h1 class="text-center text-info">${project.name}</h1>
 				<hr>
 
@@ -73,7 +73,45 @@
 						<span>${project.name}</span> <span>${project.deadline}</span>
 					</div>
 					<div>
+						<hr>
 						<h3>Epics</h3>
+						<hr>
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<td>Epic Id</td>
+									<td>Epic Name</td>
+									<td>Epic Estimate</td>
+								</thead>
+								<c:forEach var="e" items="${epics}">
+									<tr>
+										<td>${e.id}</td>
+										<td><a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
+										<td>${e.estimate}</td>
+									</tr>
+								</c:forEach>
+							</table>
+						</div>
+
+						<hr>
+						<h3>Workers</h3>
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<td></td>
+									<td>Name</td>
+									<td>Email</td>
+								</thead>
+								<c:forEach var="u" items="${workers}">
+									<tr>
+									<td><img id="avatar" src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
+										<%-- <td>${u.avatarPath}</td> --%>
+										<td>${u.firstName}	${u.lastName}</td>
+										<td>${u.email}</td>
+									</tr>
+								</c:forEach>
+							</table>
+						</div>
 					</div>
 				</div>
 

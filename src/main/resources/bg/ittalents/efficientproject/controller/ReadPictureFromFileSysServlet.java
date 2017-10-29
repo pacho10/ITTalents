@@ -14,11 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.dao.INFO;
+import bg.ittalents.efficientproject.model.exception.DBException;
+import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
+import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 @WebServlet("/ImgOutputServlet") // TODO ne iskam da e dostypno ot url????
 public class ReadPictureFromFileSysServlet extends HttpServlet {
-
 	private static final long serialVersionUID = 1L;
 	public static final String IMAGES_PATH = INFO.IMAGES_PATH;;
 
@@ -27,7 +30,13 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 		if (request.getSession(false) == null) {
 			response.sendRedirect("/LogIn");
 		}
-		User user = (User) request.getSession().getAttribute("user");
+		int userId = Integer.parseInt(request.getParameter("userid"));
+		User user=null;
+		try {
+			user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserById(userId);
+		} catch (EffPrjDAOException | DBException e) {
+			e.printStackTrace();
+		}
 		response.addHeader("Content-Type", "image/jpeg");
 		String avatarPath = user.getAvatarPath();
 		//String avatarPath = IMAGES_PATH;

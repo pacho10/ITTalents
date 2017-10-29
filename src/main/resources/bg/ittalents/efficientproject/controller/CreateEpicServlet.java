@@ -69,7 +69,7 @@ public class CreateEpicServlet extends HttpServlet {
 		int estimate = Integer.parseInt(request.getParameter("estimate"));
 		String description = request.getParameter("description");
 		int projectId = Integer.parseInt(request.getParameter("projects"));
-		Project project;
+		Project project=null;
 		try {
 			project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 			Epic epicToAdd = new Epic(name, estimate, description, project);
@@ -82,8 +82,9 @@ public class CreateEpicServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		RequestDispatcher rd = request.getRequestDispatcher("./profileShow.jsp");
-		rd.forward(request, response);
+		response.sendRedirect("./projectdetail?projectId="+project.getId());
+//		RequestDispatcher rd = request.getRequestDispatcher("./profileShow.jsp");
+//		rd.forward(request, response);
 	}
 
 }

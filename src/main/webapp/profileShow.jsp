@@ -57,7 +57,7 @@
 					<!--  <img src="./ImgOutputServlet?image=user.jpg" alt="" class="img-rounded"
 			width="200" height=auto>	  -->
 
-					<img src="./ImgOutputServlet" alt="" class="img-rounded"
+					<img src="./ImgOutputServlet?userid=${sessionScope.user.id}" alt="" class="img-rounded"
 						width="200" height=auto>
 				</div>
 				<div class="span4">
