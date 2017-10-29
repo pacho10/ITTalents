@@ -24,18 +24,6 @@
 
 
 <script type="text/javascript">
-	/* 	function SidebarChangeConent() {
-	 $("#content").empty();
-	 $.ajax({
-	 url : './dashboard',
-	 type : 'GET',
-	 success : function(response) {
-	 $("#content").append(response);
-	 }
-
-	 });
-
-	 }  */
 
 	$(document).ready(function() {
 		$("a.noReLoad").click(function() {
@@ -104,7 +92,7 @@
 								</thead>
 								<c:forEach var="u" items="${workers}">
 									<tr>
-									<td><img id="avatar" src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
+									<td><img id="avatar2" src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
 										<%-- <td>${u.avatarPath}</td> --%>
 										<td>${u.firstName}	${u.lastName}</td>
 										<td>${u.email}</td>

@@ -80,7 +80,7 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 
 			ResultSet rs = ps.executeQuery();
 			Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(id);
-			System.out.println(organization);
+//			System.out.println(organization);
 			while (rs.next()) {
 				projects.add(new Project(rs.getInt(1), rs.getString(2), rs.getDate(3), organization));
 			}

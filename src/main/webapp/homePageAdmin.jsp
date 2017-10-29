@@ -20,30 +20,6 @@
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
-/* 	function SidebarChangeConent() {
-		$("#content").empty();
-		$.ajax({
-			url : './dashboard',
-			type : 'GET',
-			success : function(response) {
-				$("#content").append(response);
-			}
-
-		});
-
-	}  */
-
-/* 	$(document).ready(function() {
-		$("a").click(function() {
-			var myhref = $(this).attr('href');
-			$('#content').load(myhref);
-			return false;
-		});
-	}); */
-
-
-</script>
 
 
 </head>
@@ -79,7 +55,7 @@
 								<td>Project Name</td>
 								<td>Project deadline</td>
 							</thead>
-							<c:forEach var="p" items="${sessionScope.projects}">
+							<c:forEach var="p" items="${projects}">
 								<tr>
 									<td>${p.id}</td>
 									<td><a
