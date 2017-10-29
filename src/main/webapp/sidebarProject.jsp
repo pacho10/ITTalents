@@ -11,7 +11,7 @@
 		<li><a href="#">Statistics</a></li>
 		<hr>
 		<li><a href="./createsprint" class="noReLoad">Start sprint</a></li>
-		<li><a href="./addWorkersToProject" class="noReLoad">Add workers</a></li>
+		<li><a href="./AddWorkersServlet" class="noReLoad">Add workers</a></li>
 		<li><a href="./createtask" class="noReLoad">Add task</a></li>
 		<li><a href="./createepic" class="noReLoad">Add epic</a></li>
 	</ul>
