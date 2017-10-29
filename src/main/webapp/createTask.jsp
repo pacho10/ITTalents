@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page isELIgnored="false"%>
+<%-- <%@ page isELIgnored="false"%>
 <%@ page errorPage="error.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -20,7 +20,11 @@
 <!-- Custom CSS -->
 <link href="bootstrap/css/simple-sidebar.css" rel="stylesheet">
 </head>
-<body>
+<body> --%>
+	<c:if test="${ sessionScope.user == null }">
+		<!-- and user is admin -->
+		<c:redirect url="/LogIn"></c:redirect>
+	</c:if>
 	<div id="createproject" style="margin-top: 50px;"
 		class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 
@@ -103,5 +107,5 @@
 			</div>
 		</div>
 	</div>	
-</body>
-</html>
+<!-- </body>
+</html> -->

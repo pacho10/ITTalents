@@ -8,13 +8,9 @@ import java.util.List;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
-import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
-import bg.ittalents.efficientproject.model.pojo.Epic;
-import bg.ittalents.efficientproject.model.pojo.Project;
 import bg.ittalents.efficientproject.model.pojo.Type;
 
 public class TypeDAO extends AbstractDBConnDAO {
-	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 	private static final String GET_ALL_TYPES = "SELECT * from types;";
 	private static final String GET_TYPE_BY_ID = "SELECT * from types where id=?;";
 
@@ -38,8 +34,6 @@ public class TypeDAO extends AbstractDBConnDAO {
 		
 		return type;
 	}
-	//TODO return list of types
-	//TODO get type by id
 	
 	public List<Type> getAllTypes() throws DBException {
 		List<Type> types = new ArrayList<>();

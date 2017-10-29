@@ -83,8 +83,6 @@ public class CreateEpicServlet extends HttpServlet {
 		}
 		
 		response.sendRedirect("./projectdetail?projectId="+project.getId());
-//		RequestDispatcher rd = request.getRequestDispatcher("./profileShow.jsp");
-//		rd.forward(request, response);
 	}
 
 }

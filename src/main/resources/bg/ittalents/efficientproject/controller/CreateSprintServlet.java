@@ -51,8 +51,9 @@ public class CreateSprintServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		RequestDispatcher rd = request.getRequestDispatcher("./profileShow.jsp");
-		rd.forward(request, response);
+		//TODO
+//		response.sendRedirect("./projectdetail?projectId="+project.getId());
+//		RequestDispatcher rd = request.getRequestDispatcher("./profileShow.jsp");
+//		rd.forward(request, response);
 	}
 }

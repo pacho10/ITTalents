@@ -88,7 +88,7 @@
 
 								<div class="form-group">
 									<div class="text-center">
-										<img id="avatar2" src="./ImgOutputServlet?userid=${sessionScope.user.id}" class="img-rounded"
+										<img src="./ImgOutputServlet?userid=${sessionScope.user.id}" class="img-rounded"
 											width="300" height=auto>
 									</div>
 								</div>

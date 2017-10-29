@@ -1,5 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+	<c:if test="${ sessionScope.user == null }">
+		<!-- and user is admin -->
+		<c:redirect url="/LogIn"></c:redirect>
+	</c:if>
 	<div id="createproject" style="margin-top: 50px;"
 		class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 

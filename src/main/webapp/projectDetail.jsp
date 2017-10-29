@@ -53,7 +53,7 @@
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
 
-				<h1 class="text-center text-info">${project.name}</h1>
+				<h3  class="text-center text-info">${project.name}</h3>
 				<hr>
 
 				<div id="content">

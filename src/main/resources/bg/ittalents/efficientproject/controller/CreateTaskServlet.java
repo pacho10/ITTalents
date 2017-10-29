@@ -76,6 +76,11 @@ public class CreateTaskServlet extends HttpServlet {
 			Task tskToAdd = new Task(type, summary, description, estimate, reporter, epic);
 			
 			int id = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).addTask(tskToAdd);
+			
+			int projectId=epic.getProject().getId();
+			response.sendRedirect("./projectdetail?projectId="+projectId);
+			
+			
 		} catch (DBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,8 +89,6 @@ public class CreateTaskServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		RequestDispatcher rd = request.getRequestDispatcher("./profileShow.jsp");
-		rd.forward(request, response);	
 	}
 
 }
