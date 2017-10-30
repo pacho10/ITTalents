@@ -66,11 +66,11 @@
 								<tr>
 									<td>${t.type.name}</td>
 									<td>${t.summary}</td>
-									<td>status here!</td>
+									<td>${t.status}</td>
 									<%-- <td>${t.description}</td> --%>
 									<%-- <td>${t.estimate}</td> --%>
 									<%-- <td>${t.creationDate}</td> --%>
-									<td>updated here!</td>
+									<td>${t.updatedDate}</td>
 									<td>${t.reporter.firstName}</td>
 									<td>${t.assignee.firstName}</td>
 									<%-- <td>${t.epic.name}</td> --%>
