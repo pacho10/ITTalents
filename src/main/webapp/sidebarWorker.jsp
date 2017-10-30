@@ -9,10 +9,10 @@
 		<li><a href="./workerTasksAllProjectTasks.jsp">All project
 				tasks</a></li>
 		<li><a href="./workerTasksCurrentSprint.jsp">Current Sprint</a></li>
-		<c:if test="${ sessionScope.project not null }">
+		<%-- <c:if test="${ sessionScope.project not null }"> --%>
 			<li><a href="./createtask?projectId=${project.id}">Create
 					task</a></li>
-		</c:if>
+		<%-- </c:if> --%>
 	<%-- 	<c:if test="${ sessionScope.project == null }">
 			<li><a href="./createtask?projectId=${project.id}">Create
 					task</a></li>
