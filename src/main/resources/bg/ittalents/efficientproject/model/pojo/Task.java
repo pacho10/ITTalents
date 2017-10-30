@@ -14,25 +14,34 @@ public class Task {
 	private Timestamp assignedDate;
 	private Timestamp finishedDate;
 	private Timestamp stoppedDate;
-	// statuses:open,todo,inprogress,resolved,closed //TODO enum? and how to handle it in db and here
+	// statuses:open,todo,inprogress,resolved,closed //TODO enum? and how to handle
+	// it in db and here
 	private Sprint sprint;
 	private User reporter;
 	private User assignee;
 	private Epic epic;
+	private TaskState status;
+	private Timestamp updatedDate;
+
+	private enum TaskState {
+		OPEN, RESOLVED, CLOSED, IN_PROGRESS
+	}
 
 	public Task(Type type, String summary, String description, float estimate, User reporter, Epic epic) {
+		this.status = TaskState.OPEN;
 		this.type = type;
 		this.summary = summary;
 		this.description = description;
 		this.estimate = estimate;
 		this.reporter = reporter;
 		this.epic = epic;
-		this.creationDate = new Timestamp(System.currentTimeMillis());//TODO tuj tyj li e????
+		this.creationDate = new Timestamp(System.currentTimeMillis());// TODO tuj tyj li e????
+		this.updatedDate = this.creationDate;
 	}
 
 	public Task(int id, Type type, String summary, String description, float estimate, Timestamp creationDate,
-			Timestamp addetToSprintDate, Timestamp assignedDate, Timestamp finishedDate, Timestamp stoppedDate
-			, Sprint sprint, User reporter, User assignee, Epic epic) {
+			Timestamp addetToSprintDate, Timestamp assignedDate, Timestamp finishedDate, Timestamp stoppedDate,
+			Sprint sprint, User reporter, User assignee, Epic epic) {
 		this(type, summary, description, estimate, reporter, epic);
 		this.id = id;
 		this.creationDate = creationDate;
@@ -42,6 +51,8 @@ public class Task {
 		this.stoppedDate = stoppedDate;
 		this.sprint = sprint;
 		this.assignee = assignee;
+		this.setStatus();
+		this.setUpdatedDate();
 	}
 
 	public String getSummary() {
@@ -116,7 +127,6 @@ public class Task {
 		this.type = type;
 	}
 
-
 	public Timestamp getAssignedDate() {
 		return assignedDate;
 	}
@@ -155,6 +165,55 @@ public class Task {
 
 	public void setEpic(Epic epic) {
 		this.epic = epic;
+	}
+
+	public TaskState getStatus() {
+		return status;
+	}
+
+	private void setStatus() {
+		// Timestamp creationDate = task.getCreationDate();
+		// Timestamp addetToSprintDate = task.getAddetToSprintDate();
+		Timestamp assignedDate = this.getAssignedDate();
+		Timestamp finishedDate = this.getFinishedDate();
+		// Timestamp stoppedDate = task.getStoppedDate();
+		if (finishedDate != null) {
+			this.status = TaskState.RESOLVED;
+			return;
+		} else {
+			if (assignedDate != null) {
+				this.status = TaskState.IN_PROGRESS;
+				return;
+			}
+		}
+		this.status = TaskState.OPEN;
+	}
+
+	public Timestamp getUpdatedDate() {
+		return updatedDate;
+	}
+
+	private void setUpdatedDate() {
+		Timestamp creationDate = this.getCreationDate();
+		Timestamp addetToSprintDate = this.getAddetToSprintDate();
+		Timestamp assignedDate = this.getAssignedDate();
+		Timestamp finishedDate = this.getFinishedDate();
+		// Timestamp stoppedDate = task.getStoppedDate();
+		if (finishedDate != null) {
+			this.updatedDate = finishedDate;
+			return;
+		} else {
+			if (assignedDate != null) {
+				this.updatedDate = assignedDate;
+				return;
+			} else {
+				if (addetToSprintDate != null) {
+					this.updatedDate = addetToSprintDate;
+					return;
+				}
+			}
+		}
+		this.updatedDate = creationDate;
 	}
 
 }

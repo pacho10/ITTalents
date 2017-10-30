@@ -139,4 +139,31 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		
 		return tasks;
 	}
+	
+	public boolean addTaskToSprint(Task task) {
+		return false;
+	}
+
+	public boolean assignTask(int taskId, int userId) {
+		return false;
+
+	}
+
+	public boolean finishTask(int taskId) {
+		return false;
+
+	}
+
+	public boolean closeTask(int taskId) {
+		return false;
+
+	}
+
+	public boolean updateTask(int taskId) {
+		return false;
+
+	}
+
+
+>>>>>>> 609952a65d099aa64ffa5481a2f05094a67b7ab6
 }
