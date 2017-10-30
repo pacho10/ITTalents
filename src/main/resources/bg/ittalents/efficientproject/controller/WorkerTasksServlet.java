@@ -20,7 +20,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
 /**
  * Servlet implementation class WorkerTasksServlet
  */
-@WebServlet("/workertasksservlet")
+@WebServlet("/workertasks")
 public class WorkerTasksServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

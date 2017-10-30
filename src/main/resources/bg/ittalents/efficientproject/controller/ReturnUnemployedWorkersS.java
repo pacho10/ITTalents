@@ -18,13 +18,13 @@ import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
  * Servlet implementation class returnUnemployedWorkersS
  */
 @WebServlet("/returnUnemployedWorkers")
-public class returnUnemployedWorkersS extends HttpServlet {
+public class ReturnUnemployedWorkersS extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public returnUnemployedWorkersS() {
+    public ReturnUnemployedWorkersS() {
         super();
         // TODO Auto-generated constructor stub
     }

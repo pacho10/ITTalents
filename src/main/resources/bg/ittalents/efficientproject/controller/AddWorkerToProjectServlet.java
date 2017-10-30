@@ -19,7 +19,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
  * Servlet implementation class addWorkerToProjectServlet
  */
 @WebServlet("/addWorkerToProject")
-public class addWorkerToProjectServlet extends HttpServlet {
+public class AddWorkerToProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 
