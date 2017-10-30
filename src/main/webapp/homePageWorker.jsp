@@ -20,21 +20,6 @@
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
-/* 	function SidebarChangeConent() {
-		$("#content").empty();
-		$.ajax({
-			url : './dashboard',
-			type : 'GET',
-			success : function(response) {
-				$("#content").append(response);
-			}
-
-		});
-
-	} */
-</script>
-
 
 </head>
 
@@ -53,7 +38,6 @@
 	<div id="wrapper" class="toggled">
 
 		<!-- Sidebar -->
-		<%-- REMOVE JSP FROM HERE!!!!! --%>
 		<jsp:include page="sidebarWorker.jsp"></jsp:include>
 
 		<!-- Page Content -->

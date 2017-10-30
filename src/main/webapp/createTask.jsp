@@ -1,5 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
- <%@ page isELIgnored="false"%>
+<%@ page isELIgnored="false"%>
 <%@ page errorPage="error.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -10,21 +12,33 @@
 
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
+<link href="bootstrap/css/simple-sidebar.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css"
 	href="font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="customCSS/styles.css">
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-<link href="css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Custom CSS -->
-<link href="bootstrap/css/simple-sidebar.css" rel="stylesheet">
 </head>
-<body> 
+<body>
 	<c:if test="${ sessionScope.user == null }">
 		<!-- and user is admin -->
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
+
+	<c:if test="${not sessionScope.user.admin}">
+		<jsp:include page="navBarWorker.jsp"></jsp:include>
+		<!-- Page  -->
+		<div id="wrapper" class="toggled">
+
+			<!-- Sidebar -->
+			<jsp:include page="sidebarWorker.jsp"></jsp:include>
+
+			<!-- Page Content -->
+			<div id="page-content-wrapper">
+	</c:if>
+
 	<div id="createproject" style="margin-top: 50px;"
 		class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 
@@ -34,7 +48,7 @@
 				<div class="panel-title">Create New Task</div>
 
 			</div>
-			<div class="panel-body">				
+			<div class="panel-body">
 				<form method="post" action="./createtask" id="create-task"
 					class="form-horizontal" role="form">
 
@@ -47,11 +61,11 @@
 					<div class="form-group">
 						<label for="summary" class="col-md-3 control-label">Summary</label>
 						<div class="col-md-9">
-							<input type="text" id="summary" class="form-control" name="summary"
-								placeholder="Summary" required>
+							<input type="text" id="summary" class="form-control"
+								name="summary" placeholder="Summary" required>
 						</div>
 					</div>
-										<div class="form-group">
+					<div class="form-group">
 						<label for="description" class="col-md-3 control-label">Description</label>
 						<div class="col-md-9">
 							<input type="text" id="description" class="form-control"
@@ -106,6 +120,13 @@
 				</form>
 			</div>
 		</div>
-	</div>	
- </body>
-</html> 
+	</div>
+	<c:if test="${not sessionScope.user.admin}">
+		</div>
+		<!-- /#page-content-wrapper -->
+
+		</div>
+		<!-- /#wrapper -->
+	</c:if>
+</body>
+</html>
