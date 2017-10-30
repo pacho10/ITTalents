@@ -26,10 +26,9 @@
 
 <body onload="SidebarChangeConent();">
 
-
-	<c:if test="${ sessionScope.user == null }">
+ 	<c:if test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
-	</c:if>
+	</c:if> 
 
 	<%-- Navbar  --%>
 	<jsp:include page="navBarWorker.jsp"></jsp:include>
@@ -58,8 +57,7 @@
 								<th>Updated Date</th>
 								<th>Reporter</th>
 								<th>Assignee</th>
-								<th></th>
-								<th></th>
+								<th>Add to sprint Button</th>
 								<!-- <th>Epic</th> -->
 							</thead>
 							<c:forEach var="t" items="${tasks}">
@@ -74,8 +72,7 @@
 									<td>${t.reporter.firstName}</td>
 									<td>${t.assignee.firstName}</td>
 									<%-- <td>${t.epic.name}</td> --%>
-									<td>Finish Button</td>
-									<td>Cancel Button</td>
+									<td>Add to sprint Button</td>
 								</tr>
 							</c:forEach>
 						</table>

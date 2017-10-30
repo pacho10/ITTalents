@@ -32,6 +32,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	private static final String UPDATE_WORKER_STATE_TO_EMPLOYED = "UPDATE users SET `is_employed`='1' WHERE `id`=?;";
 	private static final String UPDATE_WORKER_STATE_TO_UNEMPLOYED = "UPDATE users SET `is_employed`='0' WHERE `id`=?;";
 	private static final String INSERT_WORKER_INTO_PROJECTS_WORKERS_HISTORY = "insert into users_projects_history values (?,?);";
+	private static final String RETURN_CURRENT_PROJECT_OF_WORKER = "select h.project_id from users_projects_history h join projects p on p.id=h.project_id where h.users_id=? and p.deadline > CURDATE();";
 
 	@Override
 	public int addUserAdmin(User user)
@@ -118,7 +119,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 			if (rs.next()) {
 				Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(8));
-				
+
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 
@@ -266,6 +267,24 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			getCon().setAutoCommit(true);
 		}
 
+	}
+
+	public int returnCurrentWorkersProject(User user) throws EffPrjDAOException, DBException {
+		try {
+
+			PreparedStatement ps = getCon().prepareStatement(RETURN_CURRENT_PROJECT_OF_WORKER);
+			ps.setInt(1, user.getId());
+			System.out.println(user.getId());
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+			throw new EffPrjDAOException("no found results");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DBException("Cannot check for user right now!Try again later", e);
+		}
 	}
 
 	// TODO validation and synchronization!!!!!!!<--------> proper collections

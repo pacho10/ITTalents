@@ -14,6 +14,7 @@ import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
+import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Project;
 import bg.ittalents.efficientproject.model.pojo.User;
 
@@ -64,6 +65,17 @@ public class DashboardServlet extends HttpServlet {
 				request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
 				response.setContentType("text/html"); 
 			} else {
+				int CurrentProjectId;
+				try {
+					//TODO if the worker doesnt have current project-->show a message!!!
+					CurrentProjectId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).returnCurrentWorkersProject(user);
+					Project project =IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(CurrentProjectId);
+					request.getSession().setAttribute("project", project);
+					
+				} catch (EffPrjDAOException | DBException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				request.getRequestDispatcher("./homePageWorker.jsp").forward(request, response);
 
 			}
