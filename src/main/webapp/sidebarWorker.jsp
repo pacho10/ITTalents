@@ -8,7 +8,7 @@
 		<li><a href="/final_project/workertasksservlet">My open tasks</a></li>
 		<li><a href="./workerTasksAllProjectTasks.jsp">All project
 				tasks</a></li>
-		<li><a href="./workerTasksCurrentSprint.jsp">Current Sprint</a></li>
+		<li><a href="/final_project/allsprinttasks">Current Sprint</a></li>
 		<%-- <c:if test="${ sessionScope.project not null }"> --%>
 			<li><a href="./createtask?projectId=${project.id}">Create
 					task</a></li>

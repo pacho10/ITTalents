@@ -28,6 +28,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final String INSERT_USER_INTO_DB = "INSERT into tasks values(null,?,?,?,?,?,null,null,null,null,null,?,null,?);";
 	private static final String SELECT_FROM_TASKS_BY_ID = "Select * from tasks where id=?;";
 	private static final String GET_ALL_TASKS_BY_USER = "SELECT	* from tasks where assignee=?;";
+	private static final String GET_ALL_TASKS_FROM_SPRINT = "SELECT * from tasks where sprint_id=?;";
 	
 	@Override
 	public int addTask(Task task) throws EffPrjDAOException, DBException {
@@ -111,8 +112,31 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		return tasks;
 	}
 
-	
-	
-
-
+	public List<Task> getAllTasksFromSprint(int sprintId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+		List<Task> tasks = new ArrayList<>();
+		
+		try {
+			PreparedStatement ps = getCon().prepareStatement(GET_ALL_TASKS_FROM_SPRINT);
+			ps.setInt(1, sprintId);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				Type type = ITypeDAO.getDAO(SOURCE_DATABASE).getTypeById(rs.getInt(2));
+				Sprint sprint = ISprintDAO.getDAO(SOURCE_DATABASE).getSprintBId(rs.getInt(11));
+				User reporter = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(12));
+				User assignee = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(13));
+				Epic epic = IEpicDAO.getDAO(SOURCE_DATABASE).getEpicById(rs.getInt(14));
+				tasks.add(new Task(rs.getInt(1), type, rs.getString(3), rs.getString(4), rs.getFloat(5), rs.getTimestamp(6), 
+						rs.getTimestamp(7), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10), sprint, reporter, 
+						assignee, epic));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			throw new DBException("can not find tas for this sprint");
+		}
+		
+		return tasks;
+	}
 }
