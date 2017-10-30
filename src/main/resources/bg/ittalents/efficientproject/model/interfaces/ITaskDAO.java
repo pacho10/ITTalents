@@ -19,14 +19,6 @@ public interface ITaskDAO {
 
 	Task getTaskById(int id) throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
 
-	boolean addTaskToSprint(Task task);
 
-	boolean assignTask(int taskId, int userId);
-
-	boolean finishTask(int taskId);
-
-	boolean closeTask(int taskId);
-
-	boolean updateTask(int taskId);
 
 }
