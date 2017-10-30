@@ -207,11 +207,11 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 	}
 
-	public boolean employWorker(User user) throws DBException {
+	public boolean employWorker(int userId) throws DBException {
 		PreparedStatement ps;
 		try {
 			ps = getCon().prepareStatement(UPDATE_WORKER_STATE_TO_EMPLOYED);
-			ps.setInt(1, user.getId());
+			ps.setInt(1, userId);
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
@@ -233,9 +233,9 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 		}
 	}
 
-	public void addUserToProject(User user, int project_id)
+	public void addUserToProject(int userId, int projectId)
 			throws UnsupportedDataTypeException, EffPrjDAOException, DBException, SQLException {
-		if (user == null && project_id > 0) {
+		if (userId < 0 && projectId > 0) {
 			throw new EffPrjDAOException("Ivalid user or project_id");
 		}
 		try {
@@ -243,16 +243,15 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			getCon().setAutoCommit(false);
 			// add to projects_workers_history:
 			PreparedStatement ps = getCon().prepareStatement(INSERT_WORKER_INTO_PROJECTS_WORKERS_HISTORY);
-			ps.setInt(1, user.getId());
-			ps.setInt(2, project_id);
+			ps.setInt(1, userId);
+			ps.setInt(2, projectId);
 			ps.executeUpdate();
 
 			// change state to eployeed:
-			employWorker(user);
+			employWorker(userId);
 
 			// removefrom the workers list:
-			removeWorkerFromUnemployedWorkers(user);
-
+			removeWorkerFromUnemployedWorkers(getUserById(userId));
 			getCon().commit();
 		} catch (SQLException e) {
 			e.printStackTrace();

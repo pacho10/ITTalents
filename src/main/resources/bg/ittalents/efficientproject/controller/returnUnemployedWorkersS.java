@@ -35,8 +35,7 @@ public class returnUnemployedWorkersS extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
-		Collection workers = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getAllUnemployedWorkers();
-		String s = new Gson().toJson(workers);
+		String s = new Gson().toJson(IUserDAO.getDAO(DAOStorageSourse.DATABASE).getAllUnemployedWorkers());
 		System.out.println(s);
 		response.getWriter().println(s);	}
 

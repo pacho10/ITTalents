@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class AddWorkersServlet
  */
-@WebServlet("/AddWorkersServlet")
+@WebServlet("/addWorkers")
 public class AddWorkersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -31,6 +31,8 @@ public class AddWorkersServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		int projectId = Integer.parseInt(request.getParameter("projectId"));
+		request.setAttribute("projectId",projectId);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./addWorker.jsp");
 		dispatcher.forward(request, response);
 	}

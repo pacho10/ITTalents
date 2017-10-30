@@ -165,5 +165,4 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 
->>>>>>> 609952a65d099aa64ffa5481a2f05094a67b7ab6
 }
