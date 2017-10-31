@@ -10,8 +10,7 @@ import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 
 public class SprintDAO  extends AbstractDBConnDAO implements ISprintDAO{
-	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
-	private static final String CREATE_SPRINT = "INSERT into sprints values(null,?,?,?);";
+	private static final String CREATE_SPRINT = "INSERT into sprints values(null,?,?,?,?);";
 	private static final String GET_SPRINT_BY_ID = "SELECT * from sprints where id=?;";
 	
 	public int createSprint(Sprint sprint) throws DBException {
@@ -20,6 +19,7 @@ public class SprintDAO  extends AbstractDBConnDAO implements ISprintDAO{
 			ps.setString(1, sprint.getName());
 			ps.setDate(2, sprint.getStartDate());
 			ps.setInt(3, sprint.getDuration());
+			ps.setInt(4, sprint.getProject_id());
 			
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
@@ -43,7 +43,7 @@ public class SprintDAO  extends AbstractDBConnDAO implements ISprintDAO{
 			ResultSet rs = ps.executeQuery();
 			
 			if (rs.next()) {
-				sprint = new Sprint(rs.getInt(1), rs.getString(2), rs.getDate(3), rs.getInt(4));
+				sprint = new Sprint(rs.getInt(1), rs.getString(2), rs.getDate(3), rs.getInt(4),rs.getInt(5));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -8,16 +8,20 @@ public class Sprint {
 	private String name;
 	private Date startDate;
 	private int duration;
+	private int project_id;
 
-	public Sprint(String name, int duration) {
+	public Sprint(String name, int duration,int project_id) {
 		this.name = name;
 		this.duration = duration;
+		this.setProject_id(project_id);
 		this.startDate = new Date(Calendar.getInstance().getTime().getTime());// TODO ????
 	}
 
-	public Sprint(int id, String name, Date startDate, int duration) {
-		this(name, duration);
+	public Sprint(int id, String name, Date startDate, int duration,int project_id) {
+		this(name, duration, project_id);
 		this.id = id;
+		this.startDate=startDate;
+		
 	}
 
 	public int getId() {
@@ -50,6 +54,14 @@ public class Sprint {
 
 	public void setDuration(int duration) {
 		this.duration = duration;
+	}
+
+	public int getProject_id() {
+		return project_id;
+	}
+
+	public void setProject_id(int project_id) {
+		this.project_id = project_id;
 	}
 
 }

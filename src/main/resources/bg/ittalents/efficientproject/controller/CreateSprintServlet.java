@@ -48,7 +48,7 @@ public class CreateSprintServlet extends HttpServlet {
 //		request.setAttribute("projectId", projectId);
 		
 		
-		Sprint sprintToAdd = new Sprint(name, duration);
+		Sprint sprintToAdd = new Sprint(name, duration,projectId);
 		try {
 			ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
 		} catch (DBException e) {
