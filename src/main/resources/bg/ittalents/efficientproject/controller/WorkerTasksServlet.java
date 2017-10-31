@@ -42,7 +42,7 @@ public class WorkerTasksServlet extends HttpServlet {
 				List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksByUser(user.getId());
 				request.setAttribute("tasks", tasks);
 				
-				RequestDispatcher rd = request.getRequestDispatcher("./workerTasksCurrentSprint.jsp");
+				RequestDispatcher rd = request.getRequestDispatcher("./workerTasks.jsp");
 				rd.forward(request, response);
 			} catch (DBException e) {
 				// TODO Auto-generated catch block
@@ -53,7 +53,7 @@ public class WorkerTasksServlet extends HttpServlet {
 			}
 		} else {
 
-			
+			response.sendRedirect("./LogIn");
 		}
 	}
 

@@ -58,7 +58,7 @@
 								<th>Updated Date</th>
 								<th>Reporter</th>
 								<th>Assignee</th>
-								<th></th>
+								<th>Finish</th>
 								<th></th>
 								<!-- <th>Epic</th> -->
 							</thead>
@@ -74,8 +74,10 @@
 									<td>${t.reporter.firstName}</td>
 									<td>${t.assignee.firstName}</td>
 									<%-- <td>${t.epic.name}</td> --%>
-									<td>Finish Button</td>
-									<td>Cancel Button</td>
+									<td>
+										<a class="btn btn-info" href="/final_project/finishtask?taskId=${t.id}">Finish</a>
+									</td>
+									<%-- <td>Cancel Button</td> --%>
 								</tr>
 							</c:forEach>
 						</table>
