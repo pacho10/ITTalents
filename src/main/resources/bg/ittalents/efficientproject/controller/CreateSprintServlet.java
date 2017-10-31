@@ -63,8 +63,9 @@ public class CreateSprintServlet extends HttpServlet {
 			
 			String name = request.getParameter("name");
 			int duration = Integer.parseInt(request.getParameter("duration"));
-			
-			Sprint sprintToAdd = new Sprint(name, duration);
+		    int projectId= Integer.parseInt(request.getParameter("projectId"));
+		    
+			Sprint sprintToAdd = new Sprint(name, duration,projectId);
 			try {
 				int id = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
 				context.setAttribute("sprintId", id);
