@@ -33,8 +33,9 @@ public class CreateSprintServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("./createSprint.jsp");
-		rd.forward(request, response);
+		int projectId= Integer.parseInt(request.getParameter("projectId"));
+		request.setAttribute("projectId", projectId);
+		request.getRequestDispatcher("./createSprint.jsp").forward(request, response);
 	}
 
 	/**
@@ -43,6 +44,9 @@ public class CreateSprintServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name = request.getParameter("name");
 		int duration = Integer.parseInt(request.getParameter("duration"));
+		int projectId= Integer.parseInt(request.getParameter("projectId"));
+//		request.setAttribute("projectId", projectId);
+		
 		
 		Sprint sprintToAdd = new Sprint(name, duration);
 		try {
@@ -52,7 +56,7 @@ public class CreateSprintServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		//TODO
-//		response.sendRedirect("./projectdetail?projectId="+project.getId());
+		response.sendRedirect("./projectdetail?projectId="+projectId);
 //		RequestDispatcher rd = request.getRequestDispatcher("./profileShow.jsp");
 //		rd.forward(request, response);
 	}

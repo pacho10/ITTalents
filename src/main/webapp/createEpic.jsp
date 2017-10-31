@@ -73,6 +73,10 @@
 							<button id="btn-create-epic" type="submit" class="btn btn-info">
 								<i class="icon-hand-right"></i> Create
 							</button>
+							<button onclick="location.href = './projectdetail?projectId=${projectId}';" id="cancelButton"
+							class="btn btn-info">Cancel</button>
+						</div>
+							
 						</div>
 					</div>
 				</form>

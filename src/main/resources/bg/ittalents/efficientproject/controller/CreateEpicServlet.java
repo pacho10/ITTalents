@@ -40,7 +40,8 @@ public class CreateEpicServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getSession().getAttribute("user") != null) {
-			response.getWriter().append("Served at: ").append(request.getContextPath());
+			int projectId= Integer.parseInt(request.getParameter("projectId"));
+			request.setAttribute("projectId", projectId);
 			List<Project> projects = new ArrayList<>();
 			User user = (User) request.getSession().getAttribute("user");
 			

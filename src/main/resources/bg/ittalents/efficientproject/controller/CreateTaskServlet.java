@@ -53,7 +53,7 @@ public class CreateTaskServlet extends HttpServlet {
 		} catch (EffPrjDAOException e) {
 			e.printStackTrace();
 		}
-		
+		request.setAttribute("projectId", projectId);
 		RequestDispatcher rd = request.getRequestDispatcher("./createTask.jsp");
 		rd.forward(request, response);
 	}
