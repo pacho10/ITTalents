@@ -43,6 +43,7 @@
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
 
+	<%-- Navbar  --%>
 	<c:choose>
 		<c:when test="${sessionScope.user.admin}">
 			<jsp:include page="navBarAdmin.jsp"></jsp:include>
