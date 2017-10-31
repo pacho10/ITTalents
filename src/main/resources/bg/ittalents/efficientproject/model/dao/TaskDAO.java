@@ -3,6 +3,7 @@ package bg.ittalents.efficientproject.model.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final String SELECT_FROM_TASKS_BY_ID = "Select * from tasks where id=?;";
 	private static final String GET_ALL_TASKS_BY_USER = "SELECT	* from tasks where assignee=?;";
 	private static final String GET_ALL_TASKS_FROM_SPRINT = "SELECT * from tasks where sprint_id=?;";
+	private static final String WORKER_ASSIGNE_TASK = "UPDATE tasks SET assigned_date=?, assignee=? WHERE id=?;";
 	
 	@Override
 	public int addTask(Task task) throws EffPrjDAOException, DBException {
@@ -140,12 +142,25 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		return tasks;
 	}
 	
-	public boolean addTaskToSprint(Task task) {
+	public boolean addTaskToSprint(Task task)  {
+		
 		return false;
 	}
 
-	public boolean assignTask(int taskId, int userId) {
-		return false;
+	public boolean assignTask(int taskId, int userId) throws DBException {
+		try {
+			PreparedStatement ps = getCon().prepareStatement(WORKER_ASSIGNE_TASK);
+			ps.setTimestamp(1, new Timestamp(new Date().getTime()));
+			ps.setInt(2, userId);
+			ps.setInt(3, taskId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			throw new DBException("task can not be assigned");
+		}
+		
+		return true;
 
 	}
 

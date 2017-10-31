@@ -72,7 +72,20 @@
 									<td>${t.reporter.firstName}</td>
 									<td>${t.assignee.firstName}</td>
 									<%-- <td>${t.epic.name}</td> --%>
-									<td>Assigne to me Button</td>
+									<td>
+										<!--<c:if test="${t.assignee == null}">
+											<a class="btn btn-info" href="/final_project/assignetask?taskId=${t.id}">Get Task</a>
+										</c:if>-->
+										
+										<c:choose>
+											<c:when test="${t.assignee == null}">
+												<a class="btn btn-info" href="/final_project/assignetask?taskId=${t.id}">Get Task</a>
+											</c:when>
+											<c:otherwise>
+												<span>task is alredy taken</span>
+											</c:otherwise>
+										</c:choose>
+									</td>
 								</tr>
 							</c:forEach>
 						</table>
