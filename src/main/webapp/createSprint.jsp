@@ -12,7 +12,8 @@
 		<div class="panel-body">
 			<form method="post" action="./createsprint" id="create-sprint"
 				class="form-horizontal">
-
+				
+				<input type ="hidden" name="projectId" value="${projectId}">
 				<!--<div id="signupalert" style="display: none"
 						class="alert alert-danger">
 						<p>Error:</p>
