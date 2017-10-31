@@ -1,8 +1,11 @@
 package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,16 +44,38 @@ public class CreateSprintServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("name");
-		int duration = Integer.parseInt(request.getParameter("duration"));
-		
-		Sprint sprintToAdd = new Sprint(name, duration);
-		try {
-			ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
-		} catch (DBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (request.getSession().getAttribute("user") != null) {
+			ServletContext context = getServletContext();
+			boolean isExpired = true;
+			if (context.getAttribute("sprintId") != null) {
+				int id = (int) request.getSession().getAttribute("user");
+				try {
+					Sprint sprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getSprintBId(id);
+					//int days = sprint.getStartDate(). + sprint.getDuration();
+					int test = sprint.getStartDate().compareTo(new Date());
+					System.out.println(test);
+				} catch (DBException e) {
+					e.printStackTrace();
+					response.sendRedirect("./error.jsp");
+				}
+			}
+			
+			String name = request.getParameter("name");
+			int duration = Integer.parseInt(request.getParameter("duration"));
+			
+			Sprint sprintToAdd = new Sprint(name, duration);
+			try {
+				int id = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
+				context.setAttribute("sprintId", id);
+				System.out.println(context.getAttribute("sprintId"));
+			} catch (DBException e) {
+				e.printStackTrace();
+				response.sendRedirect("./error.jsp");
+			}
+		} else {
+			response.sendRedirect("./LogIn");
 		}
+		
 		//TODO
 //		response.sendRedirect("./projectdetail?projectId="+project.getId());
 //		RequestDispatcher rd = request.getRequestDispatcher("./profileShow.jsp");
