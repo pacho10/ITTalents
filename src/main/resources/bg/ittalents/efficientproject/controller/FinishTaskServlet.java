@@ -1,10 +1,6 @@
 package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,22 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
-import bg.ittalents.efficientproject.model.pojo.Task;
 
 /**
- * Servlet implementation class AllSprintTasksServlet
+ * Servlet implementation class FinisheTaskServlet
  */
-@WebServlet("/allsprinttasks")
-public class AllSprintTasksServlet extends HttpServlet {
+@WebServlet("/finishtask")
+public class FinishTaskServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AllSprintTasksServlet() {
+    public FinishTaskServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,21 +31,20 @@ public class AllSprintTasksServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getSession().getAttribute("user") != null) {
-			ServletContext context = getServletContext();
-			//int sprintId = (int) context.getAttribute("sprintId");
-			
+			int taskId = Integer.parseInt(request.getParameter("taskId"));
+			boolean result = false;
 			try {
-				List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksFromSprint(1);
-				request.setAttribute("tasks", tasks);
-				
-				RequestDispatcher rd = request.getRequestDispatcher("./workerTasksCurrentSprint.jsp");
-				rd.forward(request, response);
-			} catch (DBException | EffPrjDAOException e) {
+				result = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).finishTask(taskId);
+				if (result) {
+					response.sendRedirect("./dashboard");
+				}
+			} catch (DBException e) {
 				e.printStackTrace();
 				response.sendRedirect("./error.jsp");
 			}
+			
 		} else {
-			response.sendRedirect("./error.jsp");
+			response.sendRedirect("./LogIn");
 		}
 	}
 

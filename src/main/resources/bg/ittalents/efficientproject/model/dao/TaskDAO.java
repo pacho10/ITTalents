@@ -28,9 +28,10 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
 	private static final String INSERT_USER_INTO_DB = "INSERT into tasks values(null,?,?,?,?,?,null,null,null,null,null,?,null,?);";
 	private static final String SELECT_FROM_TASKS_BY_ID = "Select * from tasks where id=?;";
-	private static final String GET_ALL_TASKS_BY_USER = "SELECT	* from tasks where assignee=?;";
+	private static final String GET_ALL_TASKS_BY_USER = "SELECT	* from tasks where assignee=? and finished_date is null;";
 	private static final String GET_ALL_TASKS_FROM_SPRINT = "SELECT * from tasks where sprint_id=?;";
 	private static final String WORKER_ASSIGNE_TASK = "UPDATE tasks SET assigned_date=?, assignee=? WHERE id=?;";
+	private static final String FINISHE_TASK = "UPDATE tasks SET finished_date=? WHERE id=?;";
 	
 	@Override
 	public int addTask(Task task) throws EffPrjDAOException, DBException {
@@ -164,9 +165,19 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 
 	}
 
-	public boolean finishTask(int taskId) {
-		return false;
-
+	public boolean finishTask(int taskId) throws DBException {
+		try {
+			PreparedStatement ps = getCon().prepareStatement(FINISHE_TASK);
+			ps.setTimestamp(1, new Timestamp(new Date().getTime()));
+			ps.setInt(2, taskId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			throw new DBException("task can not be finished");
+		}
+		
+		return true;
 	}
 
 	public boolean closeTask(int taskId) {

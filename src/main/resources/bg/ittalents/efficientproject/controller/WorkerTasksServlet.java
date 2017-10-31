@@ -53,7 +53,7 @@ public class WorkerTasksServlet extends HttpServlet {
 			}
 		} else {
 
-			
+			response.sendRedirect("./LogIn");
 		}
 	}
 
