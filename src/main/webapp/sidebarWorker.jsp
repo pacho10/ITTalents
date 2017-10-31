@@ -5,8 +5,8 @@
 
 	<ul class="sidebar-nav">
 		<li class="sidebar-brand"><a href="./dashboard"> Dashboard </a></li>
-		<li><a href="/final_project/workertasks">My open tasks</a></li>
-		<li><a href="./workerTasksAllProjectTasks.jsp">All project
+		<li><a href="./workertasks">My open tasks</a></li>
+		<li><a href="./allTasksProject?projectId=${project.id}">All project
 				tasks</a></li>
 		<li><a href="/final_project/allsprinttasks">Current Sprint</a></li>
 		<%-- <c:if test="${ sessionScope.project not null }"> --%>

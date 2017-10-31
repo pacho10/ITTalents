@@ -115,6 +115,17 @@
 							<button id="btn-create-epic" type="submit" class="btn btn-info">
 								<i class="icon-hand-right"></i> Create
 							</button>
+							<c:if test="${sessionScope.user.admin}">
+								<button
+									onclick="location.href = './projectdetail?projectId=${projectId}';"
+									id="cancelButton" class="btn btn-info">Cancel</button>
+							</c:if>
+							<c:if test="${not sessionScope.user.admin}">
+								<button
+									onclick="location.href = './dashboard';"
+									id="cancelButton" class="btn btn-info">Cancel</button>
+							</c:if>
+
 						</div>
 					</div>
 				</form>

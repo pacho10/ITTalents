@@ -26,8 +26,7 @@
 <body onload="SidebarChangeConent();">
 
 
-	<c:if test="${ sessionScope.user == null }">
-		<!-- and user is admin -->
+	<c:if test="${ sessionScope.user == null and user.isAdmin}">
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
 

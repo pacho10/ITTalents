@@ -40,7 +40,8 @@ public class CreateEpicServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getSession().getAttribute("user") != null) {
-			response.getWriter().append("Served at: ").append(request.getContextPath());
+			int projectId= Integer.parseInt(request.getParameter("projectId"));
+			request.setAttribute("projectId", projectId);
 			List<Project> projects = new ArrayList<>();
 			User user = (User) request.getSession().getAttribute("user");
 			
@@ -68,7 +69,9 @@ public class CreateEpicServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		int estimate = Integer.parseInt(request.getParameter("estimate"));
 		String description = request.getParameter("description");
-		int projectId = Integer.parseInt(request.getParameter("projects"));
+		int projectId= Integer.parseInt(request.getParameter("projectId"));
+//		int projectId = Integer.parseInt(request.getParameter("projects"));
+		
 		Project project=null;
 		try {
 			project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);

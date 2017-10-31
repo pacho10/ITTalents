@@ -31,14 +31,27 @@
 	</c:if> 
 
 	<%-- Navbar  --%>
-	<jsp:include page="navBarWorker.jsp"></jsp:include>
+	<c:choose>
+		<c:when test="${sessionScope.user.admin}">
+			<jsp:include page="navBarAdmin.jsp"></jsp:include>
+		</c:when>
+		<c:otherwise>
+			<jsp:include page="navBarWorker.jsp"></jsp:include>
+		</c:otherwise>
+	</c:choose>
 
 	<!-- Page  -->
 	<div id="wrapper" class="toggled">
 
 		<!-- Sidebar -->
-		<%-- REMOVE JSP FROM HERE!!!!! --%>
-		<jsp:include page="sidebarWorker.jsp"></jsp:include>
+		<c:choose>
+			<c:when test="${sessionScope.user.admin}">
+				<jsp:include page="sidebarProject.jsp?projectId=${project.id}"></jsp:include>
+			</c:when>
+			<c:otherwise>
+				<jsp:include page="sidebarWorker.jsp"></jsp:include>
+			</c:otherwise>
+		</c:choose>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
@@ -57,7 +70,6 @@
 								<th>Updated Date</th>
 								<th>Reporter</th>
 								<th>Assignee</th>
-								<th>Add to sprint Button</th>
 								<!-- <th>Epic</th> -->
 							</thead>
 							<c:forEach var="t" items="${tasks}">
@@ -72,7 +84,7 @@
 									<td>${t.reporter.firstName}</td>
 									<td>${t.assignee.firstName}</td>
 									<%-- <td>${t.epic.name}</td> --%>
-									<td>Add to sprint Button</td>
+									
 								</tr>
 							</c:forEach>
 						</table>

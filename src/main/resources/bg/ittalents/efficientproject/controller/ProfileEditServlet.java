@@ -45,12 +45,12 @@ public class ProfileEditServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		if( request.getSession(false)==null) {
+
+		if (request.getSession(false) == null) {
 			response.sendRedirect("/LogIn");
 		}
 		User user = (User) request.getSession().getAttribute("user");
-		int userId=user.getId();
+		int userId = user.getId();
 
 		String firstName = request.getParameter("first-name");
 		String lastName = request.getParameter("last-name");
@@ -60,22 +60,24 @@ public class ProfileEditServlet extends HttpServlet {
 		String reNewPass = request.getParameter("rep-new-password");
 		Part avatarPart = request.getPart("avatar");
 
-
-		InputStream fis = avatarPart.getInputStream();
-		//F:\Java\final-project-img
-		String avatarPath=IMAGES_PATH + File.separator +userId+".jpg";
-		File myFile = new File(avatarPath);
-		if (!myFile.exists()) {
-			myFile.createNewFile();
+		// chsck if there is actually uploaded file:
+		if ( avatarPart.getSize() != 0) {
+			InputStream fis = avatarPart.getInputStream();
+			String avatarPath = IMAGES_PATH + File.separator + userId + ".jpg";
+			File myFile = new File(avatarPath);
+			if (!myFile.exists()) {
+				myFile.createNewFile();
+			}
+			FileOutputStream fos = new FileOutputStream(myFile);
+			int b = fis.read();
+			while (b != -1) {
+				fos.write(b);
+				b = fis.read();
+			}
+			fis.close();
+			fos.close();
+			user.setAvatarPath(avatarPath);
 		}
-		FileOutputStream fos = new FileOutputStream(myFile);
-		int b = fis.read();
-		while (b != -1) {
-			fos.write(b);
-			b = fis.read();
-		}
-		fis.close();
-		fos.close();
 
 		/*
 		 * check if the new email already exists in the db
@@ -126,7 +128,7 @@ public class ProfileEditServlet extends HttpServlet {
 		if (newPass.trim().length() > 0) {
 			user.setPassword(Encrypter.encrypt(newPass));
 		}
-		user.setAvatarPath(avatarPath);
+//		user.setAvatarPath(avatarPath);
 		user.setEmail(email);
 
 		try {
