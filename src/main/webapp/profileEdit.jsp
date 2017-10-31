@@ -89,8 +89,8 @@
 
 								<div class="form-group">
 									<div class="text-center">
-										<img src="./ImgOutputServlet?userid=${sessionScope.user.id}" class="img-rounded"
-											width="300" height=auto>
+										<img src="./ImgOutputServlet?userid=${sessionScope.user.id}"
+											class="img-rounded" width="300" height=auto>
 									</div>
 								</div>
 
@@ -178,10 +178,14 @@
 									<div class="col-md-offset-3 col-md-9">
 										<button onclick="myFunction()" id="btn-signup" type="submit"
 											class="btn btn-info">Submit</button>
+											
+
 									</div>
 								</div>
 
 							</form>
+										<button onclick="location.href = './dashboard';"
+											 class="btn btn-info">Cancel</button>
 
 						</div>
 					</div>
