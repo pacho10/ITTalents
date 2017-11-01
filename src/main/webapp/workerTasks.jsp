@@ -38,14 +38,14 @@
 	<div id="wrapper" class="toggled">
 
 		<!-- Sidebar -->
-		<%-- REMOVE JSP FROM HERE!!!!! --%>
 		<jsp:include page="sidebarWorker.jsp"></jsp:include>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 			<div id="content">
 				<div class="container-fluid" id="dashboard">
-					<h1 class="text-center text-success">PROJECT NAME</h1>
+					<h3 class="text-center text-info">${project.name}</h3>
+					<h4 class="text-center text-info">My open tasks</h4>
 					<hr>
 					<div class="table-responsive">
 						<table class="table">
@@ -67,7 +67,6 @@
 									<td>${t.updatedDate}</td>
 									<td>${t.reporter.firstName}</td>
 									<td>${t.assignee.firstName}</td>
-									<%-- <td>${t.epic.name}</td> --%>
 									<td>
 										<a class="btn btn-info" href="./finishtask?taskId=${t.id}">Finish</a>
 									</td>

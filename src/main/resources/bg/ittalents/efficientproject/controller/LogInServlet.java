@@ -23,12 +23,12 @@ public class LogInServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		//dissable cache:
+
+		// dissable cache:
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
 		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
 		response.setHeader("Expires", "0"); // Proxies.
-		
+
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
@@ -39,7 +39,7 @@ public class LogInServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String email = request.getParameter("email");
-//		System.out.println(email);
+		// System.out.println(email);
 		String password = request.getParameter("password");
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
@@ -55,14 +55,11 @@ public class LogInServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 
 		// there is user with this email but password doesn`t match:
 		User user = null;
 		try {
 			user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserByEmail(email);
-//			System.out.println(user);
-			// System.out.println(user);
 		} catch (EffPrjDAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,7 +72,7 @@ public class LogInServlet extends HttpServlet {
 			dispatcher.forward(request, response);
 			return;
 		}
-		
+
 		// everythig went well:
 		request.getSession().setAttribute("user", user);
 		response.sendRedirect("./dashboard");

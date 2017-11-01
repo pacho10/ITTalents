@@ -23,7 +23,6 @@
 </head>
 <body>
 	<c:if test="${ sessionScope.user == null }">
-		<!-- and user is admin -->
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
 
@@ -37,6 +36,8 @@
 
 			<!-- Page Content -->
 			<div id="page-content-wrapper">
+				<h3 class="text-center text-info">${project.name}</h3>
+				<hr>
 	</c:if>
 
 	<div id="createproject" style="margin-top: 50px;"
@@ -121,8 +122,7 @@
 									id="cancelButton" class="btn btn-info">Cancel</button>
 							</c:if>
 							<c:if test="${not sessionScope.user.admin}">
-								<button
-									onclick="location.href = './dashboard';"
+								<button onclick="location.href = './dashboard';"
 									id="cancelButton" class="btn btn-info">Cancel</button>
 							</c:if>
 

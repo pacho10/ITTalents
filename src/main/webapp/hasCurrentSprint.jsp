@@ -5,11 +5,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Schupi se</title>
+<title>Efficien project</title>
 </head>
 <body>
 	<h1 class="text-center text-danger">Allredy has sprint in progres</h1>
-	<hr>
-	<a class="btn btn-info" href="./dashboard">Dashboard</a>
+	<!-- <hr>
+	<a class="btn btn-info" href="./dashboard">Dashboard</a> -->
 </body>
 </html>

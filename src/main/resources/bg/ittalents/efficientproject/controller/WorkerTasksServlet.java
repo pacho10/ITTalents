@@ -45,10 +45,8 @@ public class WorkerTasksServlet extends HttpServlet {
 				RequestDispatcher rd = request.getRequestDispatcher("./workerTasks.jsp");
 				rd.forward(request, response);
 			} catch (DBException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (EffPrjDAOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {

@@ -38,14 +38,13 @@
 	<div id="wrapper" class="toggled">
 
 		<!-- Sidebar -->
-		<%-- REMOVE JSP FROM HERE!!!!! --%>
 		<jsp:include page="sidebarAdmin.jsp"></jsp:include>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 			<div id="content">
 				<div class="container-fluid" id="dashboard">
-					<h1 class="text-center text-success">${organizationName}</h1>
+					<h2 class="text-center text-info">${organizationName}</h2>
 					<hr>
 					<div class="table-responsive">
 						<table class="table">

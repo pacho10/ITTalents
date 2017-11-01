@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Schupi se</title>
+<title>Error</title>
 </head>
 <body>
  <p> Sorry brat ama stana ei tova : <%= exception.getMessage() %> </p>
