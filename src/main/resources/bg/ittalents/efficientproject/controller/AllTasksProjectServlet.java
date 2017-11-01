@@ -16,7 +16,6 @@ import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
 import bg.ittalents.efficientproject.model.pojo.Task;
-import bg.ittalents.efficientproject.model.pojo.User;
 
 /**
  * Servlet implementation class AllTasksProject
@@ -28,26 +27,37 @@ public class AllTasksProjectServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (request.getSession().getAttribute("user") != null) {
-//			User user = (User) request.getSession().getAttribute("user");
+			// User user = (User) request.getSession().getAttribute("user");
 			int projectId = Integer.parseInt(request.getParameter("projectId"));
-//			if (user.isAdmin()) {
-				try {
-					request.setAttribute("project", IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId));
-					List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksOfProject(projectId);
+			int backLog = Integer.parseInt(request.getParameter("backLog"));
+			request.setAttribute("backLog", backLog);
+			// if (user.isAdmin()) {
+			try {
+				request.setAttribute("project",
+						IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId));
+				List<Task> tasks = null;
+				if (backLog == 1) {
+					tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getProjectBackLog(projectId);
+				} else {
+					tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksOfProject(projectId);
+				}
+				if (tasks != null) {
+
 					request.setAttribute("tasks", tasks);
 
 					RequestDispatcher rd = request.getRequestDispatcher("./allProjectTasks.jsp");
 					rd.forward(request, response);
-				} catch (DBException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (EffPrjDAOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} else {
+					// TODO exception
 				}
-			} else {
+			} catch (DBException e) {
+				e.printStackTrace();
+			} catch (EffPrjDAOException e) {
+				e.printStackTrace();
+			}
+		} else {
 
-//			}
+			// TODO exception
 		}
 
 	}

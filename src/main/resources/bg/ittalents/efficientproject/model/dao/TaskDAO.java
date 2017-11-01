@@ -30,10 +30,13 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final String SELECT_FROM_TASKS_BY_ID = "Select * from tasks where id=?;";
 	private static final String GET_ALL_TASKS_BY_USER = "SELECT	* from tasks where assignee=? and finished_date is null;";
 	private static final String GET_ALL_TASKS_FROM_SPRINT = "SELECT * from tasks where sprint_id=?;";
-	private static final String GET_ALL_TASKS_FROM_PROJECT ="select t.id from projects p join epics e on p.id=e.project_id join tasks t on e.id=t.epic_id where p.id=?";
+	private static final String GET_ALL_TASKS_FROM_PROJECT = "select t.id from projects p join epics e on p.id=e.project_id join tasks t on e.id=t.epic_id where p.id=?";
+	private static final String GET_ALL_NONNFINISHED_TASKS_FROM_PROJECT = "select t.id from projects p join epics e on p.id=e.project_id join tasks t on e.id=t.epic_id where p.id=? and t.finished_date is null and sprint_id is null";
+
 	private static final String WORKER_ASSIGNE_TASK = "UPDATE tasks SET assigned_date=?, assignee=? WHERE id=?;";
-	private static final String FINISHE_TASK = "UPDATE tasks SET finished_date=? WHERE id=?;";
-	
+	private static final String FINISH_TASK = "UPDATE tasks SET finished_date=? WHERE id=?;";
+	private static final String ADD_TASK_TO_SPRINT = "UPDATE tasks SET sprint_id=? WHERE id=?;";
+
 	@Override
 	public int addTask(Task task) throws EffPrjDAOException, DBException {
 		if (task == null) {
@@ -42,14 +45,14 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		try {
 			PreparedStatement ps = getCon().prepareStatement(INSERT_USER_INTO_DB,
 					PreparedStatement.RETURN_GENERATED_KEYS);
-			ps.setInt(1,task.getType().getId() );
-			ps.setString(2,task.getSummary());
-			ps.setString(3,task.getDescription()  );
+			ps.setInt(1, task.getType().getId());
+			ps.setString(2, task.getSummary());
+			ps.setString(3, task.getDescription());
 			ps.setFloat(4, task.getEstimate());
 			ps.setTimestamp(5, task.getCreationDate());
 			ps.setInt(6, task.getReporter().getId());
 			ps.setInt(7, task.getEpic().getId());
-			
+
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			rs.next();
@@ -69,18 +72,19 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 			ps.setInt(1, id);
 
 			ResultSet rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
-			Type type =ITypeDAO.getDAO(SOURCE_DATABASE).getTypeById(rs.getInt(2));
-			Sprint sprint=ISprintDAO.getDAO(SOURCE_DATABASE).getSprintBId(rs.getInt(11));
-			User reporter=IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(12));
-			User assignee=IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(13));
-			Epic epic= IEpicDAO.getDAO(SOURCE_DATABASE).getEpicById(rs.getInt(14));
-				return new Task(rs.getInt(1), type, rs.getString(3), rs.getString(4), rs.getFloat(5),rs.getTimestamp(6),
-						rs.getTimestamp(7), rs.getTimestamp(8), rs.getTimestamp(9), rs.getTimestamp(10),sprint,reporter,assignee,epic);
+				Type type = ITypeDAO.getDAO(SOURCE_DATABASE).getTypeById(rs.getInt(2));
+				Sprint sprint = ISprintDAO.getDAO(SOURCE_DATABASE).getSprintBId(rs.getInt(11));
+				User reporter = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(12));
+				User assignee = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(13));
+				Epic epic = IEpicDAO.getDAO(SOURCE_DATABASE).getEpicById(rs.getInt(14));
+				return new Task(rs.getInt(1), type, rs.getString(3), rs.getString(4), rs.getFloat(5),
+						rs.getTimestamp(6), rs.getTimestamp(7), rs.getTimestamp(8), rs.getTimestamp(9),
+						rs.getTimestamp(10), sprint, reporter, assignee, epic);
 
 			}
-			return null;//TODO throw exception!
+			return null;// TODO throw exception!
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -89,59 +93,65 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 
 		}
 	}
-	
-	public List<Task> getAllTasksByUser(int userId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
-		List<Task> tasks =  new ArrayList<>();
-		
+
+	@Override
+	public List<Task> getAllTasksByUser(int userId)
+			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+		List<Task> tasks = new ArrayList<>();
+
 		try {
 			PreparedStatement ps = getCon().prepareStatement(GET_ALL_TASKS_BY_USER);
 			ps.setInt(1, userId);
 			ResultSet rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				tasks.add(getTaskById(rs.getInt(1)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 			throw new DBException("can not find task for this user");
 		}
-		
+
 		return tasks;
 	}
 
-	public List<Task> getAllTasksFromSprint(int sprintId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+	@Override
+	public List<Task> getAllTasksFromSprint(int sprintId)
+			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
 		List<Task> tasks = new ArrayList<>();
-		
+
 		try {
 			PreparedStatement ps = getCon().prepareStatement(GET_ALL_TASKS_FROM_SPRINT);
 			ps.setInt(1, sprintId);
-			
+
 			ResultSet rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				tasks.add(getTaskById(rs.getInt(1)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 			throw new DBException("cannot find tasks for this sprint");
 		}
-		
+
 		return tasks;
 	}
-	
-	public List<Task> getAllTasksOfProject(int projectId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+
+	@Override
+	public List<Task> getAllTasksOfProject(int projectId)
+			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
 		List<Task> tasks = new ArrayList<>();
-		
+
 		try {
 			PreparedStatement ps = getCon().prepareStatement(GET_ALL_TASKS_FROM_PROJECT);
 			ps.setInt(1, projectId);
-			
+
 			ResultSet rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
-				tasks.add(getTaskById( rs.getInt(1)));
+				tasks.add(getTaskById(rs.getInt(1)));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -149,11 +159,46 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		}
 		return tasks;
 	}
-	
-	public boolean addTaskToSprint(Task task) {
-		return false;
+
+	@Override
+	public List<Task> getProjectBackLog(int projectId)
+			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+		List<Task> tasks = new ArrayList<>();
+
+		try {
+			PreparedStatement ps = getCon().prepareStatement(GET_ALL_NONNFINISHED_TASKS_FROM_PROJECT);
+			ps.setInt(1, projectId);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				tasks.add(getTaskById(rs.getInt(1)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DBException("");
+		}
+		return tasks;
 	}
 
+	@Override
+	public boolean addTaskToSprint(int taskId, int sprintId) throws DBException {
+		try {
+			PreparedStatement ps = getCon().prepareStatement(ADD_TASK_TO_SPRINT);
+
+			ps.setInt(1, sprintId);
+			ps.setInt(2, taskId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			throw new DBException("task can not be addded to sprint");
+		}
+
+		return true;
+	}
+
+	@Override
 	public boolean assignTask(int taskId, int userId) throws DBException {
 		try {
 			PreparedStatement ps = getCon().prepareStatement(WORKER_ASSIGNE_TASK);
@@ -163,38 +208,45 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 			throw new DBException("task can not be assigned");
 		}
-		
+
 		return true;
 
 	}
 
+	@Override
 	public boolean finishTask(int taskId) throws DBException {
 		try {
-			PreparedStatement ps = getCon().prepareStatement(FINISHE_TASK);
+			PreparedStatement ps = getCon().prepareStatement(FINISH_TASK);
 			ps.setTimestamp(1, new Timestamp(new Date().getTime()));
 			ps.setInt(2, taskId);
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 			throw new DBException("task can not be finished");
 		}
-		
+
 		return true;
 	}
 
+	@Override
 	public boolean closeTask(int taskId) {
 		return false;
 
 	}
 
+	@Override
+
 	public boolean updateTask(int taskId) {
 		return false;
 
 	}
+
+
+
 
 
 }

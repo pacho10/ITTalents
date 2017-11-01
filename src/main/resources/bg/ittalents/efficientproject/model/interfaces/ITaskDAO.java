@@ -1,5 +1,7 @@
 package bg.ittalents.efficientproject.model.interfaces;
 
+import java.util.List;
+
 import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.dao.TaskDAO;
@@ -18,6 +20,26 @@ public interface ITaskDAO {
 	int addTask(Task task) throws EffPrjDAOException, DBException;
 
 	Task getTaskById(int id) throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
+
+	boolean closeTask(int taskId);
+
+	boolean updateTask(int taskId);
+
+	boolean finishTask(int taskId) throws DBException;
+
+	boolean assignTask(int taskId, int userId) throws DBException;
+
+	List<Task> getProjectBackLog(int projectId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
+
+	List<Task> getAllTasksOfProject(int projectId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
+
+	List<Task> getAllTasksFromSprint(int sprintId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
+
+	List<Task> getAllTasksByUser(int userId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
+
+	boolean addTaskToSprint(int taskId, int sprintId) throws DBException;
+
+	
 
 
 

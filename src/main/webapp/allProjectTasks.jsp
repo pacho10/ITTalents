@@ -19,16 +19,26 @@
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
 
+	$(document).ready(function() {
+		$("a.noReLoad").click(function() {
+			var myhref = $(this).attr('href');
+			$("#content").empty();
+			$('#content').load(myhref);
+			return false;
+		});
+	});
+</script>
 
 
 </head>
 
 <body onload="SidebarChangeConent();">
 
- 	<c:if test="${ sessionScope.user == null }">
+	<c:if test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
-	</c:if> 
+	</c:if>
 
 	<%-- Navbar  --%>
 	<c:choose>
@@ -57,7 +67,7 @@
 		<div id="page-content-wrapper">
 			<div id="content">
 				<div class="container-fluid" id="dashboard">
-					<h1 class="text-center text-success">${organizationName}</h1>
+					<h3  class="text-center text-info">${project.name}</h3>
 					<hr>
 					<div class="table-responsive">
 						<table class="table">
@@ -65,26 +75,32 @@
 								<th>Type</th>
 								<th>Summary</th>
 								<th>Status</th>
-								<!-- <th>Description</th> -->
-								<!-- <th>Estimate</th> -->
 								<th>Updated Date</th>
 								<th>Reporter</th>
-								<th>Assignee</th>
-								<!-- <th>Epic</th> -->
+
+								<c:if test="${backLog==0}">
+									<th>Assignee</th>
+								</c:if>
+								<c:if test="${backLog==1}">
+									<th></th>
+								</c:if>
 							</thead>
 							<c:forEach var="t" items="${tasks}">
 								<tr>
 									<td>${t.type.name}</td>
 									<td>${t.summary}</td>
 									<td>${t.status}</td>
-									<%-- <td>${t.description}</td> --%>
-									<%-- <td>${t.estimate}</td> --%>
-									<%-- <td>${t.creationDate}</td> --%>
 									<td>${t.updatedDate}</td>
 									<td>${t.reporter.firstName}</td>
-									<td>${t.assignee.firstName}</td>
-									<%-- <td>${t.epic.name}</td> --%>
 									
+									<c:if test="${backLog==0}">
+										<td>${t.assignee.firstName}</td>
+									</c:if>
+									<c:if test="${backLog==1}">
+										<td><a class="btn btn-info"
+											href="/final_project/addTaskToSprint?taskId=${t.id}<%-- &sprintId=${currentsprint!!!} --%>&projectId=${project.id}">Add to
+												sprint</a></td>
+									</c:if>
 								</tr>
 							</c:forEach>
 						</table>

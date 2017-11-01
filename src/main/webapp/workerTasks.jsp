@@ -45,7 +45,7 @@
 		<div id="page-content-wrapper">
 			<div id="content">
 				<div class="container-fluid" id="dashboard">
-					<h1 class="text-center text-success">${organizationName}</h1>
+					<h1 class="text-center text-success">PROJECT NAME</h1>
 					<hr>
 					<div class="table-responsive">
 						<table class="table">
@@ -53,29 +53,23 @@
 								<th>Type</th>
 								<th>Summary</th>
 								<th>Status</th>
-								<!-- <th>Description</th> -->
-								<!-- <th>Estimate</th> -->
 								<th>Updated Date</th>
 								<th>Reporter</th>
 								<th>Assignee</th>
 								<th>Finish</th>
 								<th></th>
-								<!-- <th>Epic</th> -->
 							</thead>
 							<c:forEach var="t" items="${tasks}">
 								<tr>
 									<td>${t.type.name}</td>
 									<td>${t.summary}</td>
 									<td>${t.status}</td>
-									<%-- <td>${t.description}</td> --%>
-									<%-- <td>${t.estimate}</td> --%>
-									<%-- <td>${t.creationDate}</td> --%>
 									<td>${t.updatedDate}</td>
 									<td>${t.reporter.firstName}</td>
 									<td>${t.assignee.firstName}</td>
 									<%-- <td>${t.epic.name}</td> --%>
 									<td>
-										<a class="btn btn-info" href="/final_project/finishtask?taskId=${t.id}">Finish</a>
+										<a class="btn btn-info" href="./finishtask?taskId=${t.id}">Finish</a>
 									</td>
 									<%-- <td>Cancel Button</td> --%>
 								</tr>

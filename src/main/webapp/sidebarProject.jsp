@@ -6,8 +6,8 @@
 		<hr> --%>
 		<li class="sidebar-brand"><a href="./projectdetail?projectId=${project.id}" >Project details</a></li>
 		<li><a href="#">Active sprint</a></li>
-		<li><a href="#">Backlog<!-- all tasks that are not taken and not finished --></a></li>
-		<li><a href="./allTasksProject?projectId=${project.id}">All tasks history</a></li>
+		<li><a href="./allTasksProject?projectId=${project.id}&backLog=1">Backlog<!-- all tasks that are not taken and not finished --></a></li>
+		<li><a href="./allTasksProject?projectId=${project.id}&backLog=0">All tasks history</a></li>
 		<li><a href="#">Statistics</a></li>
 		<hr>
 		<li><a href="./createsprint?projectId=${project.id}" class="noReLoad">Start sprint</a></li>
