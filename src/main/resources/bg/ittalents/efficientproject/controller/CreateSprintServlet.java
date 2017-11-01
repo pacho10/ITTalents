@@ -23,67 +23,68 @@ import bg.ittalents.efficientproject.model.pojo.Sprint;
 @WebServlet("/createsprint")
 public class CreateSprintServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public CreateSprintServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int projectId= Integer.parseInt(request.getParameter("projectId"));
-		request.setAttribute("projectId", projectId);
-		request.getRequestDispatcher("./createSprint.jsp").forward(request, response);
+	public CreateSprintServlet() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		if (request.getSession().getAttribute("user") != null) {
-			ServletContext context = getServletContext();
-			boolean isExpired = true;
-			if (context.getAttribute("sprintId") != null) {
-				int id = (int) request.getSession().getAttribute("user");
-				try {
-					Sprint sprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getSprintBId(id);
-					//int days = sprint.getStartDate(). + sprint.getDuration();
-					int test = sprint.getStartDate().compareTo(new Date());
-					System.out.println(test);
-				} catch (DBException e) {
-					e.printStackTrace();
-					response.sendRedirect("./error.jsp");
-				}
+			Sprint currentSprint = null;
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
+			try {
+				currentSprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getCurrentSprint(projectId);
+			} catch (DBException e) {
+				e.printStackTrace();
+				response.sendRedirect("./error.jsp");
 			}
-			
+			if (currentSprint == null) {
+				request.setAttribute("projectId", projectId);
+				request.getRequestDispatcher("./createSprint.jsp").forward(request, response);
+			} else {
+				response.sendRedirect("./hasCurrentSprint.jsp");
+			}
+		} else {
+			response.sendRedirect("./LogIn");
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if (request.getSession().getAttribute("user") != null) {
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
+
 			String name = request.getParameter("name");
 			int duration = Integer.parseInt(request.getParameter("duration"));
-		    int projectId= Integer.parseInt(request.getParameter("projectId"));
-		    
-			Sprint sprintToAdd = new Sprint(name, duration,projectId);
+			Sprint sprintToAdd = new Sprint(name, duration, projectId);
 			try {
 				int id = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
-				context.setAttribute("sprintId", id);
-				System.out.println(context.getAttribute("sprintId"));
 			} catch (DBException e) {
 				e.printStackTrace();
 				response.sendRedirect("./error.jsp");
 			}
 		} else {
 			response.sendRedirect("./LogIn");
-			}
+		}
 		String name = request.getParameter("name");
 		int duration = Integer.parseInt(request.getParameter("duration"));
-		int projectId= Integer.parseInt(request.getParameter("projectId"));
-//		request.setAttribute("projectId", projectId);
-		
-		
-		Sprint sprintToAdd = new Sprint(name, duration,projectId);
+		int projectId = Integer.parseInt(request.getParameter("projectId"));
+		// request.setAttribute("projectId", projectId);
+
+		Sprint sprintToAdd = new Sprint(name, duration, projectId);
 		try {
 			ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
 		} catch (DBException e) {
@@ -91,10 +92,11 @@ public class CreateSprintServlet extends HttpServlet {
 			e.printStackTrace();
 
 		}
-		
-		//TODO
-		response.sendRedirect("./projectdetail?projectId="+projectId);
-//		RequestDispatcher rd = request.getRequestDispatcher("./profileShow.jsp");
-//		rd.forward(request, response);
+
+		// TODO
+		response.sendRedirect("./projectdetail?projectId=" + projectId);
+		// RequestDispatcher rd =
+		// request.getRequestDispatcher("./profileShow.jsp");
+		// rd.forward(request, response);
 	}
 }

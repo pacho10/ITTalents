@@ -16,9 +16,11 @@ import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
+import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Epic;
 import bg.ittalents.efficientproject.model.pojo.Project;
+import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 /**
@@ -42,6 +44,11 @@ public class ProjectDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int projectId = Integer.parseInt(request.getParameter("projectId"));
 		try {
+			Sprint currentSprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getCurrentSprint(projectId);
+			if (currentSprint != null) {
+				request.setAttribute("currentSprint", currentSprint);
+			}
+			
 			Project currentProject = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 			request.setAttribute("project", currentProject);
 			
