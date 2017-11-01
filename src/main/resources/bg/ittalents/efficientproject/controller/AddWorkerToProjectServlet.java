@@ -13,7 +13,6 @@ import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
-import bg.ittalents.efficientproject.model.pojo.User;
 
 /**
  * Servlet implementation class addWorkerToProjectServlet
