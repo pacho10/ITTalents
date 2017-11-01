@@ -59,6 +59,14 @@
 				<div id="content">
 					<div>
 						<span>${project.name}</span> <span>${project.deadline}</span>
+						<c:choose>
+							<c:when test="${currentSprint != null}">
+								<span>${currentSprint.name}</span>
+							</c:when>
+							<c:otherwise>
+								<span>no current sprint</span>
+							</c:otherwise>
+						</c:choose>
 					</div>
 					<div>
 						<hr>
