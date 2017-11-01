@@ -105,7 +105,7 @@
 															href="/final_project/addTaskToSprint?taskId=${t.id}&sprintId=${sprintId}&projectId=${project.id}">Add
 															to sprint</a>
 													</c:when>
-													<c:otherwise><a href="./createsprint?projectId=${project.id}">Start new sprint</a></c:otherwise>
+													<c:otherwise> <a href="./createsprint?projectId=${project.id}&all=1">Start new sprint</a></c:otherwise>
 												</c:choose>
 										</c:if>
 									</c:if>

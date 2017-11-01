@@ -67,7 +67,7 @@
 									<span>Current sprint: ${currentSprint.name}</span>
 								</c:when>
 								<c:otherwise>
-									<span>no current sprint</span>
+									<div>No current sprint, <a href="./createsprint?projectId=${project.id}&all=1">start new one here</a></div>
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -86,7 +86,7 @@
 								<c:forEach var="e" items="${epics}">
 									<tr>
 										<td>${e.id}</td>
-										<td><a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
+										<td><%-- <a href="./epicdetail?epicId=${e.id}">${e.name}</a> --%></td>
 										<td>${e.estimate}</td>
 									</tr>
 								</c:forEach>

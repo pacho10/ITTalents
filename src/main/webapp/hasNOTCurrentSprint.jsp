@@ -42,7 +42,7 @@
 				<hr>
 
 				<div id="content">
-					<h1 class="text-center text-danger">No current sprint</h1>
+					<h3 class="text-center text-danger">No current sprint, <a href ="./createsprint?projectId=${project.id}&all=1">start new one here</a></h3>
 				</div>
 
 			</div>

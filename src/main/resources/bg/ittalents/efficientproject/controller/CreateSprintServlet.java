@@ -13,8 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
+import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
+import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
+import bg.ittalents.efficientproject.model.pojo.Project;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 
 /**
@@ -41,18 +44,24 @@ public class CreateSprintServlet extends HttpServlet {
 		if (request.getSession().getAttribute("user") != null) {
 			Sprint currentSprint = null;
 			int projectId = Integer.parseInt(request.getParameter("projectId"));
+			int all = Integer.parseInt(request.getParameter("all"));
+			request.setAttribute("all", all);
 			try {
 				currentSprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getCurrentSprint(projectId);
-			} catch (DBException e) {
+				Project project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
+				if (currentSprint == null) {
+					request.setAttribute("projectId", projectId);
+					request.setAttribute("project", project);
+					request.getRequestDispatcher("./createSprint.jsp").forward(request, response);
+				} else {
+					response.sendRedirect("./hasCurrentSprint.jsp");
+				}
+
+			} catch (DBException | EffPrjDAOException e) {
 				e.printStackTrace();
 				response.sendRedirect("./error.jsp");
 			}
-			if (currentSprint == null) {
-				request.setAttribute("projectId", projectId);
-				request.getRequestDispatcher("./createSprint.jsp").forward(request, response);
-			} else {
-				response.sendRedirect("./hasCurrentSprint.jsp");
-			}
+
 		} else {
 			response.sendRedirect("./LogIn");
 		}

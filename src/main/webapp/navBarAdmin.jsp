@@ -17,10 +17,9 @@
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li ><a href="./dashboard">Dashboard <span
+				<li ><a href="./dashboard">Projects <span
 						class="sr-only">(current)</span></a></li>
-				<li><a href="#">Link</a></li>
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
+				<!-- <li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Projects <span class="caret"></span></a>
 					<ul class="dropdown-menu">
@@ -31,11 +30,11 @@
 						<li><a href="#">Separated link</a></li>
 						<li role="separator" class="divider"></li>
 						<li><a href="#">One more separated link</a></li>
-					</ul></li>
+					</ul></li> -->
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
+				<!-- <li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">Dropdown <span class="caret"></span></a>
 					<ul class="dropdown-menu">
@@ -44,7 +43,7 @@
 						<li><a href="#">Something else here</a></li>
 						<li role="separator" class="divider"></li>
 						<li><a href="#">Separated link</a></li>
-					</ul></li>
+					</ul></li> -->
 				<li ><a href="./Logout">Log out</a></li>
 				<li ><a href="./Profile">${ sessionScope.user.firstName }</a></li>
 				<li><img id="avatar" src="./ImgOutputServlet?userid=${sessionScope.user.id}"></li>
