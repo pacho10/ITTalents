@@ -20,15 +20,7 @@
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-
-	$(document).ready(function() {
-		$("a.noReLoad").click(function() {
-			var myhref = $(this).attr('href');
-			$("#content").empty();
-			$('#content').load(myhref);
-			return false;
-		});
-	});
+	
 </script>
 
 
@@ -67,7 +59,16 @@
 		<div id="page-content-wrapper">
 			<div id="content">
 				<div class="container-fluid" id="dashboard">
-					<h3  class="text-center text-info">${project.name}</h3>
+					<h3 class="text-center text-info">${project.name}</h3>
+					<c:choose>
+						<c:when test="${backLog==0}">
+							<h4 class="text-center text-info">Project tasks history</h4>
+						</c:when>
+						<c:otherwise>
+							<h4 class="text-center text-info">Project backlog tasks</h4>
+						</c:otherwise>
+					</c:choose>
+
 					<hr>
 					<div class="table-responsive">
 						<table class="table">
@@ -92,14 +93,21 @@
 									<td>${t.status}</td>
 									<td>${t.updatedDate}</td>
 									<td>${t.reporter.firstName}</td>
-									
+
 									<c:if test="${backLog==0}">
 										<td>${t.assignee.firstName}</td>
 									</c:if>
-									<c:if test="${backLog==1}">
-										<td><a class="btn btn-info"
-											href="/final_project/addTaskToSprint?taskId=${t.id}<%-- &sprintId=${currentsprint!!!} --%>&projectId=${project.id}">Add to
-												sprint</a></td>
+									<c:if test="${sessionScope.user.admin}">
+										<c:if test="${backLog==1}">
+											<td><c:choose>
+													<c:when test="${not empty sprintId}">
+														<a class="btn btn-info"
+															href="/final_project/addTaskToSprint?taskId=${t.id}&sprintId=${sprintId}&projectId=${project.id}">Add
+															to sprint</a>
+													</c:when>
+													<c:otherwise><a href="./createsprint?projectId=${project.id}">Start new sprint</a></c:otherwise>
+												</c:choose>
+										</c:if>
 									</c:if>
 								</tr>
 							</c:forEach>

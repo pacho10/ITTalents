@@ -26,25 +26,39 @@
 
 <body onload="SidebarChangeConent();">
 
- 	<c:if test="${ sessionScope.user == null }">
+	<c:if test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
-	</c:if> 
+	</c:if>
 
 	<%-- Navbar  --%>
-	<jsp:include page="navBarWorker.jsp"></jsp:include>
+	<c:choose>
+		<c:when test="${sessionScope.user.admin}">
+			<jsp:include page="navBarAdmin.jsp"></jsp:include>
+		</c:when>
+		<c:otherwise>
+			<jsp:include page="navBarWorker.jsp"></jsp:include>
+		</c:otherwise>
+	</c:choose>
 
 	<!-- Page  -->
 	<div id="wrapper" class="toggled">
 
 		<!-- Sidebar -->
-		<%-- REMOVE JSP FROM HERE!!!!! --%>
-		<jsp:include page="sidebarWorker.jsp"></jsp:include>
+		<c:choose>
+			<c:when test="${sessionScope.user.admin}">
+				<jsp:include page="sidebarProject.jsp?projectId=${project.id}"></jsp:include>
+			</c:when>
+			<c:otherwise>
+				<jsp:include page="sidebarWorker.jsp"></jsp:include>
+			</c:otherwise>
+		</c:choose>
 
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 			<div id="content">
 				<div class="container-fluid" id="dashboard">
-					<h1 class="text-center text-success">${organizationName}</h1>
+					<h3 class="text-center text-info">${project.name}</h3>
+					<h4 class="text-center text-info">Current sprint backlog</h4>
 					<hr>
 					<div class="table-responsive">
 						<table class="table">
@@ -52,40 +66,31 @@
 								<th>Type</th>
 								<th>Summary</th>
 								<th>Status</th>
-								<!-- <th>Description</th> -->
-								<!-- <th>Estimate</th> -->
 								<th>Updated Date</th>
 								<th>Reporter</th>
 								<th>Assignee</th>
-								<th>Assigne to me Button</th>
-								<!-- <th>Epic</th> -->
+								<th></th>
 							</thead>
 							<c:forEach var="t" items="${tasks}">
 								<tr>
 									<td>${t.type.name}</td>
 									<td>${t.summary}</td>
 									<td>${t.status}</td>
-									<%-- <td>${t.description}</td> --%>
-									<%-- <td>${t.estimate}</td> --%>
-									<%-- <td>${t.creationDate}</td> --%>
 									<td>${t.updatedDate}</td>
 									<td>${t.reporter.firstName}</td>
 									<td>${t.assignee.firstName}</td>
-									<%-- <td>${t.epic.name}</td> --%>
-									<td>
-										<!--<c:if test="${t.assignee == null}">
-											<a class="btn btn-info" href="/final_project/assignetask?taskId=${t.id}">Get Task</a>
-										</c:if>-->
-										
-										<c:choose>
-											<c:when test="${t.assignee == null}">
-												<a class="btn btn-info" href="/final_project/assignetask?taskId=${t.id}">Get Task</a>
-											</c:when>
-											<c:otherwise>
-												<span>task is alredy taken</span>
-											</c:otherwise>
-										</c:choose>
-									</td>
+									<c:if test="${not sessionScope.user.admin}">
+										<td><c:choose>
+												<c:when test="${t.assignee == null}">
+													<a class="btn btn-info"
+														href="/final_project/assignetask?taskId=${t.id}">Get
+														Task</a>
+												</c:when>
+												<c:otherwise>
+													<span>task is alredy taken</span>
+												</c:otherwise>
+											</c:choose></td>
+									</c:if>
 								</tr>
 							</c:forEach>
 						</table>

@@ -48,18 +48,14 @@ public class DashboardServlet extends HttpServlet {
 				try {
 					List<Project> projects = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
 							.getAllProjectsFromOrganization(intorganizationId);
-//					request.getSession().setAttribute("projects", projects);
 					request.setAttribute("projects", projects);
 
 					String organizationName = user.getOrganization().getName();
-//					request.getSession().setAttribute("organizationName", organizationName);
 					request.setAttribute("organizationName", organizationName);
 					
 				} catch (DBException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (EffPrjDAOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
@@ -73,10 +69,9 @@ public class DashboardServlet extends HttpServlet {
 					request.getSession().setAttribute("project", project);
 					
 				} catch (EffPrjDAOException | DBException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				request.getRequestDispatcher("./homePageWorker.jsp").forward(request, response);
+				response.sendRedirect("./workertasks");
 
 			}
 		} else {

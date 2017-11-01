@@ -23,33 +23,21 @@
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
-<body> 
+<body>
 	<c:if test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
 
-	<c:choose>
-		<c:when test="${sessionScope.user.admin}">
-			<jsp:include page="navBarAdmin.jsp"></jsp:include>
-		</c:when>
-		<c:otherwise>
-			<jsp:include page="navBarWorker.jsp"></jsp:include>
-		</c:otherwise>
-	</c:choose>
+	<jsp:include page="navBarAdmin.jsp"></jsp:include>
 
 	<div id="wrapper" class="toggled">
 
-		<c:choose>
-			<c:when test="${sessionScope.user.admin}">
-				<jsp:include page="sidebarAdmin.jsp"></jsp:include>
-			</c:when>
-			<c:otherwise>
-				<jsp:include page="sidebarWorker.jsp"></jsp:include>
-			</c:otherwise>
-		</c:choose>
+		<jsp:include page="sidebarAdmin.jsp"></jsp:include>
 
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
+				<h2 class="text-center text-info">${organizationName}</h2>
+				<hr>
 				<div id="createproject" style="margin-top: 50px;"
 					class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 
@@ -110,4 +98,4 @@
 		</div>
 	</div>
 </body>
-</html> 
+</html>

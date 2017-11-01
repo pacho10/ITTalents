@@ -24,7 +24,6 @@
 
 
 <script type="text/javascript">
-
 	$(document).ready(function() {
 		$("a.noReLoad").click(function() {
 			var myhref = $(this).attr('href');
@@ -48,25 +47,30 @@
 	<jsp:include page="navBarAdmin.jsp"></jsp:include>
 
 	<div id="wrapper" class="toggled">
-		<jsp:include page="sidebarProject.jsp"></jsp:include>
+		<jsp:include page="sidebarProjectDetailed.jsp"></jsp:include>
 
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
 
-				<h3  class="text-center text-info">${project.name}</h3>
+				<h3 class="text-center text-info">${project.name}</h3>
 				<hr>
 
 				<div id="content">
 					<div>
-						<span>${project.name}</span> <span>${project.deadline}</span>
-						<c:choose>
-							<c:when test="${currentSprint != null}">
-								<span>${currentSprint.name}</span>
-							</c:when>
-							<c:otherwise>
-								<span>no current sprint</span>
-							</c:otherwise>
-						</c:choose>
+						<%-- <span>${project.name}</span> --%>
+						<div>
+							<span> Deadline: ${project.deadline}</span>
+						</div>
+						<div>
+							<c:choose>
+								<c:when test="${currentSprint != null}">
+									<span>Current sprint: ${currentSprint.name}</span>
+								</c:when>
+								<c:otherwise>
+									<span>no current sprint</span>
+								</c:otherwise>
+							</c:choose>
+						</div>
 					</div>
 					<div>
 						<hr>
@@ -100,9 +104,10 @@
 								</thead>
 								<c:forEach var="u" items="${workers}">
 									<tr>
-									<td><img id="avatar2" src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
+										<td><img id="avatar2"
+											src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
 										<%-- <td>${u.avatarPath}</td> --%>
-										<td>${u.firstName}	${u.lastName}</td>
+										<td>${u.firstName} ${u.lastName}</td>
 										<td>${u.email}</td>
 									</tr>
 								</c:forEach>

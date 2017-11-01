@@ -14,7 +14,9 @@ import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
+import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
+import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task;
 
 /**
@@ -27,17 +29,20 @@ public class AllTasksProjectServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (request.getSession().getAttribute("user") != null) {
-			// User user = (User) request.getSession().getAttribute("user");
 			int projectId = Integer.parseInt(request.getParameter("projectId"));
 			int backLog = Integer.parseInt(request.getParameter("backLog"));
 			request.setAttribute("backLog", backLog);
-			// if (user.isAdmin()) {
 			try {
 				request.setAttribute("project",
 						IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId));
+
 				List<Task> tasks = null;
 				if (backLog == 1) {
 					tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getProjectBackLog(projectId);
+					Sprint currentSprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getCurrentSprint(projectId);
+					if (currentSprint != null) {
+						request.setAttribute("sprintId", currentSprint.getId());
+					}
 				} else {
 					tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksOfProject(projectId);
 				}
@@ -60,12 +65,6 @@ public class AllTasksProjectServlet extends HttpServlet {
 			// TODO exception
 		}
 
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
 }
