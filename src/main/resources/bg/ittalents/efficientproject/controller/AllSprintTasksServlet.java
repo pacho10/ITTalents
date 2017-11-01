@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
+import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
+import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task;
 
 /**
@@ -36,12 +38,11 @@ public class AllSprintTasksServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getSession().getAttribute("user") != null) {
-			ServletContext context = getServletContext();
-			//int sprintId = (int) context.getAttribute("sprintId");
-			
+		if (request.getSession().getAttribute("user") != null) {	
 			try {
-				List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksFromSprint(1);
+				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				Sprint currentSprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getCurrentSprint(projectId);
+				List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksFromSprint(currentSprint.getId());
 				request.setAttribute("tasks", tasks);
 				
 				RequestDispatcher rd = request.getRequestDispatcher("./workerTasksCurrentSprint.jsp");
