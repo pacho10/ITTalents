@@ -17,7 +17,7 @@
 		<div class="collapse navbar-collapse"
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li ><a href="./dashboard">Dashboard <span
+				<li ><a href="./workertasks">Dashboard <span
 						class="sr-only">(current)</span></a></li>
 				<li><a href="#">Project</a></li>
 
