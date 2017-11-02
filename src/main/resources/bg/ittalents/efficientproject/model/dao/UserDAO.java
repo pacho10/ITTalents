@@ -136,7 +136,6 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 	@Override
 	public User getUserByEmail(String email) throws UnsupportedDataTypeException, EffPrjDAOException, DBException {
-		// System.out.println("dao param: " + email);
 		try {
 			PreparedStatement ps = getCon().prepareStatement(SELECT_FROM_USERS_BY_EMAIL);
 			ps.setString(1, email);
@@ -251,8 +250,16 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			employWorker(userId);
 
 			// removefrom the workers list:
-			removeWorkerFromUnemployedWorkers(getUserById(userId));
-			getCon().commit();
+			if(removeWorkerFromUnemployedWorkers(getUserById(userId))) {
+				getCon().commit();
+			}else {
+				try {
+					System.err.print("User already removed: Transaction is being rolled back");
+					getCon().rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
@@ -289,6 +296,13 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	// TODO validation and synchronization!!!!!!!<--------> proper collections
 	// choice
 	private static final Set<User> allUnemployedWorkers = new HashSet<>();
+			
+//			new TreeSet<User>((User a, User b) -> {
+//		if (a.getFirstName().equals(b.getFirstName())) {
+//			return a.getLastName().compareTo(b.getLastName());
+//		}
+//		return a.getFirstName().compareTo(b.getFirstName());
+//	});
 
 	// static initializing block to fill the collection when its loaded the first
 	// time:
@@ -314,9 +328,8 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	public boolean addWorkerToUnemployedWorkers(User worker) throws EffPrjDAOException {
 		if (worker != null) {
 			synchronized (allUnemployedWorkers) {
-				allUnemployedWorkers.add(worker);
+				return	allUnemployedWorkers.add(worker);
 			}
-			return true;
 		}
 		throw new EffPrjDAOException("Not valid user input!");
 	}
@@ -324,9 +337,8 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	public boolean removeWorkerFromUnemployedWorkers(User worker) throws EffPrjDAOException {
 		if (worker != null) {
 			synchronized (allUnemployedWorkers) {
-				allUnemployedWorkers.remove(worker);
+				return	allUnemployedWorkers.remove(worker);
 			}
-			return true;
 		}
 		throw new EffPrjDAOException("Not valid user input!");
 
