@@ -51,10 +51,7 @@ public class SignUpServlet extends HttpServlet {
 		String reppassword = request.getParameter("repPassword");
 		String organization = request.getParameter("organization").trim();
 		boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
-		System.out.println(isAdmin);
-
-		// response.getWriter().println(firstName+" "+ lastName+ ":" + email + ":" +
-		// password + ":" + reppassword);//TODO tuj za ko e?
+//		System.out.println(isAdmin);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./signUp.jsp");
 
@@ -101,7 +98,6 @@ public class SignUpServlet extends HttpServlet {
 			e1.printStackTrace();
 		}
 
-		// TODO a user can register an organization later in the profile page???
 		if(isAdmin && organization.equals("")) {
 			request.setAttribute("errorMessage", "This organization name is empty !");
 			dispatcher.forward(request, response);
@@ -114,8 +110,8 @@ public class SignUpServlet extends HttpServlet {
 
 			if (!isAdmin) {
 				user = new User(firstName, lastName, email, password, false);
-
-				IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserWorker(user);
+				int UserId=IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserWorker(user);
+				user.setId(UserId);
 
 			} else {
 				user = new User(firstName, lastName, email, password, true, new Organization(organization));
