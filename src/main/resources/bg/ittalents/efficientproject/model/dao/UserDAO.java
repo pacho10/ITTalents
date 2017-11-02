@@ -34,6 +34,29 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	private static final String INSERT_WORKER_INTO_PROJECTS_WORKERS_HISTORY = "insert into users_projects_history values (?,?);";
 	private static final String RETURN_CURRENT_PROJECT_OF_WORKER = "select h.project_id from users_projects_history h join projects p on p.id=h.project_id where h.users_id=? and p.deadline > CURDATE();";
 
+	private static final Set<User> allUnemployedWorkers = new HashSet<>();
+
+	// static initializing block to fill the collection when its loaded the first
+	// time:
+	static {
+		try {
+			Statement stm = getCon().createStatement();
+			ResultSet rs = stm.executeQuery(SELECT_ALL_UNEMPLOYED_WORKRS);
+			while (rs.next()) {
+				User user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+						rs.getString(6), rs.getBoolean(7), null, rs.getBoolean(9));
+				allUnemployedWorkers.add(user);
+			}
+
+		} catch (SQLException e) {
+			try {
+				throw new DBException("Could not initialize the collection", e);
+			} catch (DBException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+
 	@Override
 	public int addUserAdmin(User user)
 			throws EffPrjDAOException, DBException, UnsupportedDataTypeException, SQLException {
@@ -62,16 +85,14 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			getCon().commit();
 
 			ResultSet rs = ps.getGeneratedKeys();
-			rs.next();
-			return rs.getInt(1);
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+			throw new EffPrjDAOException("Could not add!");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			try {
-				System.err.print("Transaction is being rolled back");
-				getCon().rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			System.err.print("Transaction is being rolled back");
+			getCon().rollback();
 			throw new DBException("The user cannot be added right now!Try again later!", e);
 		} finally {
 			getCon().setAutoCommit(true);
@@ -99,17 +120,20 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			// adding to the enemployed workers list:
 			addWorkerToUnemployedWorkers(user);// TODO transaction?
 			ResultSet rs = ps.getGeneratedKeys();
-			rs.next();
-			return rs.getInt(1);
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DBException("The user cannot be added right now!Try again later!", e);
 		}
+		throw new EffPrjDAOException("Could not add!");
 	}
 
 	@Override
 	public User getUserById(int userID) throws UnsupportedDataTypeException, EffPrjDAOException, DBException {
-
+		if (userID < 0) {
+			throw new EffPrjDAOException("Invalid input!");
+		}
 		try {
 
 			PreparedStatement ps = getCon().prepareStatement(SELECT_FROM_USERS_BY_ID);
@@ -124,11 +148,9 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 
 			}
-			return null;// TODO throw exception!
+			return null;// TODO ????
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-
 			throw new DBException("Cannot check for user right now!Try again later", e);
 
 		}
@@ -136,6 +158,9 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 	@Override
 	public User getUserByEmail(String email) throws UnsupportedDataTypeException, EffPrjDAOException, DBException {
+		if (email == null) {
+			throw new EffPrjDAOException("Invalid input!");
+		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(SELECT_FROM_USERS_BY_EMAIL);
 			ps.setString(1, email);
@@ -150,17 +175,16 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 			}
-			return null;// TODO throw exception!
+			return null;// TODO null check in the servlet?
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-
 			throw new DBException("Cannot check for user right now!Try again later", e);
 
 		}
 
 	}
 
+	@Override
 	public boolean isThereSuchAnUser(String email) throws DBException, EffPrjDAOException {
 		if (email == null) {
 			throw new EffPrjDAOException("There is no email input!");
@@ -178,14 +202,16 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			return false;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DBException("Cannot check for user right now!Try again later", e);
-
 		}
 
 	}
 
-	public boolean updateUsersDetails(User user) throws DBException {
+	@Override
+	public boolean updateUsersDetails(User user) throws DBException, EffPrjDAOException {
+		if (user == null) {
+			throw new EffPrjDAOException("Invalid input!");
+		}
 		PreparedStatement ps;
 		try {
 			ps = getCon().prepareStatement(UPDATE_USER_DETAILS);
@@ -200,13 +226,15 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DBException("Cannot update users details right now!Try again later", e);
 		}
 
 	}
 
-	public boolean employWorker(int userId) throws DBException {
+	public boolean employWorker(int userId) throws DBException, EffPrjDAOException {
+		if (userId < 0) {
+			throw new EffPrjDAOException("Invalid input!");
+		}
 		PreparedStatement ps;
 		try {
 			ps = getCon().prepareStatement(UPDATE_WORKER_STATE_TO_EMPLOYED);
@@ -214,12 +242,15 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DBException("Cannot update users details right now!Try again later", e);
 		}
 	}
 
-	public boolean unemployWorker(User user) throws DBException {
+	@Override
+	public boolean unemployWorker(User user) throws DBException, EffPrjDAOException {
+		if (user == null) {
+			throw new EffPrjDAOException("Invalid input!");
+		}
 		PreparedStatement ps;
 		try {
 			ps = getCon().prepareStatement(UPDATE_WORKER_STATE_TO_UNEMPLOYED);
@@ -227,14 +258,14 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DBException("Cannot update users details right now!Try again later", e);
 		}
 	}
 
+	@Override
 	public void addUserToProject(int userId, int projectId)
 			throws UnsupportedDataTypeException, EffPrjDAOException, DBException, SQLException {
-		if (userId < 0 && projectId > 0) {
+		if (userId < 0 || projectId < 0) {
 			throw new EffPrjDAOException("Ivalid user or project_id");
 		}
 		try {
@@ -246,28 +277,19 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			ps.setInt(2, projectId);
 			ps.executeUpdate();
 
-			// change state to eployeed:
+			// change state to employed:
 			employWorker(userId);
 
-			// removefrom the workers list:
-			if(removeWorkerFromUnemployedWorkers(getUserById(userId))) {
+			// remove from the workers list:
+			if (removeWorkerFromUnemployedWorkers(getUserById(userId))) {
 				getCon().commit();
-			}else {
-				try {
-					System.err.print("User already removed: Transaction is being rolled back");
-					getCon().rollback();
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
+			} else {
+				System.err.print("User already removed: Transaction is being rolled back");
+				getCon().rollback();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			try {
-				System.err.print("Transaction is being rolled back");
-				getCon().rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			System.err.print("Transaction is being rolled back");
+			getCon().rollback();
 			throw new DBException("The user cannot be added right now!Try again later!", e);
 		} finally {
 			getCon().setAutoCommit(true);
@@ -275,73 +297,47 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 	}
 
+	@Override
 	public int returnCurrentWorkersProject(User user) throws EffPrjDAOException, DBException {
+		if (user == null) {
+			throw new EffPrjDAOException("Invalid input!");
+		}
 		try {
-
 			PreparedStatement ps = getCon().prepareStatement(RETURN_CURRENT_PROJECT_OF_WORKER);
 			ps.setInt(1, user.getId());
-			System.out.println(user.getId());
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
 				return rs.getInt(1);
 			}
-			return -1;
-//			throw new EffPrjDAOException("no found results");
+			return -1;// TODO handle in the servlet!
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DBException("Cannot check for user right now!Try again later", e);
+			throw new DBException("Try again later", e);
 		}
 	}
 
-	// TODO validation and synchronization!!!!!!!<--------> proper collections
-	// choice
-	private static final Set<User> allUnemployedWorkers = new HashSet<>();
-			
-//			new TreeSet<User>((User a, User b) -> {
-//		if (a.getFirstName().equals(b.getFirstName())) {
-//			return a.getLastName().compareTo(b.getLastName());
-//		}
-//		return a.getFirstName().compareTo(b.getFirstName());
-//	});
-
-	// static initializing block to fill the collection when its loaded the first
-	// time:
-	static {
-		try {
-			Statement stm = getCon().createStatement();
-			ResultSet rs = stm.executeQuery(SELECT_ALL_UNEMPLOYED_WORKRS);
-			while (rs.next()) {
-				User user = new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-						rs.getString(6), rs.getBoolean(7), null, rs.getBoolean(9));
-				allUnemployedWorkers.add(user);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
+	@Override
 	public Collection<User> getAllUnemployedWorkers() {
 		return Collections.unmodifiableCollection(allUnemployedWorkers);
 	}
 
+	@Override
 	public boolean addWorkerToUnemployedWorkers(User worker) throws EffPrjDAOException {
 		if (worker != null) {
 			synchronized (allUnemployedWorkers) {
-				return	allUnemployedWorkers.add(worker);
+				return allUnemployedWorkers.add(worker);
 			}
 		}
 		throw new EffPrjDAOException("Not valid user input!");
 	}
 
+	@Override
 	public boolean removeWorkerFromUnemployedWorkers(User worker) throws EffPrjDAOException {
 		if (worker != null) {
 			synchronized (allUnemployedWorkers) {
-				return	allUnemployedWorkers.remove(worker);
+				return allUnemployedWorkers.remove(worker);
 			}
 		}
 		throw new EffPrjDAOException("Not valid user input!");
-
 	}
 }

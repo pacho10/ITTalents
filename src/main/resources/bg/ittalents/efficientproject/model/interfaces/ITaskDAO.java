@@ -25,9 +25,9 @@ public interface ITaskDAO {
 
 	boolean updateTask(int taskId);
 
-	boolean finishTask(int taskId) throws DBException;
+	boolean finishTask(int taskId) throws DBException, EffPrjDAOException;
 
-	boolean assignTask(int taskId, int userId) throws DBException;
+	boolean assignTask(int taskId, int userId) throws DBException, EffPrjDAOException;
 
 	List<Task> getProjectBackLog(int projectId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
 
@@ -37,7 +37,7 @@ public interface ITaskDAO {
 
 	List<Task> getAllTasksByUser(int userId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
 
-	boolean addTaskToSprint(int taskId, int sprintId) throws DBException;
+	boolean addTaskToSprint(int taskId, int sprintId) throws DBException, EffPrjDAOException;
 
 	
 
