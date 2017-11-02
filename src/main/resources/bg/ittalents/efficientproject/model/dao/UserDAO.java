@@ -286,7 +286,8 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			if (rs.next()) {
 				return rs.getInt(1);
 			}
-			throw new EffPrjDAOException("no found results");
+			return -1;
+//			throw new EffPrjDAOException("no found results");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DBException("Cannot check for user right now!Try again later", e);
