@@ -97,15 +97,10 @@ public class CreateSprintServlet extends HttpServlet {
 		try {
 			ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
 		} catch (DBException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}
 
-		// TODO
 		response.sendRedirect("./projectdetail?projectId=" + projectId);
-		// RequestDispatcher rd =
-		// request.getRequestDispatcher("./profileShow.jsp");
-		// rd.forward(request, response);
 	}
 }

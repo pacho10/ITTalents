@@ -81,16 +81,12 @@ public class SignUpServlet extends HttpServlet {
 			if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAnUser(email)) {
 				
 				request.setAttribute("errorMessage", "User with such email already exists, use another email !");
-				// TODO how to show the organization label?
-				// request.setAttribute("organization.style.display", "block");
 				dispatcher.forward(request, response);
 				return;
 			}
 		} catch (DBException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		} catch (EffPrjDAOException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 

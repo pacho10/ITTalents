@@ -56,7 +56,6 @@ public class AllSprintTasksServlet extends HttpServlet {
 					RequestDispatcher rd = request.getRequestDispatcher("./workerTasksCurrentSprint.jsp");
 					rd.forward(request, response);
 				} else {
-					// TODO //response.sendRedirect("./createsprint?projectId="+projectId);
 					RequestDispatcher rd = request.getRequestDispatcher("./hasNOTCurrentSprint.jsp");
 					rd.forward(request, response);
 				}
