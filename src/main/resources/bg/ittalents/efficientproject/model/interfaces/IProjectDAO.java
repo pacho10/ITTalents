@@ -18,7 +18,6 @@ public interface IProjectDAO {
 			throw new UnsupportedDataTypeException();
 		}
 
-		int addProject(Project project) throws EffPrjDAOException, DBException;
 
 		Project getProjectByID(int projectId) throws DBException, EffPrjDAOException, UnsupportedDataTypeException;
 
@@ -27,4 +26,11 @@ public interface IProjectDAO {
 
 		List<User> getAllWorkersWorkingOnAProject(int projectId)
 				throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
+
+		int addProject(Project project, int adminId) throws EffPrjDAOException, DBException;
+
+
+		boolean isThisProjectOfThisUser(int projectId, int userId) throws DBException;
+
+		
 }

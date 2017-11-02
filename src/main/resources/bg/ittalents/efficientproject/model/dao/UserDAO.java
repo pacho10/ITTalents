@@ -59,7 +59,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 	@Override
 	public int addUserAdmin(User user)
-			throws EffPrjDAOException, DBException, UnsupportedDataTypeException, SQLException {
+			throws EffPrjDAOException, DBException, UnsupportedDataTypeException{
 		if (user == null) {
 			throw new EffPrjDAOException("There is no user to add!");
 		}
@@ -82,21 +82,28 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			ps.setBoolean(8, user.isEmployed());
 
 			ps.executeUpdate();
-			getCon().commit();
 
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
+				getCon().commit();
 				return rs.getInt(1);
 			}
+			getCon().rollback();
 			throw new EffPrjDAOException("Could not add!");
 		} catch (SQLException e) {
-			e.printStackTrace();
 			System.err.print("Transaction is being rolled back");
-			getCon().rollback();
+			try {
+				getCon().rollback();
+			} catch (SQLException e1) {
+				throw new DBException("Transaction is being rolled back", e1);
+				}
 			throw new DBException("The user cannot be added right now!Try again later!", e);
 		} finally {
-			getCon().setAutoCommit(true);
-		}
+			try {
+				getCon().setAutoCommit(true);
+			} catch (SQLException e) {
+				throw new DBException("Autocommit failed", e);
+			}}
 	}
 
 	@Override
@@ -148,7 +155,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 
 			}
-			return null;// TODO ????
+			return null;
 
 		} catch (SQLException e) {
 			throw new DBException("Cannot check for user right now!Try again later", e);
@@ -175,7 +182,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 			}
-			return null;// TODO null check in the servlet?
+			return null;
 
 		} catch (SQLException e) {
 			throw new DBException("Cannot check for user right now!Try again later", e);
@@ -263,14 +270,14 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	}
 
 	@Override
-	public void addUserToProject(int userId, int projectId)
-			throws UnsupportedDataTypeException, EffPrjDAOException, DBException, SQLException {
+	public boolean addUserToProject(int userId, int projectId)
+			throws UnsupportedDataTypeException, EffPrjDAOException, DBException{
 		if (userId < 0 || projectId < 0) {
 			throw new EffPrjDAOException("Ivalid user or project_id");
 		}
 		try {
-			// transaction!
 			getCon().setAutoCommit(false);
+			
 			// add to projects_workers_history:
 			PreparedStatement ps = getCon().prepareStatement(INSERT_WORKER_INTO_PROJECTS_WORKERS_HISTORY);
 			ps.setInt(1, userId);
@@ -283,16 +290,26 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			// remove from the workers list:
 			if (removeWorkerFromUnemployedWorkers(getUserById(userId))) {
 				getCon().commit();
+				return true;
 			} else {
 				System.err.print("User already removed: Transaction is being rolled back");
 				getCon().rollback();
+				return false;
 			}
 		} catch (SQLException e) {
 			System.err.print("Transaction is being rolled back");
-			getCon().rollback();
+			try {
+				getCon().rollback();
+			} catch (SQLException e1) {
+				throw new DBException("Transaction is being rolled back", e1);
+			}
 			throw new DBException("The user cannot be added right now!Try again later!", e);
 		} finally {
-			getCon().setAutoCommit(true);
+			try {
+				getCon().setAutoCommit(true);
+			} catch (SQLException e) {
+				throw new DBException("Autocommit failed", e);
+			}
 		}
 
 	}
