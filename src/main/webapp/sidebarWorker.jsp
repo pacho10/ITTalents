@@ -29,7 +29,7 @@
 				<li>Project tasks history</li>
 				<li>Current Sprint</li>
 				<li>Create task</li>
-				<li><a href="/final_project/BarChartStatistics.jsp">Statistics</a></li>
+				<li>Statistics</li>
 
 
 			</c:otherwise>

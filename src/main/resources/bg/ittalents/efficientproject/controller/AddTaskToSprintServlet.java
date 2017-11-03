@@ -3,6 +3,7 @@ package bg.ittalents.efficientproject.controller;
 import java.io.IOException;
 
 import javax.activation.UnsupportedDataTypeException;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,14 +34,14 @@ public class AddTaskToSprintServlet extends HttpServlet {
 			 * user is not admin:
 			 */
 			if (request.getSession(false) == null) {
-				response.sendRedirect("./LogIn");//TODO invalidate session when login redirect!!!!!
+				response.sendRedirect("./LogIn");
 				return;
 			}
 			if (request.getSession().getAttribute("user") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 
 				if (!user.isAdmin()) {
-					response.sendRedirect("./LogIn");
+					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
 					return;
 				}
 
@@ -52,7 +53,7 @@ public class AddTaskToSprintServlet extends HttpServlet {
 					 * check if the project is of this admin
 					 */
 					if (!IProjectDAO.getDAO(SOURCE_DATABASE).isThisProjectOfThisUser(projectId, user.getId())) {
-						response.sendRedirect("./LogIn");//TODO kato otida na login da invalidiram sesiqta!?
+						request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
 						return;
 					}
 					int taskId = Integer.parseInt(request.getParameter("taskId"));
@@ -61,17 +62,17 @@ public class AddTaskToSprintServlet extends HttpServlet {
 					ITaskDAO.getDAO(SOURCE_DATABASE).addTaskToSprint(taskId, sprintId);
 					response.sendRedirect("./allTasksProject?projectId=" + projectId + "&backLog=1");
 				} else {
-					throw new EffProjectException("parameters missing in request");
+					request.getRequestDispatcher("error2.jsp").forward(request, response);
 				}
 			} else {
-				throw new EffProjectException("parameters missing in session");
+				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
 
-		} catch (DBException | EffPrjDAOException | IOException | EffProjectException e) {
+		} catch (DBException | EffPrjDAOException | IOException | ServletException  e) {
 			try {
-				response.sendRedirect("error.jsp");
+				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();
-			} catch (IOException e1) {
+			} catch (IOException | ServletException e1) {
 				e1.printStackTrace();
 			}
 		}

@@ -1,13 +1,12 @@
 package bg.ittalents.efficientproject.controller;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,42 +19,53 @@ import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
 
-@WebServlet("/ImgOutputServlet") // TODO ne iskam da e dostypno ot url????
+@WebServlet("/ImgOutputServlet")
 public class ReadPictureFromFileSysServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String IMAGES_PATH = INFO.IMAGES_PATH;;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		if (request.getSession(false) == null) {
-			response.sendRedirect("/LogIn");
-		}
-		int userId = Integer.parseInt(request.getParameter("userid"));
-		User user=null;
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserById(userId);
-		} catch (EffPrjDAOException | DBException e) {
-			e.printStackTrace();
-			//TODO error page +returm
-		}
-		response.addHeader("Content-Type", "image/jpeg");
-		String avatarPath = user.getAvatarPath();
-		//String avatarPath = IMAGES_PATH;
-		File imgFile = new File(avatarPath);
-		try (InputStream fis = new FileInputStream(imgFile); ServletOutputStream fos = response.getOutputStream()) {
-			int b = fis.read();
-			while (b != -1) {
-				fos.write(b);
-				b = fis.read();
+			response.addHeader("Content-Type", "image/jpeg");
+
+			if (request.getSession(false) == null) {
+				response.sendRedirect("/LogIn");
+				return;
 			}
 
+			if (request.getSession().getAttribute("user") != null) {
+				User userSession = (User) request.getSession().getAttribute("user");
+				int userId = Integer.parseInt(request.getParameter("userid"));
+
+				if (userSession.getId() != userId) {
+					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
+					return;
+				}
+
+				User user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserById(userId);
+				String avatarPath = user.getAvatarPath();
+				File imgFile = new File(avatarPath);
+
+				try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(imgFile));
+						ServletOutputStream fos = response.getOutputStream()) {
+					do {
+						int b = bis.read();
+						if (b != -1) {
+							fos.write(b);
+							b = bis.read();
+						} else {
+							break;
+						}
+					} while (true);
+				}
+			} else {
+				request.getRequestDispatcher("error2.jsp").forward(request, response);
+			}
+		} catch (EffPrjDAOException | DBException | IOException | ServletException e) {
 		}
 
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
 
-	}
 
 }
