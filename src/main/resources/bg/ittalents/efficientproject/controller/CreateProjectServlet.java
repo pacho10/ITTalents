@@ -1,6 +1,8 @@
 package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +36,9 @@ public class CreateProjectServlet extends HttpServlet {
 		User user = (User) request.getSession().getAttribute("user");
 		String organizationName = user.getOrganization().getName();
 		request.setAttribute("organizationName", organizationName);
+		
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./createProject.jsp");
 		dispatcher.forward(request, response);
@@ -46,12 +51,18 @@ public class CreateProjectServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String name = request.getParameter("name");
+			name = URLEncoder.encode(name, "ISO-8859-1");
+			name = URLDecoder.decode(name, "UTF-8");
 			String deadline = request.getParameter("deadline");
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = new Date((sdf.parse(deadline)).getTime());
 			User user = (User) request.getSession().getAttribute("user");
 			Organization org = IOrganizationDAO.getDAO(DAOStorageSourse.DATABASE)
 					.getOrgById(user.getOrganization().getId());
+			
+
+			request.setCharacterEncoding("UTF-8");
+			response.setCharacterEncoding("UTF-8");
 
 			Project projectToAdd = new Project(name, date, org);
 

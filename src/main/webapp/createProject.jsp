@@ -10,7 +10,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Efficient Project</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+<meta charset="UTF-8">
 
 <link rel="stylesheet" type="text/css"
 	href="bootstrap/css/bootstrap.min.css" />
@@ -49,7 +49,7 @@
 						</div>
 						<div class="panel-body">
 							<form method="post" action="./createproject" id="create-project"
-								class="form-horizontal" role="form">
+								class="form-horizontal" role="form" accept-charset="ISO-8859-1">
 
 								<!--<div id="signupalert" style="display: none"
 						class="alert alert-danger">

@@ -58,8 +58,10 @@ public class DashboardServlet extends HttpServlet {
 				} catch (EffPrjDAOException e) {
 					e.printStackTrace();
 				}
-				request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
 				response.setContentType("text/html");
+				response.setCharacterEncoding("UTF-8");
+				request.setCharacterEncoding("UTF-8");
+				request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
 			} else {
 				int CurrentProjectId;
 				try {
