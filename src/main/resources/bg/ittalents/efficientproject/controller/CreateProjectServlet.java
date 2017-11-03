@@ -60,6 +60,7 @@ public class CreateProjectServlet extends HttpServlet {
 			response.sendRedirect("./dashboard");
 		} catch (ParseException | EffPrjDAOException | DBException | IOException e) {
 			try {
+				e.printStackTrace();
 				response.sendRedirect("./error.jsp");
 			} catch (IOException e1) {
 				e1.printStackTrace();

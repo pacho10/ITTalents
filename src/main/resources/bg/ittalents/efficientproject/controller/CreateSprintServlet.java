@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EffProjectException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
@@ -39,14 +40,13 @@ public class CreateSprintServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		if (request.getSession().getAttribute("user") != null) {
-			Sprint currentSprint = null;
-			int projectId = Integer.parseInt(request.getParameter("projectId"));
-			int all = Integer.parseInt(request.getParameter("all"));
-			request.setAttribute("all", all);
-			try {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			if (request.getSession().getAttribute("user") != null) {
+				Sprint currentSprint = null;
+				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				int all = Integer.parseInt(request.getParameter("all"));
+				request.setAttribute("all", all);
 				currentSprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getCurrentSprint(projectId);
 				Project project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 				if (currentSprint == null) {
@@ -57,13 +57,16 @@ public class CreateSprintServlet extends HttpServlet {
 					response.sendRedirect("./hasCurrentSprint.jsp");
 				}
 
-			} catch (DBException | EffPrjDAOException e) {
-				e.printStackTrace();
-				response.sendRedirect("./error.jsp");
+			} else {
+				response.sendRedirect("./LogIn");
 			}
-
-		} else {
-			response.sendRedirect("./LogIn");
+		} catch (DBException | EffPrjDAOException | IOException | ServletException e) {
+			try {
+				response.sendRedirect("error.jsp");
+				e.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 

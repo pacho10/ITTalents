@@ -23,44 +23,28 @@ import bg.ittalents.efficientproject.model.pojo.User;
 @WebServlet("/workertasks")
 public class WorkerTasksServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public WorkerTasksServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getSession().getAttribute("user") != null) {
-			User user = (User) request.getSession().getAttribute("user");
-			try {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			if (request.getSession().getAttribute("user") != null) {
+				User user = (User) request.getSession().getAttribute("user");
 				List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksByUser(user.getId());
 				request.setAttribute("tasks", tasks);
-				
+
 				RequestDispatcher rd = request.getRequestDispatcher("./workerTasks.jsp");
 				rd.forward(request, response);
-			} catch (DBException e) {
-				e.printStackTrace();
-			} catch (EffPrjDAOException e) {
-				e.printStackTrace();
+			} else {
+				response.sendRedirect("./LogIn");
 			}
-		} else {
+		} catch (EffPrjDAOException | IOException | ServletException | DBException e) {
+			try {
+				response.sendRedirect("error.jsp");
+				e.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 
-			response.sendRedirect("./LogIn");
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
 }

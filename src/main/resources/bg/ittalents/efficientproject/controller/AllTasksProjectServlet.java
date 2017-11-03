@@ -3,7 +3,6 @@ package bg.ittalents.efficientproject.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.activation.UnsupportedDataTypeException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,16 +19,16 @@ import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task;
 
-/**
- * Servlet implementation class AllTasksProject
- */
+
 @WebServlet("/allTasksProject")
 public class AllTasksProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			
 			if (request.getSession().getAttribute("user") != null) {
+				
 				int projectId = Integer.parseInt(request.getParameter("projectId"));
 				int backLog = Integer.parseInt(request.getParameter("backLog"));
 				request.setAttribute("backLog", backLog);
@@ -53,16 +52,31 @@ public class AllTasksProjectServlet extends HttpServlet {
 					RequestDispatcher rd = request.getRequestDispatcher("./allProjectTasks.jsp");
 					rd.forward(request, response);
 				} else {
-					// TODO exception
+					redirecttoerrorpage(response);
 				}
 			} else {
-
-				// TODO exception
+				redirecttoerrorpage(response);
 			}
-		} catch (EffPrjDAOException |DBException | ServletException | IOException e) {
-
+		} catch (EffPrjDAOException | DBException | ServletException | IOException e) {
+			redirecttoerrorpage(response, e);
 		}
+	}
 
+	private void redirecttoerrorpage(HttpServletResponse response, Exception e) {
+		try {
+			response.sendRedirect("error.jsp");
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	private void redirecttoerrorpage(HttpServletResponse response) {
+		try {
+			response.sendRedirect("error.jsp");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 }

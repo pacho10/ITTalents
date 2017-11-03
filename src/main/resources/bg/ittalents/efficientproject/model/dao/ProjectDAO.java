@@ -48,9 +48,9 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 				
 				// add to projects_workers_history:
 				PreparedStatement ps2 = getCon().prepareStatement(INSERT_INTO_USERS_PROJECTS_HISTORY);
-				ps.setInt(1, adminId);
-				ps.setInt(2, projectId);
-				ps.executeUpdate();
+				ps2.setInt(1, adminId);
+				ps2.setInt(2, projectId);
+				ps2.executeUpdate();
 				return projectId;
 			}
 			getCon().rollback();

@@ -33,3 +33,10 @@ src/main/resources/bg/ittalents/efficientproject/model/dao/DBConnection.java
 /target/m2e-wtp/web-resources/META-INF/maven/final_project/final_project/pom.properties
 /target/m2e-wtp/web-resources/META-INF
 /target/
+
+.classpath
+.project
+.metadata
+.settings/
+build
+/bin/

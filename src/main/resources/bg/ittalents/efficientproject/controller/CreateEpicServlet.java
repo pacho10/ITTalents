@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.activation.UnsupportedDataTypeException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,66 +27,67 @@ import bg.ittalents.efficientproject.model.pojo.User;
 @WebServlet("/createepic")
 public class CreateEpicServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public CreateEpicServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getSession().getAttribute("user") != null) {
-			int projectId= Integer.parseInt(request.getParameter("projectId"));
-			request.setAttribute("projectId", projectId);
-			List<Project> projects = new ArrayList<>();
-			User user = (User) request.getSession().getAttribute("user");
-			
-			try {
-				projects = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getAllProjectsFromOrganization(
-						user.getOrganization().getId());
+	public CreateEpicServlet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			if (request.getSession().getAttribute("user") != null) {
+				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				request.setAttribute("projectId", projectId);
+				List<Project> projects = new ArrayList<>();
+				User user = (User) request.getSession().getAttribute("user");
+
+				projects = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
+						.getAllProjectsFromOrganization(user.getOrganization().getId());
 				request.setAttribute("projects", projects);
 				RequestDispatcher rd = request.getRequestDispatcher("./createEpic.jsp");
 				rd.forward(request, response);
-			} catch (DBException e) {
-				// TODO Auto-generated catch block
+			}
+		} catch (EffPrjDAOException | DBException | ServletException | IOException e) {
+			try {
+				response.sendRedirect("error.jsp");
 				e.printStackTrace();
-			} catch (EffPrjDAOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
 		}
-		
+
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("name");
-		int estimate = Integer.parseInt(request.getParameter("estimate"));
-		String description = request.getParameter("description");
-		int projectId= Integer.parseInt(request.getParameter("projectId"));
-//		int projectId = Integer.parseInt(request.getParameter("projects"));
-		
-		Project project=null;
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			String name = request.getParameter("name");
+			int estimate = Integer.parseInt(request.getParameter("estimate"));
+			String description = request.getParameter("description");
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
+			// int projectId = Integer.parseInt(request.getParameter("projects"));
+
+			Project project = null;
+
 			project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 			Epic epicToAdd = new Epic(name, estimate, description, project);
 			int id = IEpicDAO.getDAO(DAOStorageSourse.DATABASE).createEpic(epicToAdd);
-		} catch (DBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (EffPrjDAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		response.sendRedirect("./projectdetail?projectId="+project.getId());
-	}
 
+			response.sendRedirect("./projectdetail?projectId=" + project.getId());
+		} catch (EffPrjDAOException | IOException | DBException e) {
+			try {
+				response.sendRedirect("error.jsp");
+				e.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+
+	}
 }
