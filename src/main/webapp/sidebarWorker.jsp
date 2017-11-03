@@ -12,6 +12,6 @@
 		<li><a href="./allsprinttasks?projectId=${project.id}">Current Sprint</a></li>
 			<li><a href="./createtask?projectId=${project.id}">Create
 					task</a></li>
-		<li><a href="#">Statistics</a></li>
+		<li><a id="stat" href="/final_project/BarChartStatistics.jsp">Statistics</a></li>
 	</ul>
 </div>
