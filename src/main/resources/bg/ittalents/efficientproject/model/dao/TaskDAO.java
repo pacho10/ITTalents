@@ -280,7 +280,11 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 				} catch (UnsupportedDataTypeException e) {
 					e.printStackTrace();
 					
-					throw new DBException("can not find tasks for statistics");
+					throw new DBException("can not find tasks for statistics", e);
+				} catch (EffPrjDAOException e) {
+					e.printStackTrace();
+					
+					throw new DBException("can not find tasks for statistics", e);
 				}
 			}
 		} catch (SQLException e) {

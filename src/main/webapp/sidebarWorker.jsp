@@ -37,12 +37,10 @@
 				<li>Project tasks history</li>
 				<li>Current Sprint</li>
 				<li>Create task</li>
-				<li><a href="#">Statistics</a></li>
+				<li><a href="/final_project/BarChartStatistics.jsp">Statistics</a></li>
 
 
 			</c:otherwise>
 		</c:choose>
-
->>>>>>> 21927b105906f363fe3ae846af81edcbe37d2781
 	</ul>
 </div>
