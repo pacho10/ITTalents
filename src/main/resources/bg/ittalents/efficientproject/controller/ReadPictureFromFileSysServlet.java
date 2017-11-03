@@ -36,6 +36,7 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 			user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserById(userId);
 		} catch (EffPrjDAOException | DBException e) {
 			e.printStackTrace();
+			//TODO error page +returm
 		}
 		response.addHeader("Content-Type", "image/jpeg");
 		String avatarPath = user.getAvatarPath();

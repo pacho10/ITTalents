@@ -39,6 +39,8 @@ public interface ITaskDAO {
 
 	boolean addTaskToSprint(int taskId, int sprintId) throws DBException, EffPrjDAOException;
 
+	boolean checkIfTaskIsNotTaken(int taskId) throws EffPrjDAOException, DBException;
+
 	
 
 

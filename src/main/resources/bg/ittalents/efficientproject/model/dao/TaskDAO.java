@@ -33,6 +33,8 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final String GET_ALL_TASKS_FROM_PROJECT = "select t.id from projects p join epics e on p.id=e.project_id join tasks t on e.id=t.epic_id where p.id=?";
 	private static final String GET_ALL_NONNFINISHED_TASKS_FROM_PROJECT = "select t.id from projects p join epics e on p.id=e.project_id join tasks t on e.id=t.epic_id where p.id=? and t.finished_date is null and sprint_id is null";
 
+	// TODO ako dvama du6i se opitvat da zemat task ednovremenno?
+	private static final String CHECK_IF_TASK_IS_NOT_TAKEN = "select id from tasks where assigned_date is  null and id=?;";
 	private static final String WORKER_ASSIGNE_TASK = "UPDATE tasks SET assigned_date=?, assignee=? WHERE id=?;";
 	private static final String FINISH_TASK = "UPDATE tasks SET finished_date=? WHERE id=?;";
 	private static final String ADD_TASK_TO_SPRINT = "UPDATE tasks SET sprint_id=? WHERE id=?;";
@@ -200,25 +202,46 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 	@Override
+	public boolean checkIfTaskIsNotTaken(int taskId) throws EffPrjDAOException, DBException {
+		if (taskId < 0) {
+			throw new EffPrjDAOException("Invalid input!");
+		}
+		try {
+			PreparedStatement ps = getCon().prepareStatement(CHECK_IF_TASK_IS_NOT_TAKEN);
+			ps.setInt(1, taskId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+			return false;
+		} catch (SQLException e) {
+			throw new DBException("task can not be checked", e);
+		}
+	}
+
+	@Override
 	public boolean assignTask(int taskId, int userId) throws DBException, EffPrjDAOException {
 		if (taskId < 0 || userId < 0) {
 			throw new EffPrjDAOException("Invalid input!");
 		}
 		try {
-			PreparedStatement ps = getCon().prepareStatement(WORKER_ASSIGNE_TASK);
-			ps.setTimestamp(1, new Timestamp(new Date().getTime()));
-			ps.setInt(2, userId);
-			ps.setInt(3, taskId);
-			ps.executeUpdate();
-			return true;
+			if (checkIfTaskIsNotTaken(taskId)) {
+				PreparedStatement ps = getCon().prepareStatement(WORKER_ASSIGNE_TASK);
+				ps.setTimestamp(1, new Timestamp(new Date().getTime()));
+				ps.setInt(2, userId);
+				ps.setInt(3, taskId);
+				ps.executeUpdate();
+				return true;
+			}
+			return false;//TODO ???
 		} catch (SQLException e) {
-			throw new DBException("task can not be assigned",e);
+			throw new DBException("task can not be assigned", e);
 		}
 	}
 
 	@Override
 	public boolean finishTask(int taskId) throws DBException, EffPrjDAOException {
-		if (taskId < 0 ) {
+		if (taskId < 0) {
 			throw new EffPrjDAOException("Invalid input!");
 		}
 		try {
@@ -228,21 +251,21 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 			ps.executeUpdate();
 			return true;
 		} catch (SQLException e) {
-			throw new DBException("task can not be finished",e);
+			throw new DBException("task can not be finished", e);
 		}
 	}
 
 	@Override
 	public boolean closeTask(int taskId) {
 		return false;
-		//TODO
+		// TODO
 	}
 
 	@Override
 
 	public boolean updateTask(int taskId) {
 		return false;
-		//TODO
+		// TODO
 	}
 
 }

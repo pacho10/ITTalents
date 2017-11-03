@@ -71,36 +71,31 @@ public class CreateSprintServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		if (request.getSession().getAttribute("user") != null) {
-			int projectId = Integer.parseInt(request.getParameter("projectId"));
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			if (request.getSession().getAttribute("user") != null) {
+				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				String name = request.getParameter("name");
+				int duration = Integer.parseInt(request.getParameter("duration"));
+				Sprint sprintToAdd = new Sprint(name, duration, projectId);
+				int id = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
+			} else {
+				response.sendRedirect("./LogIn");
+			}
 			String name = request.getParameter("name");
 			int duration = Integer.parseInt(request.getParameter("duration"));
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
+
 			Sprint sprintToAdd = new Sprint(name, duration, projectId);
-			try {
-				int id = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
-			} catch (DBException e) {
-				e.printStackTrace();
-				response.sendRedirect("./error.jsp");
-			}
-		} else {
-			response.sendRedirect("./LogIn");
-		}
-		String name = request.getParameter("name");
-		int duration = Integer.parseInt(request.getParameter("duration"));
-		int projectId = Integer.parseInt(request.getParameter("projectId"));
-		// request.setAttribute("projectId", projectId);
-
-		Sprint sprintToAdd = new Sprint(name, duration, projectId);
-		try {
 			ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
-		} catch (DBException e) {
-			e.printStackTrace();
 
+			response.sendRedirect("./projectdetail?projectId=" + projectId);
+		} catch (DBException | IOException | EffPrjDAOException e) {
+			try {
+				response.sendRedirect("./error.jsp");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
-
-		response.sendRedirect("./projectdetail?projectId=" + projectId);
 	}
 }

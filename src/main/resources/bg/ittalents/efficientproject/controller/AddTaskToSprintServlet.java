@@ -33,14 +33,14 @@ public class AddTaskToSprintServlet extends HttpServlet {
 			 * user is not admin:
 			 */
 			if (request.getSession(false) == null) {
-				response.sendRedirect("LogIn");
+				response.sendRedirect("./LogIn");
 				return;
 			}
 
 			User user = (User) request.getSession().getAttribute("user");
 
 			if (!user.isAdmin()) {
-				response.sendRedirect("LogIn");
+				response.sendRedirect("./LogIn");
 				return;
 			}
 
@@ -48,8 +48,11 @@ public class AddTaskToSprintServlet extends HttpServlet {
 					&& request.getParameter("ProjectId") != null) {
 
 				int projectId = Integer.parseInt(request.getParameter("ProjectId"));
+				/**
+				 * check if the project is of this admin
+				 */
 				if (IProjectDAO.getDAO(SOURCE_DATABASE).isThisProjectOfThisUser(projectId, user.getId())) {
-					response.sendRedirect("LogIn");
+					response.sendRedirect("./LogIn");
 					return;
 				}
 				int taskId = Integer.parseInt(request.getParameter("taskId"));
