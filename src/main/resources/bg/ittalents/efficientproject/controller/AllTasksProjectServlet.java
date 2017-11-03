@@ -3,6 +3,7 @@ package bg.ittalents.efficientproject.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.activation.UnsupportedDataTypeException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,13 +27,12 @@ import bg.ittalents.efficientproject.model.pojo.Task;
 public class AllTasksProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		if (request.getSession().getAttribute("user") != null) {
-			int projectId = Integer.parseInt(request.getParameter("projectId"));
-			int backLog = Integer.parseInt(request.getParameter("backLog"));
-			request.setAttribute("backLog", backLog);
-			try {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			if (request.getSession().getAttribute("user") != null) {
+				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				int backLog = Integer.parseInt(request.getParameter("backLog"));
+				request.setAttribute("backLog", backLog);
 				request.setAttribute("project",
 						IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId));
 
@@ -55,14 +55,12 @@ public class AllTasksProjectServlet extends HttpServlet {
 				} else {
 					// TODO exception
 				}
-			} catch (DBException e) {
-				e.printStackTrace();
-			} catch (EffPrjDAOException e) {
-				e.printStackTrace();
-			}
-		} else {
+			} else {
 
-			// TODO exception
+				// TODO exception
+			}
+		} catch (EffPrjDAOException |DBException | ServletException | IOException e) {
+
 		}
 
 	}

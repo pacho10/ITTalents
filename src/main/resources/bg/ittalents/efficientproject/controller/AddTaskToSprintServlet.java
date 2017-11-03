@@ -33,39 +33,44 @@ public class AddTaskToSprintServlet extends HttpServlet {
 			 * user is not admin:
 			 */
 			if (request.getSession(false) == null) {
-				response.sendRedirect("./LogIn");
+				response.sendRedirect("./LogIn");//TODO invalidate session when login redirect!!!!!
 				return;
 			}
+			if (request.getSession().getAttribute("user") != null) {
+				User user = (User) request.getSession().getAttribute("user");
 
-			User user = (User) request.getSession().getAttribute("user");
-
-			if (!user.isAdmin()) {
-				response.sendRedirect("./LogIn");
-				return;
-			}
-
-			if (request.getParameter("taskId") != null && request.getParameter("sprintId") != null
-					&& request.getParameter("ProjectId") != null) {
-
-				int projectId = Integer.parseInt(request.getParameter("ProjectId"));
-				/**
-				 * check if the project is of this admin
-				 */
-				if (IProjectDAO.getDAO(SOURCE_DATABASE).isThisProjectOfThisUser(projectId, user.getId())) {
+				if (!user.isAdmin()) {
 					response.sendRedirect("./LogIn");
 					return;
 				}
-				int taskId = Integer.parseInt(request.getParameter("taskId"));
-				int sprintId = Integer.parseInt(request.getParameter("sprintId"));
 
-				ITaskDAO.getDAO(SOURCE_DATABASE).addTaskToSprint(taskId, sprintId);
-				response.sendRedirect("./allTasksProject?projectId=" + projectId + "&backLog=1");
+				if (request.getParameter("taskId") != null && request.getParameter("sprintId") != null
+						&& request.getParameter("projectId") != null) {
+
+					int projectId = Integer.parseInt(request.getParameter("projectId"));
+					/**
+					 * check if the project is of this admin
+					 */
+					if (!IProjectDAO.getDAO(SOURCE_DATABASE).isThisProjectOfThisUser(projectId, user.getId())) {
+						response.sendRedirect("./LogIn");//TODO kato otida na login da invalidiram sesiqta!?
+						return;
+					}
+					int taskId = Integer.parseInt(request.getParameter("taskId"));
+					int sprintId = Integer.parseInt(request.getParameter("sprintId"));
+
+					ITaskDAO.getDAO(SOURCE_DATABASE).addTaskToSprint(taskId, sprintId);
+					response.sendRedirect("./allTasksProject?projectId=" + projectId + "&backLog=1");
+				} else {
+					throw new EffProjectException("parameters missing in request");
+				}
 			} else {
-				throw new EffProjectException("parameters missing in request");
+				throw new EffProjectException("parameters missing in session");
 			}
+
 		} catch (DBException | EffPrjDAOException | IOException | EffProjectException e) {
 			try {
 				response.sendRedirect("error.jsp");
+				e.printStackTrace();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

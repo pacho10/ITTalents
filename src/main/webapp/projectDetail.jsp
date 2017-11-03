@@ -86,7 +86,7 @@
 								<c:forEach var="e" items="${epics}">
 									<tr>
 										<td>${e.id}</td>
-										<td><%-- <a href="./epicdetail?epicId=${e.id}">${e.name}</a> --%></td>
+										<td> <a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
 										<td>${e.estimate}</td>
 									</tr>
 								</c:forEach>
