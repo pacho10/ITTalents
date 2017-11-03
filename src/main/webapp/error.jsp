@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ page isErrorPage="true" %>
+<%@ page isErrorPage="true"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,8 +8,11 @@
 <title>Error</title>
 </head>
 <body>
- <p> Sorry brat ama stana ei tova : <%= exception.getMessage() %> </p>
- 
- <a href="./index.jsp">Probvai pak ako iskash</a>
+	<p>
+		Oops,something went wrong!
+		<%-- : <%= exception.getMessage() %> --%>
+	</p>
+
+	<a href="./index.jsp">Log in here</a>
 </body>
 </html>

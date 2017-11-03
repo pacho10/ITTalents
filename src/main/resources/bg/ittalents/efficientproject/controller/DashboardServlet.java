@@ -44,7 +44,7 @@ public class DashboardServlet extends HttpServlet {
 			User user = (User) request.getSession().getAttribute("user");
 			if (user.isAdmin()) {
 				int intorganizationId = user.getOrganization().getId();
-//				System.out.println("servlet "+intorganizationId);
+				// System.out.println("servlet "+intorganizationId);
 				try {
 					List<Project> projects = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
 							.getAllProjectsFromOrganization(intorganizationId);
@@ -52,22 +52,25 @@ public class DashboardServlet extends HttpServlet {
 
 					String organizationName = user.getOrganization().getName();
 					request.setAttribute("organizationName", organizationName);
-					
+
 				} catch (DBException e) {
 					e.printStackTrace();
 				} catch (EffPrjDAOException e) {
 					e.printStackTrace();
 				}
 				request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
-				response.setContentType("text/html"); 
+				response.setContentType("text/html");
 			} else {
 				int CurrentProjectId;
 				try {
-					//TODO if the worker doesnt have current project-->show a message!!!
+					// TODO if the worker doesnt have current project-->show a message!!!
 					CurrentProjectId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).returnCurrentWorkersProject(user);
-					Project project =IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(CurrentProjectId);
+					Project project = null;
+					if (CurrentProjectId > 0) {
+						project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(CurrentProjectId);
+					}
 					request.getSession().setAttribute("project", project);
-					
+
 				} catch (EffPrjDAOException | DBException e) {
 					e.printStackTrace();
 				}

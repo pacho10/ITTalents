@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.activation.UnsupportedDataTypeException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,50 +28,44 @@ import bg.ittalents.efficientproject.model.pojo.User;
 @WebServlet("/createproject")
 public class CreateProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public CreateProjectServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
 		String organizationName = user.getOrganization().getName();
 		request.setAttribute("organizationName", organizationName);
-		
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./createProject.jsp");
 		dispatcher.forward(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("name");
-		String deadline = request.getParameter("deadline");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			String name = request.getParameter("name");
+			String deadline = request.getParameter("deadline");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = new Date((sdf.parse(deadline)).getTime());
-			User user = (User)request.getSession().getAttribute("user");
-			Organization org = IOrganizationDAO.getDAO(DAOStorageSourse.DATABASE).getOrgById(user.getOrganization().getId());
-			
+			User user = (User) request.getSession().getAttribute("user");
+			Organization org = IOrganizationDAO.getDAO(DAOStorageSourse.DATABASE)
+					.getOrgById(user.getOrganization().getId());
+
 			Project projectToAdd = new Project(name, date, org);
-			
-			int id = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).addProject(projectToAdd);
-		} catch (ParseException | EffPrjDAOException | DBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			int id = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).addProject(projectToAdd,user.getId());
+			// everything went well:
+			response.sendRedirect("./dashboard");
+		} catch (ParseException | EffPrjDAOException | DBException | IOException e) {
+			try {
+				response.sendRedirect("./error.jsp");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
-		
-		//everything went well:
-		response.sendRedirect("./dashboard");
-		
+
 	}
 
 }

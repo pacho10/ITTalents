@@ -1,8 +1,13 @@
 package bg.ittalents.efficientproject.model.interfaces;
 
+import java.util.List;
+
 import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.dao.TypeDAO;
+import bg.ittalents.efficientproject.model.exception.DBException;
+import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.pojo.Type;
 
 public interface ITypeDAO {
 	public static TypeDAO getDAO(DAOStorageSourse storage) throws UnsupportedDataTypeException {
@@ -11,4 +16,8 @@ public interface ITypeDAO {
 		}
 		throw new UnsupportedDataTypeException();
 	}
+
+	Type getTypeById(int TypeId) throws DBException, EffPrjDAOException;
+
+	List<Type> getAllTypes() throws DBException;
 }

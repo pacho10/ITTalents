@@ -22,55 +22,28 @@
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("a.noReLoad").click(function() {
-			var myhref = $(this).attr('href');
-			$("#content").empty();
-			$('#content').load(myhref);
-			return false;
-		});
-	});
-</script>
-
-
-
 </head>
 
 <body>
 	<c:if
-		test="${ sessionScope.user == null && not sessionScope.user.admin}">
+		test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
 
 	<jsp:include page="navBarAdmin.jsp"></jsp:include>
 
 	<div id="wrapper" class="toggled">
-		<jsp:include page="sidebarProjectDetailed.jsp"></jsp:include>
+		<jsp:include page="sidebarProject.jsp"></jsp:include>
 
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
 
-				<h3 class="text-center text-info">${project.name}</h3>
+				<h3  class="text-center text-info">${project.name}</h3>
 				<hr>
 
 				<div id="content">
 					<div>
-						<%-- <span>${project.name}</span> --%>
-						<div>
-							<span> Deadline: ${project.deadline}</span>
-						</div>
-						<div>
-							<c:choose>
-								<c:when test="${currentSprint != null}">
-									<span>Current sprint: ${currentSprint.name}</span>
-								</c:when>
-								<c:otherwise>
-									<div>No current sprint, <a href="./createsprint?projectId=${project.id}&all=1">start new one here</a></div>
-								</c:otherwise>
-							</c:choose>
-						</div>
+						<span>${project.name}</span> <span>${project.deadline}</span>
 					</div>
 					<div>
 						<hr>
@@ -86,7 +59,7 @@
 								<c:forEach var="e" items="${epics}">
 									<tr>
 										<td>${e.id}</td>
-										<td> <a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
+										<td><a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
 										<td>${e.estimate}</td>
 									</tr>
 								</c:forEach>
@@ -104,10 +77,9 @@
 								</thead>
 								<c:forEach var="u" items="${workers}">
 									<tr>
-										<td><img id="avatar2"
-											src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
+									<td><img id="avatar2" src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
 										<%-- <td>${u.avatarPath}</td> --%>
-										<td>${u.firstName} ${u.lastName}</td>
+										<td>${u.firstName}	${u.lastName}</td>
 										<td>${u.email}</td>
 									</tr>
 								</c:forEach>

@@ -19,5 +19,5 @@ public interface IOrganizationDAO {
 
 	int addOrganization(Organization organization) throws EffPrjDAOException, DBException;
 
-	boolean isThereSuchOrganization(String name) throws EffPrjDAOException;
+	boolean isThereSuchOrganization(String name) throws EffPrjDAOException, DBException;
 }

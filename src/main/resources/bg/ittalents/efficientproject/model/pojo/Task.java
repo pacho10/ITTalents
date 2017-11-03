@@ -14,8 +14,6 @@ public class Task {
 	private Timestamp assignedDate;
 	private Timestamp finishedDate;
 	private Timestamp stoppedDate;
-	// statuses:open,todo,inprogress,resolved,closed //TODO enum? and how to handle
-	// it in db and here
 	private Sprint sprint;
 	private User reporter;
 	private User assignee;

@@ -27,8 +27,8 @@ public class SignUpServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-	
-		//dissable cache:
+
+		// dissable cache:
 		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
 		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
 		response.setHeader("Expires", "0"); // Proxies.
@@ -38,103 +38,79 @@ public class SignUpServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		//dissable cache:
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-		response.setHeader("Expires", "0"); // Proxies.
-		
-		String firstName = request.getParameter("first-name");
-		String lastName = request.getParameter("last-name");
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String reppassword = request.getParameter("repPassword");
-		String organization = request.getParameter("organization").trim();
-		boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
-		System.out.println(isAdmin);
-
-		// response.getWriter().println(firstName+" "+ lastName+ ":" + email + ":" +
-		// password + ":" + reppassword);//TODO tuj za ko e?
-
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./signUp.jsp");
-
-		if (!isMailValid(email)) {
-			request.setAttribute("errorMessage", "Invalid e-mail! Try Again");
-			dispatcher.forward(request, response);
-			return;
-		}
-
-		if (!password.equals(reppassword)) {
-			request.setAttribute("errorMessage", "Passwords do no match please make sure they do!");
-			dispatcher.forward(request, response);
-			return;
-		}
-
-		
-		if (!isPaswordStrong(password)) {
-			request.setAttribute("errorMessage", "Password must contain 5 symbols and at least one number and letter");
-			dispatcher.forward(request, response);
-			return;
-		}
-
 		try {
-			if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAnUser(email)) {
-				
-				request.setAttribute("errorMessage", "User with such email already exists, use another email !");
-				// TODO how to show the organization label?
-				// request.setAttribute("organization.style.display", "block");
+
+			// dissable cache:
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+			response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+			response.setHeader("Expires", "0"); // Proxies.
+
+			String firstName = request.getParameter("first-name");
+			String lastName = request.getParameter("last-name");
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			String reppassword = request.getParameter("repPassword");
+			String organization = request.getParameter("organization").trim();
+			boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
+			// System.out.println(isAdmin);
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("./signUp.jsp");
+
+			if (!isMailValid(email)) {
+				request.setAttribute("errorMessage", "Invalid e-mail! Try Again");
 				dispatcher.forward(request, response);
 				return;
 			}
-		} catch (DBException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		} catch (EffPrjDAOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
 
-		try {
+			if (!password.equals(reppassword)) {
+				request.setAttribute("errorMessage", "Passwords do no match please make sure they do!");
+				dispatcher.forward(request, response);
+				return;
+			}
+
+			if (!isPaswordStrong(password)) {
+				request.setAttribute("errorMessage",
+						"Password must contain 5 symbols and at least one number and letter");
+				dispatcher.forward(request, response);
+				return;
+			}
+
+			if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAnUser(email)) {
+
+				request.setAttribute("errorMessage", "User with such email already exists, use another email !");
+				dispatcher.forward(request, response);
+				return;
+			}
+
 			if (IOrganizationDAO.getDAO(SOURCE_DATABASE).isThereSuchOrganization(organization)) {
 				request.setAttribute("errorMessage", "This organization is already registered !");
 				dispatcher.forward(request, response);
 				return;
 			}
-		} catch (EffPrjDAOException e1) {
-			e1.getMessage();
-			e1.printStackTrace();
-		}
 
-		// TODO a user can register an organization later in the profile page???
-		if(isAdmin && organization.equals("")) {
-			request.setAttribute("errorMessage", "This organization name is empty !");
-			dispatcher.forward(request, response);
-			return;
-		}
+			if (isAdmin && organization.equals("")) {
+				request.setAttribute("errorMessage", "This organization name is empty !");
+				dispatcher.forward(request, response);
+				return;
+			}
 
-		// adding the user to the database:
-		User user = null;
-		try {
-
+			// adding the user to the database:
+			User user = null;
 			if (!isAdmin) {
 				user = new User(firstName, lastName, email, password, false);
-
-				IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserWorker(user);
+				int UserId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserWorker(user);
+				user.setId(UserId);
 
 			} else {
 				user = new User(firstName, lastName, email, password, true, new Organization(organization));
 				IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserAdmin(user);
 			}
-		} catch (EffPrjDAOException | DBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		request.getSession().setAttribute("user", user);
-		response.sendRedirect("./ProfileEdit");
+			request.getSession().setAttribute("user", user);
+			response.sendRedirect("./ProfileEdit");
+		} catch (EffPrjDAOException | DBException e) {
+
+		}
 	}
 
 	public static boolean isPaswordStrong(String pass) {
