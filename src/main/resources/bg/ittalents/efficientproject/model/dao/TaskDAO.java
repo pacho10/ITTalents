@@ -18,6 +18,7 @@ import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITypeDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
+import bg.ittalents.efficientproject.model.pojo.Element;
 import bg.ittalents.efficientproject.model.pojo.Epic;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task;
@@ -38,6 +39,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final String WORKER_ASSIGNE_TASK = "UPDATE tasks SET assigned_date=?, assignee=? WHERE id=?;";
 	private static final String FINISH_TASK = "UPDATE tasks SET finished_date=? WHERE id=?;";
 	private static final String ADD_TASK_TO_SPRINT = "UPDATE tasks SET sprint_id=? WHERE id=?;";
+	private static final String GET_ALL_TASKS_FROM_ALL_SPRINTS = "SELECT count(*), sprint_id FROM tasks t join sprints s on t.sprint_id=s.id where s.project_id=? group by sprint_id;";
 
 	@Override
 	public int addTask(Task task) throws EffPrjDAOException, DBException {
@@ -254,6 +256,45 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 			throw new DBException("task can not be finished", e);
 		}
 	}
+	
+	public List<Element> getAllTaskFromAllSprints(int projectId) throws DBException {
+		List<Element> elements = new ArrayList<>();
+		
+		try {
+			PreparedStatement ps = getCon().prepareStatement(GET_ALL_TASKS_FROM_ALL_SPRINTS);
+			ps.setInt(1, projectId);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				try {
+					Sprint sprint = ISprintDAO.getDAO(SOURCE_DATABASE).getSprintBId(rs.getInt(2));
+					//String sName = "";
+					if (sprint != null) {
+						String sName = sprint.getName();
+						Element element = new Element(rs.getInt(1), sName);
+						
+						elements.add(element);
+					} 
+					
+					
+				} catch (UnsupportedDataTypeException e) {
+					e.printStackTrace();
+					
+					throw new DBException("can not find tasks for statistics", e);
+				} catch (EffPrjDAOException e) {
+					e.printStackTrace();
+					
+					throw new DBException("can not find tasks for statistics", e);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			throw new DBException("can not find tasks for statistics");
+		}
+		
+		return elements;
+	}
 
 	@Override
 	public boolean closeTask(int taskId) {
@@ -262,10 +303,8 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 	@Override
-
 	public boolean updateTask(int taskId) {
 		return false;
 		// TODO
 	}
-
 }
