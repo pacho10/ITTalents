@@ -50,12 +50,10 @@
 
 
 
-<body style="background-color: #F0F8FF">
+<body  background="./img/Background1.jpg">
 	<div class="text-info">
-		<div class="text-center">
+		<div class="text-left">
 			<h1>Efficient Project</h1>
-			<h2>Get productive and efficient in a few simple steps!</h2>
-			<img src="img/pm.png" class="img-rounded" width="620" height=auto>
 		</div>
 	</div>
 
@@ -65,7 +63,7 @@
 		<div class="panel panel-info">
 			<div class="panel-heading">
 
-				<div class="panel-title">Sign in Efficient Project</div>
+				<div class="panel-title">Sign in </div>
 
 			</div>
 			<div class="panel-body">
