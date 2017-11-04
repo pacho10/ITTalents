@@ -14,18 +14,21 @@ import javax.servlet.http.HttpServletResponse;
 public class ProfileShowServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//dissable cache:
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-		response.setHeader("Expires", "0"); // Proxies.
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			if (request.getSession(false) == null) {
+				response.sendRedirect("/LogIn");
+				return;
+			}
+			request.getRequestDispatcher("./profileShow.jsp").forward(request, response);
+		} catch (IOException | ServletException e) {
+			try {
+				request.getRequestDispatcher("error.jsp").forward(request, response);
+				e.printStackTrace();
+			} catch (IOException | ServletException e1) {
+				e1.printStackTrace();
+			}
+		}
 
-		request.getRequestDispatcher("./profileShow.jsp").forward(request,response);
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-	}
-
 }

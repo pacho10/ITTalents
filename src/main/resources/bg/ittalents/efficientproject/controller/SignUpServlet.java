@@ -1,8 +1,6 @@
 package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,6 +16,8 @@ import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 import bg.ittalents.efficientproject.model.pojo.User;
+import bg.ittalents.efficientproject.util.CredentialsChecks;
+
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 @WebServlet("/SignUp")
@@ -53,8 +53,8 @@ public class SignUpServlet extends HttpServlet {
 			String firstName = escapeHtml4(request.getParameter("first-name")).trim();
 			String lastName = escapeHtml4(request.getParameter("last-name")).trim();
 			String email = escapeHtml4(request.getParameter("email")).trim();
-			String password = escapeHtml4(request.getParameter("password")).trim();
-			String reppassword = escapeHtml4(request.getParameter("repPassword")).trim();
+			String password = escapeHtml4(request.getParameter("password"));
+			String reppassword = escapeHtml4(request.getParameter("repPassword"));
 			String organization = escapeHtml4(request.getParameter("organization")).trim();
 			boolean isAdmin = Boolean.parseBoolean(request.getParameter("isAdmin"));
 
@@ -69,7 +69,7 @@ public class SignUpServlet extends HttpServlet {
 				return;
 			}
 
-			if (!isMailValid(email)) {
+			if (!CredentialsChecks.isMailValid(email)) {
 				request.setAttribute("errorMessage", "Invalid e-mail! Try Again");
 				dispatcher.forward(request, response);
 				return;
@@ -81,14 +81,14 @@ public class SignUpServlet extends HttpServlet {
 				return;
 			}
 
-			if (!isPaswordStrong(password)) {
+			if (!CredentialsChecks.isPaswordStrong(password)) {
 				request.setAttribute("errorMessage",
 						"Password must contain 5 symbols and at least one number and letter");
 				dispatcher.forward(request, response);
 				return;
 			}
 
-			if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAnUser(email)) {
+			if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAUser(email)) {
 				request.setAttribute("errorMessage", "User with such email already exists, use another email !");
 				dispatcher.forward(request, response);
 				return;
@@ -130,30 +130,5 @@ public class SignUpServlet extends HttpServlet {
 		}
 	}
 
-	public static boolean isPaswordStrong(String pass) {
-		boolean letter = false;
-		boolean number = false;
-
-		for (int i = 0; i < pass.length(); i++) {
-			if (letter == false && pass.charAt(i) >= 'A' && pass.charAt(i) <= 'z') {
-				letter = true;
-			}
-			if (number == false && pass.charAt(i) >= '0' && pass.charAt(i) <= '9') {
-				number = true;
-			}
-
-			if (number && letter && pass.length() > 4) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean isMailValid(String mail) {
-
-		final Pattern pat = Pattern.compile(
-				"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
-
-		return pat.matcher(mail).matches();
-	}
+	
 }

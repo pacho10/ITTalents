@@ -155,7 +155,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 
 			}
-			return null;
+			throw new EffPrjDAOException("Invalid input!");
 
 		} catch (SQLException e) {
 			throw new DBException("Cannot check for user right now!Try again later", e);
@@ -182,7 +182,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 			}
-			return null;
+			throw new EffPrjDAOException("Invalid input!");
 
 		} catch (SQLException e) {
 			throw new DBException("Cannot check for user right now!Try again later", e);
@@ -192,7 +192,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	}
 
 	@Override
-	public boolean isThereSuchAnUser(String email) throws DBException, EffPrjDAOException {
+	public boolean isThereSuchAUser(String email) throws DBException, EffPrjDAOException {
 		if (email == null) {
 			throw new EffPrjDAOException("There is no email input!");
 		}

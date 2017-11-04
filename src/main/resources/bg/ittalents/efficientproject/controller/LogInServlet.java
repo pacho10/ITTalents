@@ -21,62 +21,54 @@ public class LogInServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 4252149006661628687L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		// dissable cache:
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-		response.setHeader("Expires", "0"); // Proxies.
-
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
-		dispatcher.forward(request, response);
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			request.getRequestDispatcher("./index.jsp").forward(request, response);
+		} catch (IOException | ServletException e) {
+			try {
+				request.getRequestDispatcher("error.jsp").forward(request, response);
+				e.printStackTrace();
+			} catch (IOException | ServletException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String email = request.getParameter("email");
-		// System.out.println(email);
-		String password = request.getParameter("password");
-
-		RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
-
-		// there is no user with this email:
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if (!IUserDAO.getDAO(DAOStorageSourse.DATABASE).isThereSuchAnUser(email)) {
+			request.setCharacterEncoding("UTF-8");
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");
+
+			// there is no user with this email:
+			if (!IUserDAO.getDAO(DAOStorageSourse.DATABASE).isThereSuchAUser(email)) {
 				request.setAttribute("errorMessage", "There is no user registered with this email!");
 				dispatcher.forward(request, response);
 				return;
 			}
-		} catch (DBException | EffPrjDAOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
-		// there is user with this email but password doesn`t match:
-		User user = null;
-		try {
-			user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserByEmail(email);
-		} catch (EffPrjDAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (user == null || !user.getPassword().equals(Encrypter.encrypt(password))) {
-			request.setAttribute("errorMessage", "Password not matching the user, try again!");
-			dispatcher.forward(request, response);
-			return;
-		}
+			// there is user with this email but password doesn`t match:
+			User user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserByEmail(email);
 
-		// everythig went well:
-		request.getSession().setAttribute("user", user);
-		response.sendRedirect("./dashboard");
+			if ( !user.getPassword().equals(Encrypter.encrypt(password))) {
+				request.setAttribute("errorMessage", "Password not matching the user, try again!");
+				dispatcher.forward(request, response);
+				return;
+			}
 
+			// Everything went well:
+			request.getSession().setAttribute("user", user);
+			response.sendRedirect("./dashboard");
+		} catch (DBException | EffPrjDAOException | ServletException | IOException e) {
+			try {
+				request.getRequestDispatcher("error.jsp").forward(request, response);
+				e.printStackTrace();
+			} catch (IOException | ServletException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 }

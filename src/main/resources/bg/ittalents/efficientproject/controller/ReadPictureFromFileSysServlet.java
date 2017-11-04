@@ -22,7 +22,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
 @WebServlet("/ImgOutputServlet")
 public class ReadPictureFromFileSysServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static final String IMAGES_PATH = INFO.IMAGES_PATH;;
+	// public static final String IMAGES_PATH = INFO.IMAGES_PATH;;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -34,38 +34,37 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 			}
 
 			if (request.getSession().getAttribute("user") != null) {
-				User userSession = (User) request.getSession().getAttribute("user");
+				User user = (User) request.getSession().getAttribute("user");
 				int userId = Integer.parseInt(request.getParameter("userid"));
 
-				if (userSession.getId() != userId) {
+				if (user.getId() != userId) {
 					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
 					return;
 				}
 
-				User user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserById(userId);
 				String avatarPath = user.getAvatarPath();
 				File imgFile = new File(avatarPath);
 
-				try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(imgFile));
+				try (BufferedInputStream fis = new BufferedInputStream(new FileInputStream(imgFile));
 						ServletOutputStream fos = response.getOutputStream()) {
-					do {
-						int b = bis.read();
-						if (b != -1) {
-							fos.write(b);
-							b = bis.read();
-						} else {
-							break;
-						}
-					} while (true);
+					int b = fis.read();
+					while (b != -1) {
+						fos.write(b);
+						b = fis.read();
+					}
 				}
 			} else {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
-		} catch (EffPrjDAOException | DBException | IOException | ServletException e) {
+		} catch (IOException | ServletException e) {
+			try {
+				request.getRequestDispatcher("error.jsp").forward(request, response);
+				e.printStackTrace();
+			} catch (IOException | ServletException e1) {
+				e1.printStackTrace();
+			}
 		}
 
 	}
-
-
 
 }

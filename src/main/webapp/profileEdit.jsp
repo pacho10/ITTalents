@@ -136,7 +136,7 @@
 									<label for="password" class="col-md-3 control-label">Old
 										password</label>
 									<div class="col-md-9">
-										<input type="password" id="pass1" class="form-control"
+										<input type="password" id="pass" class="form-control"
 											name="old-password" placeholder="Old Password">
 									</div>
 								</div>

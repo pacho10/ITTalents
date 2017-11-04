@@ -27,7 +27,7 @@ public interface IUserDAO {
 
 	int addUserWorker(User user) throws EffPrjDAOException, DBException, UnsupportedDataTypeException;
 
-	boolean isThereSuchAnUser(String email) throws DBException, EffPrjDAOException;
+	boolean isThereSuchAUser(String email) throws DBException, EffPrjDAOException;
 
 	boolean updateUsersDetails(User user) throws DBException, EffPrjDAOException;
 
