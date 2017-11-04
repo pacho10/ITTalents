@@ -49,13 +49,11 @@
 					<div class="table-responsive">
 						<table class="table">
 							<thead>
-								<td>Project Id</td>
 								<td>Project Name</td>
 								<td>Project deadline</td>
 							</thead>
 							<c:forEach var="p" items="${projects}">
 								<tr>
-									<td>${p.id}</td>
 									<td><a
 										href="/final_project/projectdetail?projectId=${p.id}">${p.name}</a>
 									</td>

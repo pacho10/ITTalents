@@ -36,7 +36,6 @@ public class ProjectDetailServlet extends HttpServlet {
 	 */
 	public ProjectDetailServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -45,6 +44,12 @@ public class ProjectDetailServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
+
+			if (request.getSession(false) == null) {
+				response.sendRedirect("/LogIn");
+				return;
+			}
+			
 			int projectId = Integer.parseInt(request.getParameter("projectId"));
 
 			Sprint currentSprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getCurrentSprint(projectId);

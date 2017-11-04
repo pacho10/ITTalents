@@ -79,13 +79,11 @@
 						<div class="table-responsive">
 							<table class="table">
 								<thead>
-									<td>Epic Id</td>
 									<td>Epic Name</td>
 									<td>Epic Estimate</td>
 								</thead>
 								<c:forEach var="e" items="${epics}">
 									<tr>
-										<td>${e.id}</td>
 										<td> <a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
 										<td>${e.estimate}</td>
 									</tr>

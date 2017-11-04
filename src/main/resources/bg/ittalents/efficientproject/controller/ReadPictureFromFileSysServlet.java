@@ -33,14 +33,14 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 				return;
 			}
 
-			if (request.getSession().getAttribute("user") != null) {
-				User user = (User) request.getSession().getAttribute("user");
+			if (request.getParameter("userid") != null) {
+//				User user = (User) request.getSession().getAttribute("user");
 				int userId = Integer.parseInt(request.getParameter("userid"));
-
-				if (user.getId() != userId) {
-					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
-					return;
-				}
+				User user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserById(userId);
+//				if (user.getId() != userId) {
+//					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
+//					return;
+//				}
 
 				String avatarPath = user.getAvatarPath();
 				File imgFile = new File(avatarPath);
@@ -56,7 +56,7 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 			} else {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
-		} catch (IOException | ServletException e) {
+		} catch (IOException | ServletException | EffPrjDAOException | DBException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();

@@ -37,59 +37,54 @@ public class DashboardServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		if (request.getSession(false) != null && request.getSession().getAttribute("user") != null) {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+		try {
 
-			User user = (User) request.getSession().getAttribute("user");
-			if (user.isAdmin()) {
-				int intorganizationId = user.getOrganization().getId();
-				// System.out.println("servlet "+intorganizationId);
-				try {
+			if (request.getSession(false) == null) {
+				response.sendRedirect("/LogIn");
+				return;
+			}
+			if (request.getSession().getAttribute("user") != null) {
+
+				User user = (User) request.getSession().getAttribute("user");
+				// if the user is admin forward to admins page
+				if (user.isAdmin()) {
+					int intorganizationId = user.getOrganization().getId();
 					List<Project> projects = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
 							.getAllProjectsFromOrganization(intorganizationId);
-					request.setAttribute("projects", projects);
+					if (projects != null) {
+						request.setAttribute("projects", projects);
+					} else {
+						request.getRequestDispatcher("error2.jsp").forward(request, response);
+					}
 
 					String organizationName = user.getOrganization().getName();
 					request.setAttribute("organizationName", organizationName);
 
-				} catch (DBException e) {
-					e.printStackTrace();
-				} catch (EffPrjDAOException e) {
-					e.printStackTrace();
-				}
-				request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
-				response.setContentType("text/html");
-			} else {
-				int CurrentProjectId;
-				try {
-					// TODO if the worker doesnt have current project-->show a message!!!
-					CurrentProjectId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).returnCurrentWorkersProject(user);
+					request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
+					response.setContentType("text/html");
+				} else {//if the user is worker:
+					int CurrentProjectId= IUserDAO.getDAO(DAOStorageSourse.DATABASE).returnCurrentWorkersProject(user);
 					Project project = null;
 					if (CurrentProjectId > 0) {
 						project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(CurrentProjectId);
 					}
 					request.getSession().setAttribute("project", project);
 
-				} catch (EffPrjDAOException | DBException e) {
-					e.printStackTrace();
+					response.sendRedirect("./workertasks");
+
 				}
-				response.sendRedirect("./workertasks");
-
+			} else {
+				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
-		} else {
-			response.sendRedirect("./LogIn");
+		} catch (IOException | ServletException | EffPrjDAOException | DBException e) {
+			try {
+				request.getRequestDispatcher("error.jsp").forward(request, response);
+				e.printStackTrace();
+			} catch (IOException | ServletException e1) {
+				e1.printStackTrace();
+			}
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
 }

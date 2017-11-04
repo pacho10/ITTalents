@@ -1,6 +1,8 @@
 package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
+
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -8,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
-import bg.ittalents.efficientproject.model.exception.EffProjectException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
+import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
 
@@ -28,28 +30,33 @@ public class AddWorkerToProjectServlet extends HttpServlet {
 			 * user is not admin:
 			 */
 			if (request.getSession(false) == null) {
-				response.sendRedirect("LogIn");
+				response.sendRedirect("./LogIn");
 				return;
 			}
 
+			if (request.getParameter("userId") != null && request.getParameter("ProjectId") != null) {
 			User user = (User) request.getSession().getAttribute("user");
 
 			if (!user.isAdmin()) {
 				response.sendRedirect("LogIn");
 				return;
 			}
+			int projectId = Integer.parseInt(request.getParameter("projectId"));
 			/**
 			 * check if the project is of this admin
 			 */
-			if (request.getParameter("userId") != null && request.getParameter("ProjectId") != null) {
-				int projectId = Integer.parseInt(request.getParameter("projectId"));
+			if (!IProjectDAO.getDAO(SOURCE_DATABASE).isThisProjectOfThisUser(projectId, user.getId())) {
+				request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
+				return;
+			}
+			
 				int userId = Integer.parseInt(request.getParameter("userId"));
 				IUserDAO.getDAO(SOURCE_DATABASE).addUserToProject(userId, projectId);
 				response.sendRedirect("./projectdetail?projectId=" + projectId);
 			}else {
-				throw new EffProjectException("parameters missing in request");
-			}
-		} catch (EffPrjDAOException | DBException | IOException | EffProjectException e) {
+				request.getRequestDispatcher("error2.jsp").forward(request, response);
+				}
+		} catch (EffPrjDAOException | DBException | IOException | ServletException e) {
 			try {
 				response.sendRedirect("error.jsp");
 			} catch (IOException e1) {
