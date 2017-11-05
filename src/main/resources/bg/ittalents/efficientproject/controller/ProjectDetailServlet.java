@@ -36,10 +36,10 @@ public class ProjectDetailServlet extends HttpServlet {
 		try {
 
 			if (request.getSession(false) == null) {
-				response.sendRedirect("/LogIn");
+				response.sendRedirect("./LogIn");
 				return;
 			}
-			if (request.getParameter("projectId") != null) {
+			if (request.getSession().getAttribute("user")!=null && request.getParameter("projectId") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 
 				if (!user.isAdmin()) {
@@ -59,6 +59,8 @@ public class ProjectDetailServlet extends HttpServlet {
 					request.setAttribute("currentSprint", currentSprint);
 				}
 
+				boolean projectFinished=IProjectDAO.getDAO(DAOStorageSourse.DATABASE).isProjectFinished(projectId);
+				request.setAttribute("projectFinished", projectFinished);
 				Project currentProject = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 				request.setAttribute("project", currentProject);
 
@@ -68,6 +70,7 @@ public class ProjectDetailServlet extends HttpServlet {
 				List<User> users = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
 						.getAllWorkersWorkingOnAProject(projectId);
 				request.setAttribute("workers", users);
+				
 
 				// get current sprintby id---->if there is no current sprint--->message and
 				// redirect to create new one

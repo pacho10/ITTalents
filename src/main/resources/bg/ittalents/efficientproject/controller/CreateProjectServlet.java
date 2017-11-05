@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
 import javax.activation.UnsupportedDataTypeException;
 import javax.servlet.RequestDispatcher;
@@ -55,7 +56,7 @@ public class CreateProjectServlet extends HttpServlet {
 			name = URLDecoder.decode(name, "UTF-8");
 			String deadline = request.getParameter("deadline");
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date date = new Date((sdf.parse(deadline)).getTime());
+			LocalDate date = new Date((sdf.parse(deadline)).getTime()).toLocalDate();
 			User user = (User) request.getSession().getAttribute("user");
 			Organization org = IOrganizationDAO.getDAO(DAOStorageSourse.DATABASE)
 					.getOrgById(user.getOrganization().getId());

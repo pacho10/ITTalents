@@ -38,7 +38,6 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final String GET_ALL_TASKS_FROM_PROJECT = "select t.id from projects p join epics e on p.id=e.project_id join tasks t on e.id=t.epic_id where p.id=?";
 	private static final String GET_ALL_NONNFINISHED_TASKS_FROM_PROJECT = "select t.id from projects p join epics e on p.id=e.project_id join tasks t on e.id=t.epic_id where p.id=? and t.finished_date is null and sprint_id is null";
 
-	// TODO ako dvama du6i se opitvat da zemat task ednovremenno?
 	private static final String CHECK_IF_TASK_IS_NOT_TAKEN = "select id from tasks where assigned_date is  null and id=?;";
 	private static final String WORKER_ASSIGNE_TASK = "UPDATE tasks SET assigned_date=?, assignee=? WHERE id=?;";
 	private static final String FINISH_TASK = "UPDATE tasks SET finished_date=? WHERE id=?;";
@@ -318,4 +317,5 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		return false;
 		// TODO
 	}
+
 }

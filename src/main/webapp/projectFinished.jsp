@@ -25,45 +25,24 @@
 </head>
 
 <body>
-	<c:choose>
-		<c:when test="${sessionScope.user.admin}">
-			<jsp:include page="navBarAdmin.jsp"></jsp:include>
-		</c:when>
-		<c:otherwise>
-			<jsp:include page="navBarWorker.jsp"></jsp:include>
-		</c:otherwise>
-	</c:choose>
+	<c:if
+		test="${ sessionScope.user == null && not sessionScope.user.admin}">
+		<c:redirect url="/LogIn"></c:redirect>
+	</c:if>
+
+	<jsp:include page="navBarAdmin.jsp"></jsp:include>
 
 	<div id="wrapper" class="toggled">
+		<jsp:include page="sidebarProject.jsp"></jsp:include>
 
-		<c:choose>
-			<c:when test="${sessionScope.user.admin}">
-				<jsp:include page="sidebarAdmin.jsp"></jsp:include>
-			</c:when>
-			<c:otherwise>
-				<jsp:include page="sidebarWorker.jsp"></jsp:include>
-			</c:otherwise>
-		</c:choose>
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
-				<div class="span2">
 
-					<img src="./ImgOutputServlet?userid=${sessionScope.user.id}" alt=""
-						class="img-rounded" width="200" height=auto>
-				</div>
-				<div class="span4">
-					<blockquote>
-						<c:out
-							value="${sessionScope.user.firstName }  ${ sessionScope.user.lastName }"></c:out>
-					</blockquote>
-					<p>
+				<h3 class="text-center text-info">${project.name}</h3>
+				<hr>
 
-						<i class="fa fa-envelope"></i> ${ sessionScope.user.email } <br>
-						<c:if test="${ sessionScope.user.admin == true }">
-							<c:out value="admin at: ${ sessionScope.user.organization.name }"></c:out>
-						</c:if>
-
-					</p>
+				<div id="content">
+					<h3 class="text-center text-info">Project is finished</h3>
 				</div>
 
 			</div>

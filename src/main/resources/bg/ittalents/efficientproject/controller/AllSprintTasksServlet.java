@@ -45,19 +45,22 @@ public class AllSprintTasksServlet extends HttpServlet {
 		if (request.getSession().getAttribute("user") != null) {
 			try {
 				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				boolean projectFinished = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).isProjectFinished(projectId);
 				Project project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 				request.setAttribute("project", project);
 				Sprint currentSprint = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).getCurrentSprint(projectId);
 
-				if (currentSprint != null) {
-					List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE)
-							.getAllTasksFromSprint(currentSprint.getId());
-					request.setAttribute("tasks", tasks);
-					RequestDispatcher rd = request.getRequestDispatcher("./workerTasksCurrentSprint.jsp");
-					rd.forward(request, response);
+				if (!projectFinished) {
+					if (currentSprint != null) {
+						List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE)
+								.getAllTasksFromSprint(currentSprint.getId());
+						request.setAttribute("tasks", tasks);
+						request.getRequestDispatcher("./workerTasksCurrentSprint.jsp").forward(request, response);
+					} else {
+						request.getRequestDispatcher("./hasNOTCurrentSprint.jsp").forward(request, response);
+					}
 				} else {
-					RequestDispatcher rd = request.getRequestDispatcher("./hasNOTCurrentSprint.jsp");
-					rd.forward(request, response);
+					request.getRequestDispatcher("./projectFinished.jsp").forward(request, response);
 				}
 			} catch (DBException | EffPrjDAOException e) {
 				e.printStackTrace();

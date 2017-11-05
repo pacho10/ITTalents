@@ -21,8 +21,8 @@ public class Task {
 	private TaskState status;
 	private Timestamp updatedDate;
 
-	private enum TaskState {
-		OPEN, RESOLVED, CLOSED, IN_PROGRESS
+	enum TaskState {
+		OPEN, RESOLVED, CLOSED, INPROGRESS
 	}
 
 	public Task(Type type, String summary, String description, float estimate, User reporter, Epic epic) {
@@ -33,7 +33,7 @@ public class Task {
 		this.estimate = estimate;
 		this.reporter = reporter;
 		this.epic = epic;
-		this.creationDate = new Timestamp(System.currentTimeMillis());// TODO tuj tyj li e????
+		this.creationDate = new Timestamp(System.currentTimeMillis());
 		this.updatedDate = this.creationDate;
 	}
 
@@ -180,7 +180,7 @@ public class Task {
 			return;
 		} else {
 			if (assignedDate != null) {
-				this.status = TaskState.IN_PROGRESS;
+				this.status = TaskState.INPROGRESS;
 				return;
 			}
 		}

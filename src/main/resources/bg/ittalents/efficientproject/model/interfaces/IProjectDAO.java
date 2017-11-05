@@ -32,5 +32,8 @@ public interface IProjectDAO {
 
 		boolean isThisProjectOfThisUser(int projectId, int userId) throws DBException;
 
+
+		boolean isProjectFinished(int projectId) throws EffPrjDAOException, DBException;
+
 		
 }

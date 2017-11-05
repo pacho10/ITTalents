@@ -74,7 +74,8 @@
 							<c:forEach var="t" items="${tasks}">
 								<tr>
 									<td>${t.type.name}</td>
-									<td>${t.summary}</td>
+									<td><a
+											href="./taskdetail?taskId=${t.id}&projectId=${project.id}">${t.summary}</a></td>
 									<td>${t.status}</td>
 									<td>${t.updatedDate}</td>
 									<td>${t.reporter.firstName}</td>
