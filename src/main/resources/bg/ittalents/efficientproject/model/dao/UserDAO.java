@@ -155,7 +155,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 
 			}
-			throw new EffPrjDAOException("Invalid input!");
+			return null;
 
 		} catch (SQLException e) {
 			throw new DBException("Cannot check for user right now!Try again later", e);

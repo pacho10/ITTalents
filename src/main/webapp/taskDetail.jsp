@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="bg.ittalents.efficientproject.util.Datetime" %>
 <%@ page isELIgnored="false"%>
 <%-- <%@ page errorPage="error.jsp"%> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -26,9 +27,9 @@
 
 <body>
 
-	<c:if test="${ sessionScope.user == null }">
+	<%-- 	<c:if test="${ sessionScope.user == null }">
 		<c:redirect url="/LogIn"></c:redirect>
-	</c:if>
+	</c:if> --%>
 
 	<%-- Navbar  --%>
 	<c:choose>
@@ -59,50 +60,81 @@
 
 				<h3 class="text-center text-info">${project.name}</h3>
 				<hr>
-
+				<h4 class="text-center text-info">Task details</h4>
 				<div id="content">
 					<div>
 						<%-- <span>${project.name}</span> <span>${project.deadline}</span> --%>
 						<div>
-							<div>Summary:</div>
-							<div>Description:</div>
-							<div>Assignee:</div>
-							<div>Reporter:</div>
-
-							<div>Time tracking:</div>
-							<div>
-								<div>Estimate time :</div>
-								<div>Remaining time:</div>
-								<div>Logged:</div>
-							</div>
-						</div>
-						<div>
-							<!-- <hr>
-							<h3>Epics</h3> -->
-							<hr>
 							<div class="table-responsive">
 								<table class="table">
 									<thead>
-										<td>Type</td>
-										<td>Status</td>
-										<td>Epic</td>
-										<td>Sprint</td>
+										<td></td>
+										<td></td>
 									</thead>
 									<tr>
-										<td>${task.type}</td>
-										<td>${task.status}</td>
-										<td>${task.epic}</td>
-										<td>${task.sprint}</td>
+										<td>Summary:</td>
+										<td>${task.summary}</td>
+									</tr>
+									<tr>
+										<td>Description:</td>
+										<td>${task.description}</td>
+									</tr>
+									<tr>
+										<td>Reporter:</td>
+										<td><img id="avatar2"
+											src="./ImgOutputServlet?userid=${reporter.id}"
+											class="img-rounded"> ${reporter.firstName}</td>
+									</tr>
+									<tr>
+										<td>Assignee:</td>
+										<td><img id="avatar2"
+											src="./ImgOutputServlet?userid=${assignee.id}"
+											class="img-rounded"> ${assignee.firstName}</td>
+									</tr>
+									<tr>
+										<td>Time tracking:</td>
+									</tr>
+									<tr>
+										<td>Estimate time :</td>
+										<td>${task.estimate}</td>
+									</tr>
+									<tr>
+										<td>Remaining time:</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>Logged:</td>
+										<td></td>
 									</tr>
 								</table>
 							</div>
+							<div>
+								<hr>
+								<div class="table-responsive">
+									<table class="table">
+										<thead>
+											<td>Type</td>
+											<td>Status</td>
+											<td>Epic</td>
+											<td>Sprint</td>
+											<td>Updated on:</td>
+										</thead>
+										<tr>
+											<td>${task.type}</td>
+											<td>${task.status}</td>
+											<td>${epic.name}</td>
+											<td>${sprint.name}</td>
+											<td>${Datetime.timestampAsString(task.updatedDate)}</td>
+										</tr>
+									</table>
+								</div>
 
+							</div>
 						</div>
 					</div>
-				</div>
 
+				</div>
 			</div>
 		</div>
-	</div>
 </body>
 </html>
