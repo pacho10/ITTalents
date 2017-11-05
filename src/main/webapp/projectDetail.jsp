@@ -67,7 +67,11 @@
 									<span>Current sprint: ${currentSprint.name}</span>
 								</c:when>
 								<c:otherwise>
-									<div>No current sprint, <a href="./createsprint?projectId=${project.id}&all=1">start new one here</a></div>
+									<div>
+										No current sprint, <a
+											href="./createsprint?projectId=${project.id}&all=1">start
+											new one here</a>
+									</div>
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -84,7 +88,7 @@
 								</thead>
 								<c:forEach var="e" items="${epics}">
 									<tr>
-										<td> <a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
+										<td><a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
 										<td>${e.estimate}</td>
 									</tr>
 								</c:forEach>
@@ -101,13 +105,15 @@
 									<td>Email</td>
 								</thead>
 								<c:forEach var="u" items="${workers}">
-									<tr>
-										<td><img id="avatar2"
-											src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
-										<%-- <td>${u.avatarPath}</td> --%>
-										<td>${u.firstName} ${u.lastName}</td>
-										<td>${u.email}</td>
-									</tr>
+									<c:if test="${not u.admin}">
+										<tr>
+											<td><img id="avatar2"
+												src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
+											<%-- <td>${u.avatarPath}</td> --%>
+											<td>${u.firstName} ${u.lastName}</td>
+											<td>${u.email}</td>
+										</tr>
+									</c:if>
 								</c:forEach>
 							</table>
 						</div>
