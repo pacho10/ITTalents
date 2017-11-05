@@ -61,6 +61,8 @@ public class DashboardServlet extends HttpServlet {
 					String organizationName = user.getOrganization().getName();
 					request.setAttribute("organizationName", organizationName);
 
+				request.setCharacterEncoding("UTF-8");
+				response.setCharacterEncoding("UTF-8");
 					request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
 					response.setContentType("text/html");
 				} else {//if the user is worker:

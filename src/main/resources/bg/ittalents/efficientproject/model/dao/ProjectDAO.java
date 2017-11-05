@@ -1,5 +1,8 @@
 package bg.ittalents.efficientproject.model.dao;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -106,10 +109,12 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 			ResultSet rs = ps.executeQuery();
 			Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(organizationId);
 			while (rs.next()) {
-				projects.add(new Project(rs.getInt(1), rs.getString(2), rs.getDate(3), organization));
+				//String name = URLEncoder.encode(rs.getString(2), "ISO-8859-1");
+				String name = URLDecoder.decode(rs.getString(2), "UTF-8");
+				projects.add(new Project(rs.getInt(1), name, rs.getDate(3), organization));
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException | UnsupportedEncodingException e) {
 			throw new DBException("projects can not be selected!", e);
 		}
 		return projects;
