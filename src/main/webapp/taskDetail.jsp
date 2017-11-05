@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="bg.ittalents.efficientproject.util.Datetime" %>
+<%@ page import="bg.ittalents.efficientproject.util.Datetime"%>
 <%@ page isELIgnored="false"%>
 <%-- <%@ page errorPage="error.jsp"%> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -66,7 +66,7 @@
 						<%-- <span>${project.name}</span> <span>${project.deadline}</span> --%>
 						<div>
 							<div class="table-responsive">
-								<table class="table">
+								<table class="table"  width= 50>
 									<thead>
 										<td></td>
 										<td></td>
@@ -87,12 +87,20 @@
 									</tr>
 									<tr>
 										<td>Assignee:</td>
-										<td><img id="avatar2"
-											src="./ImgOutputServlet?userid=${assignee.id}"
-											class="img-rounded"> ${assignee.firstName}</td>
+										<c:choose>
+											<c:when test="${not empty assignee}">
+												<td><img id="avatar2"
+													src="./ImgOutputServlet?userid=${assignee.id}"
+													class="img-rounded"> ${assignee.firstName}</td>
+											</c:when>
+											<c:otherwise>
+												<td>Not assigned yet</td>
+											</c:otherwise>
+										</c:choose>
+
 									</tr>
 									<tr>
-										<td>Time tracking:</td>
+										<td><h4>Time tracking</h4></td>
 									</tr>
 									<tr>
 										<td>Estimate time :</td>
@@ -123,7 +131,14 @@
 											<td>${task.type}</td>
 											<td>${task.status}</td>
 											<td>${epic.name}</td>
-											<td>${sprint.name}</td>
+											<c:choose>
+											<c:when test="${not empty sprint}">
+												<td>${sprint.name}</td>
+											</c:when>
+											<c:otherwise>
+												<td>Not added to sprint yet</td>
+											</c:otherwise>
+										</c:choose>
 											<td>${Datetime.timestampAsString(task.updatedDate)}</td>
 										</tr>
 									</table>

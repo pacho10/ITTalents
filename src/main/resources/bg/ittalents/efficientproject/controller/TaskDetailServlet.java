@@ -34,7 +34,7 @@ public class TaskDetailServlet extends HttpServlet {
 				response.sendRedirect("/LogIn");
 				return;
 			}
-			if (request.getParameter("projectId") != null || request.getParameter("taskId") != null) {
+			if (request.getSession().getAttribute("user")!=null || request.getParameter("projectId") != null || request.getParameter("taskId") != null) {
 				int projectId = Integer.parseInt(request.getParameter("projectId"));
 				User user = (User) request.getSession().getAttribute("user");
 				/**
@@ -56,6 +56,7 @@ public class TaskDetailServlet extends HttpServlet {
 				Epic epic =task.getEpic();
 				Sprint sprint =task.getSprint();
 				request.setAttribute("assignee", assignee);
+				System.out.println(assignee);
 				request.setAttribute("reporter", reporter);
 				request.setAttribute("epic", epic);
 				request.setAttribute("task", task);

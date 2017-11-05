@@ -20,7 +20,9 @@
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-	
+	function addToSprint() {
+
+	}
 </script>
 
 
@@ -86,31 +88,37 @@
 									<th></th>
 								</c:if>
 							</thead>
-							<c:forEach var="t" items="${tasks}">
-								<tr>
-									<td>${t.type.name}</td>
-									<td><a href="./taskdetail?taskId=${t.id}&projectId=${project.id}">${t.summary}</a></td>
-									<td>${t.status}</td>
-									<td>${t.updatedDate}</td>
-									<td>${t.reporter.firstName}</td>
+							
+							<tbody id="update">
+								<c:forEach var="t" items="${tasks}">
+									<tr>
+										<td>${t.type.name}</td>
+										<td><a
+											href="./taskdetail?taskId=${t.id}&projectId=${project.id}">${t.summary}</a></td>
+										<td>${t.status}</td>
+										<td>${t.updatedDate}</td>
+										<td>${t.reporter.firstName}</td>
 
-									<c:if test="${backLog==0}">
-										<td>${t.assignee.firstName}</td>
-									</c:if>
-									<c:if test="${sessionScope.user.admin}">
-										<c:if test="${backLog==1}">
-											<td><c:choose>
-													<c:when test="${not empty sprintId}">
-														<a class="btn btn-info"
-															href="/final_project/addTaskToSprint?taskId=${t.id}&sprintId=${sprintId}&projectId=${project.id}">Add
-															to sprint</a>
-													</c:when>
-													<c:otherwise> <a href="./createsprint?projectId=${project.id}&all=1">Start new sprint</a></c:otherwise>
-												</c:choose>
+										<c:if test="${backLog==0}">
+											<td>${t.assignee.firstName}</td>
 										</c:if>
-									</c:if>
-								</tr>
-							</c:forEach>
+										<c:if test="${sessionScope.user.admin}">
+											<c:if test="${backLog==1}">
+												<td><c:choose>
+														<c:when test="${not empty sprintId}">
+															<a class="btn btn-info"  href="/final_project/addTaskToSprint?taskId=${t.id}&sprintId=${sprintId}&projectId=${project.id} ">Add
+																to sprint</a>
+														</c:when>
+														<c:otherwise>
+															<a href="./createsprint?projectId=${project.id}&all=1">Start
+																new sprint</a>
+														</c:otherwise>
+													</c:choose>
+											</c:if>
+										</c:if>
+									</tr>
+								</c:forEach>
+							</tbody>
 						</table>
 					</div>
 

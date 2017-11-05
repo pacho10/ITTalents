@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.activation.UnsupportedDataTypeException;
@@ -28,13 +28,13 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	private static final String SELECT_FROM_USERS_BY_EMAIL = "Select * from users where email=?;";
 	private static final String SELECT_FROM_USERS_BY_ID = "Select * from users where id=?;";
 	private static final String UPDATE_USER_DETAILS = "update users set first_name =? , last_name=? ,email=? , password=? , avatar_path=? where id=?;";
-	private static final String SELECT_ALL_UNEMPLOYED_WORKRS = "Select * from users where admin =0 and is_employed =0 ;";
+	private static final String SELECT_ALL_UNEMPLOYED_WORKRS = "Select * from users where admin =0 and is_employed =0 order by first_name;";
 	private static final String UPDATE_WORKER_STATE_TO_EMPLOYED = "UPDATE users SET `is_employed`='1' WHERE `id`=?;";
 	private static final String UPDATE_WORKER_STATE_TO_UNEMPLOYED = "UPDATE users SET `is_employed`='0' WHERE `id`=?;";
 	private static final String INSERT_WORKER_INTO_PROJECTS_WORKERS_HISTORY = "insert into users_projects_history values (?,?);";
 	private static final String RETURN_CURRENT_PROJECT_OF_WORKER = "select h.project_id from users_projects_history h join projects p on p.id=h.project_id where h.users_id=? and p.deadline > CURDATE();";
 
-	private static final Set<User> allUnemployedWorkers = new HashSet<>();
+	private static final Set<User> allUnemployedWorkers = new LinkedHashSet<>();
 
 	// static initializing block to fill the collection when its loaded the first
 	// time:

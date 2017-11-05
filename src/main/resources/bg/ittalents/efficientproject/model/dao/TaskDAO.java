@@ -5,8 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.activation.UnsupportedDataTypeException;
 
@@ -41,6 +45,13 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final String ADD_TASK_TO_SPRINT = "UPDATE tasks SET sprint_id=? WHERE id=?;";
 	private static final String GET_ALL_TASKS_FROM_ALL_SPRINTS = "SELECT count(*), sprint_id FROM tasks t join sprints s on t.sprint_id=s.id where s.project_id=? group by sprint_id;";
 
+//	private static Set<Task> projectBacklog= new LinkedHashSet<>();
+	
+//	@Override
+//	public Collection<Task> getProjectBacklogTasks() {
+//		return Collections.unmodifiableCollection(projectBacklog);
+//	}
+	
 	@Override
 	public int addTask(Task task) throws EffPrjDAOException, DBException {
 		if (task == null) {
