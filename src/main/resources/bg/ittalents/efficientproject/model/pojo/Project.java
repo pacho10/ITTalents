@@ -23,9 +23,7 @@ public class Project {
 		this.deadline = deadline;
 		this.organization = organization;
 		this.setStartDate(LocalDate.now());
-//		tasksNumberPerState.put(TaskState.OPEN, 0);
-//		tasksNumberPerState.put(TaskState.INPROGRESS, 0);
-//		tasksNumberPerState.put(TaskState.RESOLVED, 0);
+
 	}
 
 	public Project(int id, String name, LocalDate deadline, Organization organization,LocalDate startDate) {

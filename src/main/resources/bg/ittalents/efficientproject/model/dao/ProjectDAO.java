@@ -2,16 +2,16 @@ package bg.ittalents.efficientproject.model.dao;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.activation.UnsupportedDataTypeException;
 
@@ -20,9 +20,12 @@ import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
+import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 import bg.ittalents.efficientproject.model.pojo.Project;
+import bg.ittalents.efficientproject.model.pojo.Task;
+import bg.ittalents.efficientproject.model.pojo.Task.TaskState;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
@@ -42,13 +45,13 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 		}
 		try {
 			Statement st = getCon().createStatement();
-			ResultSet rs = st.executeQuery(RETURN_PROJECT_DEADLINE + projectId );
+			ResultSet rs = st.executeQuery(RETURN_PROJECT_DEADLINE + projectId);
 			while (rs.next()) {
 				LocalDate deadline = rs.getDate(1).toLocalDate();
 				return deadline.isAfter(LocalDate.now()) ? false : true;
 			}
 			throw new EffPrjDAOException("no project found");
-			
+
 		} catch (SQLException e) {
 			throw new DBException("Transaction is being rolled back", e);
 		}
@@ -181,4 +184,30 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 		}
 	}
 
+	public Map<TaskState, Integer> tasksNumberPerState(int projectId)
+			throws UnsupportedDataTypeException, DBException, EffPrjDAOException {
+		List<Task> allProjectTasks = ITaskDAO.getDAO(SOURCE_DATABASE).getAllTasksOfProject(projectId);
+		Map<TaskState, Integer> tasksNumberPerState = new HashMap<>();
+		int open = 0;
+		int inprogree = 0;
+		int resolved = 0;
+		for (Task t : allProjectTasks) {
+			TaskState taskState = t.getStatus();
+			switch (taskState) {
+			case OPEN:
+				open++;
+				break;
+			case INPROGRESS:
+				inprogree++;
+				break;
+			case RESOLVED:
+				resolved++;
+				break;
+			}
+		}
+		tasksNumberPerState.put(TaskState.OPEN, open);
+		tasksNumberPerState.put(TaskState.INPROGRESS, inprogree);
+		tasksNumberPerState.put(TaskState.RESOLVED, resolved);
+		return tasksNumberPerState;
+	}
 }

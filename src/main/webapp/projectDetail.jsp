@@ -61,10 +61,19 @@
 			responsive : true
 		}
 	};
+		
 	
-	var tasksOpen;
-	var tasksDone;
-	var tasksInProgress;
+	var tasksOpen=${tasksOpen};
+	var tasksDone=${tasksDone};
+	var tasksInProgress=${tasksInProgress};
+	/* var projectId="./returnTasksPerState?projectId="+${project.id};
+	$.getJSON(projectId).success(function(states) {
+		$.each(states, function(key, val){
+			if(key=="OPEN"){
+				tasksOpen=val;
+			}
+		});
+	}); */
 	var config2 = {
 			type : 'pie',
 			data : {

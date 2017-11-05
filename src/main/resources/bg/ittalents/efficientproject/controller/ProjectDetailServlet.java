@@ -2,7 +2,7 @@ package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,9 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
-import bg.ittalents.efficientproject.model.exception.EffProjectException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
@@ -22,6 +23,8 @@ import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Epic;
 import bg.ittalents.efficientproject.model.pojo.Project;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
+import bg.ittalents.efficientproject.model.pojo.Task;
+import bg.ittalents.efficientproject.model.pojo.Task.TaskState;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 /**
@@ -61,6 +64,18 @@ public class ProjectDetailServlet extends HttpServlet {
 
 				boolean projectFinished=IProjectDAO.getDAO(DAOStorageSourse.DATABASE).isProjectFinished(projectId);
 				request.setAttribute("projectFinished", projectFinished);
+				Map<TaskState, Integer> tasksNumberPerState=IProjectDAO.getDAO(SOURCE_DATABASE).tasksNumberPerState(projectId);
+				request.setAttribute("tasksOpen", tasksNumberPerState.get(TaskState.OPEN));
+				request.setAttribute("tasksDone", tasksNumberPerState.get(TaskState.RESOLVED));
+				request.setAttribute("tasksInProgress", tasksNumberPerState.get(TaskState.INPROGRESS));
+//				tasksNumberPerState
+//				response.setCharacterEncoding("UTF-8");
+//				response.setContentType("application/json");
+//				String tasksPerStateJSON = new Gson().toJson(IProjectDAO.getDAO(SOURCE_DATABASE).tasksNumberPerState(projectId));
+//				request.setAttribute("tasksPerStateJSON", tasksPerStateJSON);
+//				System.out.println(tasksPerStateJSON);
+//				response.getWriter().println(s);
+			
 				Project currentProject = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 				request.setAttribute("project", currentProject);
 

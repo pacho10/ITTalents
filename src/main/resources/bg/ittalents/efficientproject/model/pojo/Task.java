@@ -21,7 +21,7 @@ public class Task {
 	private TaskState status;
 	private Timestamp updatedDate;
 
-	enum TaskState {
+	public enum TaskState {
 		OPEN, RESOLVED, CLOSED, INPROGRESS
 	}
 
