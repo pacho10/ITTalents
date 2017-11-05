@@ -86,7 +86,7 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				Organization org = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(4));
-				return new Project(rs.getInt(1), rs.getString(2), rs.getDate(3), org);
+				return new Project(rs.getInt(1), rs.getString(2), rs.getDate(3), org,rs.getDate(5).toLocalDate());
 			}
 		} catch (SQLException e) {
 			throw new DBException("Cannot check for user right now!Try again later", e);
@@ -111,7 +111,7 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 			while (rs.next()) {
 				//String name = URLEncoder.encode(rs.getString(2), "ISO-8859-1");
 				String name = URLDecoder.decode(rs.getString(2), "UTF-8");
-				projects.add(new Project(rs.getInt(1), name, rs.getDate(3), organization));
+				projects.add(new Project(rs.getInt(1), name, rs.getDate(3), organization,rs.getDate(5).toLocalDate()));
 			}
 
 		} catch (SQLException | UnsupportedEncodingException e) {
