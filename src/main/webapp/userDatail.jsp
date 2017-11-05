@@ -25,10 +25,6 @@
 </head>
 
 <body>
-	<c:if
-		test="${ sessionScope.user == null}">
-		<c:redirect url="/LogIn"></c:redirect>
-	</c:if>
 
 	<jsp:include page="navBarAdmin.jsp"></jsp:include>
 
