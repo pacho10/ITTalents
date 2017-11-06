@@ -221,7 +221,7 @@
 											<td><img id="avatar2"
 												src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
 											<%-- <td>${u.avatarPath}</td> --%>
-											<td><span>${u.firstName}</span><span> </span><span>${u.lastName}</span></td>
+											<td><a href="./profileDetail?userId=${u.id}"><span>${u.firstName}</span><span> </span><span>${u.lastName}</span></a></td>
 											<td>${u.email}</td>
 										</tr>
 									</c:if>

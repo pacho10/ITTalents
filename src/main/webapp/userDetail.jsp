@@ -46,21 +46,23 @@
 		</c:choose>
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
+			<h4 class="text-info">User profile</h4>
+				<hr>
 				<div class="span2">
 
-					<img src="./ImgOutputServlet?userid=${sessionScope.user.id}" alt=""
+					<img src="./ImgOutputServlet?userid=${user.id}" alt=""
 						class="img-rounded" width="200" height=auto>
 				</div>
 				<div class="span4">
 					<blockquote>
 						<c:out
-							value="${sessionScope.user.firstName }  ${ sessionScope.user.lastName }"></c:out>
+							value="${user.firstName }  ${user.lastName }"></c:out>
 					</blockquote>
 					<p>
 
-						<i class="fa fa-envelope"></i> ${ sessionScope.user.email } <br>
-						<c:if test="${ sessionScope.user.admin == true }">
-							<c:out value="admin at: ${ sessionScope.user.organization.name }"></c:out>
+						<i class="fa fa-envelope"></i> ${user.email } <br>
+						<c:if test="${user.admin == true }">
+							<c:out value="admin at: ${user.organization.name }"></c:out>
 						</c:if>
 
 					</p>

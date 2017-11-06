@@ -35,11 +35,11 @@ public class ProjectDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
 
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession(false).getAttribute("user")==null) {
 				response.sendRedirect("./LogIn");
 				return;
 			}
-			if (request.getSession().getAttribute("user")!=null && request.getParameter("projectId") != null) {
+			if ( request.getParameter("projectId") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 
 				if (!user.isAdmin()) {

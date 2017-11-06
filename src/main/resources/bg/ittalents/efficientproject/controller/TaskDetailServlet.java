@@ -30,7 +30,7 @@ public class TaskDetailServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if (request.getSession(false) == null || request.getSession().getAttribute("user") != null) {
+			if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) {
 				response.sendRedirect("/LogIn");
 				return;
 			}

@@ -41,7 +41,7 @@ public class ReturnUnemployedWorkersS extends HttpServlet {
 			 * check if there is no session or there is but the user is different or the
 			 * user is not admin:
 			 */
-			if (request.getSession(false) == null || request.getSession().getAttribute("user") != null) {
+			if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) {
 				response.sendRedirect("./LogIn");
 				return;
 			}
