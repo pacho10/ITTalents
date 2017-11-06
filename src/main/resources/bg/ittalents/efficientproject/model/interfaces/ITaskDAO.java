@@ -41,6 +41,8 @@ public interface ITaskDAO {
 
 	boolean checkIfTaskIsNotTaken(int taskId) throws EffPrjDAOException, DBException;
 
+	List<Task> allEpicsTasks(int epicId) throws UnsupportedDataTypeException, DBException, EffPrjDAOException;
+
 	
 
 

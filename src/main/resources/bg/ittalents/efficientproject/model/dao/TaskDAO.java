@@ -43,7 +43,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final String FINISH_TASK = "UPDATE tasks SET finished_date=? WHERE id=?;";
 	private static final String ADD_TASK_TO_SPRINT = "UPDATE tasks SET sprint_id=? WHERE id=?;";
 	private static final String GET_ALL_TASKS_FROM_ALL_SPRINTS = "SELECT count(*), sprint_id FROM tasks t join sprints s on t.sprint_id=s.id where s.project_id=? group by sprint_id;";
-
+	private static final String GET_ALL_TASKS_FROM_EPIC = "SELECT * from tasks where epic_id=?;";
 //	private static Set<Task> projectBacklog= new LinkedHashSet<>();
 	
 //	@Override
@@ -318,4 +318,26 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		// TODO
 	}
 
+	@Override
+	public List<Task> allEpicsTasks(int epicId) throws UnsupportedDataTypeException, DBException, EffPrjDAOException{
+		if (epicId < 0) {
+			throw new EffPrjDAOException("Invalid input!");
+		}
+		List<Task> tasks = new ArrayList<>();
+
+		try {
+			PreparedStatement ps = getCon().prepareStatement(GET_ALL_TASKS_FROM_EPIC);
+			ps.setInt(1, epicId);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				tasks.add(getTaskById(rs.getInt(1)));
+			}
+		} catch (SQLException e) {
+			throw new DBException("cannot find tasks for this epic", e);
+		}
+//		System.out.println(tasks);
+		return tasks;	
+	}
 }

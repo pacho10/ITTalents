@@ -35,6 +35,20 @@
 			return false;
 		});
 	});
+	
+	$(document).ready(function() {
+		$("a.noReLoadEpic").click(function() {
+			var myhref = $(this).attr('href');
+			 $("#epicDetail").empty(); 
+			$('#epicDetail').load(myhref);
+			return false;
+		});
+	});
+	
+	function closeEpicDetail(){
+		$("#epicDetail").empty();
+	}
+	
 	var daysLeft;
 	var daysPast;
 	var isProjectFinished=${projectFinished};
@@ -132,13 +146,13 @@
 								<c:when test="${projectFinished}">
 									<span>Project is finished</span>
 								</c:when>
-								
+
 								<c:otherwise>
 									<c:choose>
 										<c:when test="${currentSprint != null}">
 											<span>Current sprint: ${currentSprint.name}</span>
 										</c:when>
-										
+
 										<c:otherwise>
 											<div>
 												No current sprint, <a
@@ -148,7 +162,7 @@
 										</c:otherwise>
 									</c:choose>
 								</c:otherwise>
-								
+
 							</c:choose>
 						</div>
 						<div>
@@ -158,11 +172,15 @@
 							<span> Deadline: ${project.deadline}</span>
 						</div>
 						<div id="canvas-holder" style="width: 40%">
-						<div><h4 class="text-center text-info">Time log</h4></div>
+							<div>
+								<h4 class="text-center text-info">Time log</h4>
+							</div>
 							<canvas id="chart-area" />
 						</div>
-												<div id="canvas-holder" style="width: 40%">
-						<div><h4 class="text-center text-info">Tasks statistics</h4></div>
+						<div id="canvas-holder" style="width: 40%">
+							<div>
+								<h4 class="text-center text-info">Tasks statistics</h4>
+							</div>
 							<canvas id="chart-area2" />
 						</div>
 					</div>
@@ -175,14 +193,17 @@
 								<thead>
 									<td>Epic Name</td>
 									<td>Epic Estimate</td>
+									<td></td>
 								</thead>
 								<c:forEach var="e" items="${epics}">
 									<tr>
-										<td><a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
-										<td>${e.estimate}</td>
+										<td><a href="./epicdetail?epicId=${e.id}"
+											class="noReLoadEpic">${e.name}</a></td>
+										<td>${e.estimate}days</td>
 									</tr>
 								</c:forEach>
 							</table>
+							<div id="epicDetail"></div>
 						</div>
 
 						<hr>
@@ -200,7 +221,7 @@
 											<td><img id="avatar2"
 												src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
 											<%-- <td>${u.avatarPath}</td> --%>
-											<td>${u.firstName} ${u.lastName}</td>
+											<td><span>${u.firstName}</span><span> </span><span>${u.lastName}</span></td>
 											<td>${u.email}</td>
 										</tr>
 									</c:if>
