@@ -148,13 +148,10 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 			if (rs.next()) {
 				Organization organization = IOrganizationDAO.getDAO(SOURCE_DATABASE).getOrgById(rs.getInt(8));
-
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
-
 			}
-			return null;
-
+			throw new EfficientProjectDAOException("could not find the user");
 		} catch (SQLException e) {
 			throw new DBException("Cannot check for user right now!Try again later", e);
 
@@ -162,7 +159,8 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	}
 
 	@Override
-	public User getUserByEmail(String email) throws UnsupportedDataTypeException, EfficientProjectDAOException, DBException {
+	public User getUserByEmail(String email)
+			throws UnsupportedDataTypeException, EfficientProjectDAOException, DBException {
 		if (email == null) {
 			throw new EfficientProjectDAOException("Invalid input!");
 		}
@@ -180,7 +178,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 				return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 						rs.getString(6), rs.getBoolean(7), organization, rs.getBoolean(9));
 			}
-			throw new EfficientProjectDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("could not fid the user");
 
 		} catch (SQLException e) {
 			throw new DBException("Cannot check for user right now!Try again later", e);
@@ -217,19 +215,18 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 		if (user == null) {
 			throw new EfficientProjectDAOException("Invalid input!");
 		}
-		PreparedStatement ps;
 		try {
-			ps = getCon().prepareStatement(UPDATE_USER_DETAILS);
+			PreparedStatement ps = getCon().prepareStatement(UPDATE_USER_DETAILS);
 			ps.setString(1, user.getFirstName());
 			ps.setString(2, user.getLastName());
 			ps.setString(3, user.getEmail());
 			ps.setString(4, user.getPassword());
 			ps.setString(5, user.getAvatarPath());
-
 			ps.setInt(6, user.getId());
-
-			ps.executeUpdate();
-			return true;
+			if (ps.executeUpdate() > 0) {
+				return true;
+			}
+			throw new EfficientProjectDAOException("Could not update");
 		} catch (SQLException e) {
 			throw new DBException("Cannot update users details right now!Try again later", e);
 		}
@@ -240,12 +237,13 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 		if (userId < 0) {
 			throw new EfficientProjectDAOException("Invalid input!");
 		}
-		PreparedStatement ps;
 		try {
-			ps = getCon().prepareStatement(UPDATE_WORKER_STATE_TO_EMPLOYED);
+			PreparedStatement ps = getCon().prepareStatement(UPDATE_WORKER_STATE_TO_EMPLOYED);
 			ps.setInt(1, userId);
-			ps.executeUpdate();
-			return true;
+			if (ps.executeUpdate() > 0) {
+				return true;
+			}
+			throw new EfficientProjectDAOException("Could not update");
 		} catch (SQLException e) {
 			throw new DBException("Cannot update users details right now!Try again later", e);
 		}
@@ -256,19 +254,20 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 		if (user == null) {
 			throw new EfficientProjectDAOException("Invalid input!");
 		}
-		PreparedStatement ps;
 		try {
-			ps = getCon().prepareStatement(UPDATE_WORKER_STATE_TO_UNEMPLOYED);
+			PreparedStatement ps = getCon().prepareStatement(UPDATE_WORKER_STATE_TO_UNEMPLOYED);
 			ps.setInt(1, user.getId());
-			ps.executeUpdate();
-			return true;
+			if (ps.executeUpdate() > 0) {
+				return true;
+			}
+			throw new EfficientProjectDAOException("Could not update");
 		} catch (SQLException e) {
 			throw new DBException("Cannot update users details right now!Try again later", e);
 		}
 	}
 
 	@Override
-	public boolean addUserToProject(int userId, int projectId)
+	public boolean addWorkerToProject(int userId, int projectId)
 			throws UnsupportedDataTypeException, EfficientProjectDAOException, DBException {
 		if (userId < 0 || projectId < 0) {
 			throw new EfficientProjectDAOException("Ivalid user or project_id");
@@ -330,7 +329,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			throw new DBException("Try again later", e);
 		}
 	}
-	
+
 	@Override
 	public boolean isThereCurrentProjectForThisWorker(User user) throws EfficientProjectDAOException, DBException {
 		if (user == null) {

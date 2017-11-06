@@ -51,7 +51,7 @@ public class AddWorkerToProjectServlet extends HttpServlet {
 			}
 			
 				int userId = Integer.parseInt(request.getParameter("userId"));
-				IUserDAO.getDAO(SOURCE_DATABASE).addUserToProject(userId, projectId);
+				IUserDAO.getDAO(SOURCE_DATABASE).addWorkerToProject(userId, projectId);
 				response.sendRedirect("./projectdetail?projectId=" + projectId);
 			}else {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);

@@ -113,18 +113,18 @@ public class ProfileEditServlet extends HttpServlet {
 //					}
 				}
 
-				boolean fNÐNotEmptyandDifferent = firstName.length() > 0 && !firstName.equals(user.getFirstName());
-				boolean lNNotEmptyAndDifferent = lastName.length() > 0 && !lastName.equals(user.getLastName());
+				boolean firstNameNotEmptyandDifferent = firstName.length() > 0 && !firstName.equals(user.getFirstName());
+				boolean lastNameNotEmptyAndDifferent = lastName.length() > 0 && !lastName.equals(user.getLastName());
 				boolean emailNotEmptyAndDifferent = email.length() > 0 && !email.equals(user.getEmail());
 				boolean newPassNotEmpty = newPass.trim().length() > 0;
 				boolean oldPassNotEmpty = oldPass.trim().length() > 0;
 
-				if (fNÐNotEmptyandDifferent) {
+				if (firstNameNotEmptyandDifferent) {
 					user.setFirstName(firstName);
 					System.out.println("1change done");
 				}
 
-				if (lNNotEmptyAndDifferent) {
+				if (lastNameNotEmptyAndDifferent) {
 					user.setLastName(lastName);
 					System.out.println("2change done");
 				}
@@ -180,7 +180,7 @@ public class ProfileEditServlet extends HttpServlet {
 				}
 
 
-				if (fNÐNotEmptyandDifferent || lNNotEmptyAndDifferent || emailNotEmptyAndDifferent || newPassNotEmpty) {
+				if (firstNameNotEmptyandDifferent || lastNameNotEmptyAndDifferent || emailNotEmptyAndDifferent || newPassNotEmpty) {
 					System.out.println("change done");
 					IUserDAO.getDAO(SOURCE_DATABASE).updateUsersDetails(user);
 					request.getSession().setAttribute("user", user);

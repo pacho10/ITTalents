@@ -33,7 +33,7 @@ public interface IUserDAO {
 
 	boolean unemployWorker(User user) throws DBException, EfficientProjectDAOException;
 
-	boolean addUserToProject(int userId, int projectId)
+	boolean addWorkerToProject(int userId, int projectId)
 			throws UnsupportedDataTypeException, EfficientProjectDAOException, DBException, SQLException;
 
 	int returnCurrentWorkersProject(User user) throws EfficientProjectDAOException, DBException;
