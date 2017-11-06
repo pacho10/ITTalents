@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
@@ -66,20 +66,18 @@ public class DashboardServlet extends HttpServlet {
 					request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
 					response.setContentType("text/html");
 				} else {//if the user is worker:
-					int CurrentProjectId= IUserDAO.getDAO(DAOStorageSourse.DATABASE).returnCurrentWorkersProject(user);
-					Project project = null;
-					if (CurrentProjectId > 0) {
-						project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(CurrentProjectId);
+					if(IUserDAO.getDAO(DAOStorageSourse.DATABASE).isThereCurrentProjectForThisWorker(user)) {
+						int CurrentProjectId= IUserDAO.getDAO(DAOStorageSourse.DATABASE).returnCurrentWorkersProject(user);
+						Project project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(CurrentProjectId);
+						request.getSession().setAttribute("project", project);
 					}
-					request.getSession().setAttribute("project", project);
-
 					response.sendRedirect("./workertasks");
 
 				}
 			} else {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
-		} catch (IOException | ServletException | EffPrjDAOException | DBException e) {
+		} catch (IOException | ServletException | EfficientProjectDAOException | DBException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();

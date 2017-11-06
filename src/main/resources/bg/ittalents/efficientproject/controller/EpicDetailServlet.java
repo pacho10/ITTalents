@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
@@ -54,7 +54,7 @@ public class EpicDetailServlet extends HttpServlet {
 			} else {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
-		} catch (DBException | EffPrjDAOException | IOException | ServletException e) {
+		} catch (DBException | EfficientProjectDAOException | IOException | ServletException e) {
 			try {
 				response.sendRedirect("error.jsp");
 				e.printStackTrace();

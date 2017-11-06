@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
 import bg.ittalents.efficientproject.model.pojo.Task;
@@ -36,7 +36,7 @@ public class WorkerTasksServlet extends HttpServlet {
 			} else {
 				response.sendRedirect("./LogIn");
 			}
-		} catch (EffPrjDAOException | IOException | ServletException | DBException e) {
+		} catch (EfficientProjectDAOException | IOException | ServletException | DBException e) {
 			try {
 				response.sendRedirect("error.jsp");
 				e.printStackTrace();

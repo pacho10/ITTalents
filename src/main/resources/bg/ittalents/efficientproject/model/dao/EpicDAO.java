@@ -9,7 +9,7 @@ import java.util.List;
 import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
@@ -23,9 +23,9 @@ public class EpicDAO extends AbstractDBConnDAO implements IEpicDAO {
 	private static final String GET_EPIC_BY_ID = "SELECT * from epics where id=?;";
 
 	@Override
-	public int createEpic(Epic epic) throws EffPrjDAOException, DBException {
+	public int createEpic(Epic epic) throws EfficientProjectDAOException, DBException {
 		if (epic == null) {
-			throw new EffPrjDAOException("epic can not be null");
+			throw new EfficientProjectDAOException("epic can not be null");
 		}
 
 		try {
@@ -44,14 +44,14 @@ public class EpicDAO extends AbstractDBConnDAO implements IEpicDAO {
 		} catch (SQLException e) {
 			throw new DBException("epic can not be added!", e);
 		}
-		throw new EffPrjDAOException("epic can not be added!");
+		throw new EfficientProjectDAOException("epic can not be added!");
 	}
 
 	@Override
 	public List<Epic> getAllEpicsByProject(int projectId)
-			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+			throws DBException, UnsupportedDataTypeException, EfficientProjectDAOException {
 		if (projectId < 0) {
-			throw new EffPrjDAOException("invalid input!");
+			throw new EfficientProjectDAOException("invalid input!");
 		}
 		List<Epic> epics = new ArrayList<>();
 		Project project = IProjectDAO.getDAO(SOURCE_DATABASE).getProjectByID(projectId);
@@ -71,9 +71,9 @@ public class EpicDAO extends AbstractDBConnDAO implements IEpicDAO {
 	}
 	
 	@Override
-	public Epic getEpicById(int epicId) throws UnsupportedDataTypeException, DBException, EffPrjDAOException {
+	public Epic getEpicById(int epicId) throws UnsupportedDataTypeException, DBException, EfficientProjectDAOException {
 		if (epicId < 0) {
-			throw new EffPrjDAOException("invalid input!");
+			throw new EfficientProjectDAOException("invalid input!");
 		}
 		
 		Epic epic = null;

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
 
@@ -34,7 +34,7 @@ public class FinishTaskServlet extends HttpServlet {
 			} else {
 				response.sendRedirect("./LogIn");
 			}
-		} catch (DBException | IOException | EffPrjDAOException e) {
+		} catch (DBException | IOException | EfficientProjectDAOException e) {
 			try {
 				response.sendRedirect("./error.jsp");
 			} catch (IOException e1) {

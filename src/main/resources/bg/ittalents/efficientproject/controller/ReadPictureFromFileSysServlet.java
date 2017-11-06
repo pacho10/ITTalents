@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.dao.INFO;
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
@@ -56,7 +56,7 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 			} else {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
-		} catch (IOException | ServletException | EffPrjDAOException | DBException e) {
+		} catch (IOException | ServletException | EfficientProjectDAOException | DBException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();

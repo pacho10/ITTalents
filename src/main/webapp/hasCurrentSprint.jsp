@@ -8,7 +8,7 @@
 <title>Efficien project</title>
 </head>
 <body>
-	<h1 class="text-center text-danger">Allredy has sprint in progres</h1>
+	<h1 class="text-center text-danger">Already has sprint in progress</h1>
 	<!-- <hr>
 	<a class="btn btn-info" href="./dashboard">Dashboard</a> -->
 </body>

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
@@ -70,7 +70,7 @@ public class CreateProjectServlet extends HttpServlet {
 			int id = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).addProject(projectToAdd,user.getId());
 			// everything went well:
 			response.sendRedirect("./dashboard");
-		} catch (ParseException | EffPrjDAOException | DBException | IOException e) {
+		} catch (ParseException | EfficientProjectDAOException | DBException | IOException e) {
 			try {
 				e.printStackTrace();
 				response.sendRedirect("./error.jsp");

@@ -16,7 +16,7 @@ import java.util.Map;
 import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
@@ -39,9 +39,9 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 	private static final String RETURN_PROJECT_DEADLINE = "select deadline from projects where id=";
 
 	@Override
-	public boolean isProjectFinished(int projectId) throws EffPrjDAOException, DBException {
+	public boolean isProjectFinished(int projectId) throws EfficientProjectDAOException, DBException {
 		if (projectId < 0) {
-			throw new EffPrjDAOException("illegal input!");
+			throw new EfficientProjectDAOException("illegal input!");
 		}
 		try {
 			Statement st = getCon().createStatement();
@@ -50,7 +50,7 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 				LocalDate deadline = rs.getDate(1).toLocalDate();
 				return deadline.isAfter(LocalDate.now()) ? false : true;
 			}
-			throw new EffPrjDAOException("no project found");
+			throw new EfficientProjectDAOException("no project found");
 
 		} catch (SQLException e) {
 			throw new DBException("Transaction is being rolled back", e);
@@ -58,9 +58,9 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 	}
 
 	@Override
-	public int addProject(Project project, int adminId) throws EffPrjDAOException, DBException {
+	public int addProject(Project project, int adminId) throws EfficientProjectDAOException, DBException {
 		if (project == null) {
-			throw new EffPrjDAOException("project can not be null!");
+			throw new EfficientProjectDAOException("project can not be null!");
 		}
 		try {
 			getCon().setAutoCommit(false);
@@ -84,7 +84,7 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 				return projectId;
 			}
 			getCon().rollback();
-			throw new EffPrjDAOException("Could not add!");
+			throw new EfficientProjectDAOException("Could not add!");
 		} catch (SQLException e) {
 			try {
 				getCon().rollback();
@@ -102,9 +102,9 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 	}
 
 	@Override
-	public Project getProjectByID(int projectId) throws DBException, EffPrjDAOException, UnsupportedDataTypeException {
+	public Project getProjectByID(int projectId) throws DBException, EfficientProjectDAOException, UnsupportedDataTypeException {
 		if (projectId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(GET_PROJECT_BY_ID);
@@ -124,9 +124,9 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 
 	@Override
 	public List<Project> getAllProjectsFromOrganization(int organizationId)
-			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+			throws DBException, UnsupportedDataTypeException, EfficientProjectDAOException {
 		if (organizationId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		List<Project> projects = new ArrayList<>();
 
@@ -151,9 +151,9 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 
 	@Override
 	public List<User> getAllWorkersWorkingOnAProject(int projectId)
-			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+			throws DBException, UnsupportedDataTypeException, EfficientProjectDAOException {
 		if (projectId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		List<User> workers = new ArrayList<>();
 		try {
@@ -185,7 +185,7 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 	}
 
 	public Map<TaskState, Integer> tasksNumberPerState(int projectId)
-			throws UnsupportedDataTypeException, DBException, EffPrjDAOException {
+			throws UnsupportedDataTypeException, DBException, EfficientProjectDAOException {
 		List<Task> allProjectTasks = ITaskDAO.getDAO(SOURCE_DATABASE).getAllTasksOfProject(projectId);
 		Map<TaskState, Integer> tasksNumberPerState = new HashMap<>();
 		int open = 0;

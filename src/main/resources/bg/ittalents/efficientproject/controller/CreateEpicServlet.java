@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
@@ -54,7 +54,7 @@ public class CreateEpicServlet extends HttpServlet {
 				RequestDispatcher rd = request.getRequestDispatcher("./createEpic.jsp");
 				rd.forward(request, response);
 			}
-		} catch (EffPrjDAOException | DBException | ServletException | IOException e) {
+		} catch (EfficientProjectDAOException | DBException | ServletException | IOException e) {
 			try {
 				response.sendRedirect("error.jsp");
 				e.printStackTrace();
@@ -80,7 +80,7 @@ public class CreateEpicServlet extends HttpServlet {
 			int id = IEpicDAO.getDAO(DAOStorageSourse.DATABASE).createEpic(epicToAdd);
 
 			response.sendRedirect("./projectdetail?projectId=" + project.getId());
-		} catch (EffPrjDAOException | IOException | DBException e) {
+		} catch (EfficientProjectDAOException | IOException | DBException e) {
 			try {
 				response.sendRedirect("error.jsp");
 				e.printStackTrace();

@@ -15,7 +15,7 @@ import java.util.Set;
 import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
@@ -52,9 +52,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 //	}
 	
 	@Override
-	public int addTask(Task task) throws EffPrjDAOException, DBException {
+	public int addTask(Task task) throws EfficientProjectDAOException, DBException {
 		if (task == null) {
-			throw new EffPrjDAOException("There is no user to add!");
+			throw new EfficientProjectDAOException("There is no user to add!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(INSERT_USER_INTO_DB,
@@ -77,9 +77,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 	@Override
-	public Task getTaskById(int taskId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+	public Task getTaskById(int taskId) throws DBException, UnsupportedDataTypeException, EfficientProjectDAOException {
 		if (taskId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(SELECT_FROM_TASKS_BY_ID);
@@ -87,7 +87,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 
 			ResultSet rs = ps.executeQuery();
 
-			while (rs.next()) {
+			if (rs.next()) {
 				Type type = ITypeDAO.getDAO(SOURCE_DATABASE).getTypeById(rs.getInt(2));
 				Sprint sprint = ISprintDAO.getDAO(SOURCE_DATABASE).getSprintBId(rs.getInt(11));
 				User reporter = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(12));
@@ -107,9 +107,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 
 	@Override
 	public List<Task> getAllTasksByUser(int userId)
-			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+			throws DBException, UnsupportedDataTypeException, EfficientProjectDAOException {
 		if (userId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		List<Task> tasks = new ArrayList<>();
 
@@ -129,9 +129,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 
 	@Override
 	public List<Task> getAllTasksFromSprint(int sprintId)
-			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+			throws DBException, UnsupportedDataTypeException, EfficientProjectDAOException {
 		if (sprintId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		List<Task> tasks = new ArrayList<>();
 
@@ -152,9 +152,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 
 	@Override
 	public List<Task> getAllTasksOfProject(int projectId)
-			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+			throws DBException, UnsupportedDataTypeException, EfficientProjectDAOException {
 		if (projectId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		List<Task> tasks = new ArrayList<>();
 
@@ -175,9 +175,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 
 	@Override
 	public List<Task> getProjectBackLog(int projectId)
-			throws DBException, UnsupportedDataTypeException, EffPrjDAOException {
+			throws DBException, UnsupportedDataTypeException, EfficientProjectDAOException {
 		if (projectId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		List<Task> tasks = new ArrayList<>();
 
@@ -197,9 +197,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 	@Override
-	public boolean addTaskToSprint(int taskId, int sprintId) throws DBException, EffPrjDAOException {
+	public boolean addTaskToSprint(int taskId, int sprintId) throws DBException, EfficientProjectDAOException {
 		if (taskId < 0 || sprintId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(ADD_TASK_TO_SPRINT);
@@ -214,9 +214,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 	@Override
-	public boolean checkIfTaskIsNotTaken(int taskId) throws EffPrjDAOException, DBException {
+	public boolean checkIfTaskIsNotTaken(int taskId) throws EfficientProjectDAOException, DBException {
 		if (taskId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(CHECK_IF_TASK_IS_NOT_TAKEN);
@@ -232,9 +232,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 	@Override
-	public boolean assignTask(int taskId, int userId) throws DBException, EffPrjDAOException {
+	public boolean assignTask(int taskId, int userId) throws DBException, EfficientProjectDAOException {
 		if (taskId < 0 || userId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			if (checkIfTaskIsNotTaken(taskId)) {
@@ -252,9 +252,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 	@Override
-	public boolean finishTask(int taskId) throws DBException, EffPrjDAOException {
+	public boolean finishTask(int taskId) throws DBException, EfficientProjectDAOException {
 		if (taskId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(FINISH_TASK);
@@ -291,7 +291,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 					e.printStackTrace();
 					
 					throw new DBException("can not find tasks for statistics", e);
-				} catch (EffPrjDAOException e) {
+				} catch (EfficientProjectDAOException e) {
 					e.printStackTrace();
 					
 					throw new DBException("can not find tasks for statistics", e);
@@ -319,9 +319,9 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 	@Override
-	public List<Task> allEpicsTasks(int epicId) throws UnsupportedDataTypeException, DBException, EffPrjDAOException{
+	public List<Task> allEpicsTasks(int epicId) throws UnsupportedDataTypeException, DBException, EfficientProjectDAOException{
 		if (epicId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		List<Task> tasks = new ArrayList<>();
 

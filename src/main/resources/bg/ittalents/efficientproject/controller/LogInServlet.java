@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
@@ -61,7 +61,7 @@ public class LogInServlet extends HttpServlet {
 			// Everything went well:
 			request.getSession().setAttribute("user", user);
 			response.sendRedirect("./dashboard");
-		} catch (DBException | EffPrjDAOException | ServletException | IOException e) {
+		} catch (DBException | EfficientProjectDAOException | ServletException | IOException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();

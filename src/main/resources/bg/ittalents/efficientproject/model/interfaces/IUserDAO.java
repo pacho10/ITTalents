@@ -7,7 +7,7 @@ import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.dao.UserDAO;
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 public interface IUserDAO {
@@ -19,30 +19,32 @@ public interface IUserDAO {
 		throw new UnsupportedDataTypeException();
 	}
 
-	User getUserById(int userID) throws UnsupportedDataTypeException, EffPrjDAOException, DBException;
+	User getUserById(int userID) throws UnsupportedDataTypeException, EfficientProjectDAOException, DBException;
 
-	User getUserByEmail(String email) throws UnsupportedDataTypeException, EffPrjDAOException, DBException;
+	User getUserByEmail(String email) throws UnsupportedDataTypeException, EfficientProjectDAOException, DBException;
 
-	int addUserAdmin(User user) throws EffPrjDAOException, DBException, UnsupportedDataTypeException, SQLException;
+	int addUserAdmin(User user) throws EfficientProjectDAOException, DBException, UnsupportedDataTypeException, SQLException;
 
-	int addUserWorker(User user) throws EffPrjDAOException, DBException, UnsupportedDataTypeException;
+	int addUserWorker(User user) throws EfficientProjectDAOException, DBException, UnsupportedDataTypeException;
 
-	boolean isThereSuchAUser(String email) throws DBException, EffPrjDAOException;
+	boolean isThereSuchAUser(String email) throws DBException, EfficientProjectDAOException;
 
-	boolean updateUsersDetails(User user) throws DBException, EffPrjDAOException;
+	boolean updateUsersDetails(User user) throws DBException, EfficientProjectDAOException;
 
-	boolean unemployWorker(User user) throws DBException, EffPrjDAOException;
+	boolean unemployWorker(User user) throws DBException, EfficientProjectDAOException;
 
 	boolean addUserToProject(int userId, int projectId)
-			throws UnsupportedDataTypeException, EffPrjDAOException, DBException, SQLException;
+			throws UnsupportedDataTypeException, EfficientProjectDAOException, DBException, SQLException;
 
-	int returnCurrentWorkersProject(User user) throws EffPrjDAOException, DBException;
+	int returnCurrentWorkersProject(User user) throws EfficientProjectDAOException, DBException;
 
-	boolean removeWorkerFromUnemployedWorkers(User worker) throws EffPrjDAOException;
+	boolean removeWorkerFromUnemployedWorkers(User worker) throws EfficientProjectDAOException;
 
-	boolean addWorkerToUnemployedWorkers(User worker) throws EffPrjDAOException;
+	boolean addWorkerToUnemployedWorkers(User worker) throws EfficientProjectDAOException;
 
 	Collection<User> getAllUnemployedWorkers();
+
+	boolean isThereCurrentProjectForThisWorker(User user) throws EfficientProjectDAOException, DBException;
 
 	
 }

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
@@ -67,7 +67,7 @@ public class TaskDetailServlet extends HttpServlet {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
 
-		} catch (IOException | DBException | EffPrjDAOException | ServletException e) {
+		} catch (IOException | DBException | EfficientProjectDAOException | ServletException e) {
 			try {
 				response.sendRedirect("error.jsp");
 				e.printStackTrace();

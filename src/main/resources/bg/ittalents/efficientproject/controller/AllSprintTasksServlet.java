@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
@@ -62,7 +62,7 @@ public class AllSprintTasksServlet extends HttpServlet {
 				} else {
 					request.getRequestDispatcher("./projectFinished.jsp").forward(request, response);
 				}
-			} catch (DBException | EffPrjDAOException e) {
+			} catch (DBException | EfficientProjectDAOException e) {
 				e.printStackTrace();
 				response.sendRedirect("./error.jsp");
 			}

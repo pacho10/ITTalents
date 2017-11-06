@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.exception.EffProjectException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
@@ -42,7 +42,7 @@ public class AssigneTaskFromSprintServlet extends HttpServlet {
 			} else {
 				throw new EffProjectException("parameters missing in request");
 			}
-		} catch (EffPrjDAOException | IOException | DBException | EffProjectException e) {
+		} catch (EfficientProjectDAOException | IOException | DBException | EffProjectException e) {
 			try {
 				response.sendRedirect("error.jsp");
 			} catch (IOException e1) {

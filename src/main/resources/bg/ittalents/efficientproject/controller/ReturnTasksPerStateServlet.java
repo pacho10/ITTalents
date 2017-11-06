@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
@@ -53,7 +53,7 @@ public class ReturnTasksPerStateServlet extends HttpServlet {
 			} else {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
-		} catch (IOException | ServletException | DBException | EffPrjDAOException e) {
+		} catch (IOException | ServletException | DBException | EfficientProjectDAOException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();

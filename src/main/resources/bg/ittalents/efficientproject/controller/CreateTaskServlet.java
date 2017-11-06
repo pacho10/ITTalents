@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
@@ -50,7 +50,7 @@ public class CreateTaskServlet extends HttpServlet {
 		} catch (DBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (EffPrjDAOException e) {
+		} catch (EfficientProjectDAOException e) {
 			e.printStackTrace();
 		}
 		request.setAttribute("projectId", projectId);
@@ -84,7 +84,7 @@ public class CreateTaskServlet extends HttpServlet {
 		} catch (DBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (EffPrjDAOException e) {
+		} catch (EfficientProjectDAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
