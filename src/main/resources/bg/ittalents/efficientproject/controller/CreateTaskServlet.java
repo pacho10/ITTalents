@@ -76,9 +76,13 @@ public class CreateTaskServlet extends HttpServlet {
 			Task tskToAdd = new Task(type, summary, description, estimate, reporter, epic);
 			
 			int id = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).addTask(tskToAdd);
-			
+			User user=(User) request.getSession().getAttribute("user");
 			int projectId=epic.getProject().getId();
-			response.sendRedirect("./projectdetail?projectId="+projectId);
+			if(user.isAdmin()) {
+				response.sendRedirect("./projectdetail?projectId="+projectId);
+			}else {
+				response.sendRedirect("./createtask?projectId="+projectId);
+			}
 			
 			
 		} catch (DBException e) {

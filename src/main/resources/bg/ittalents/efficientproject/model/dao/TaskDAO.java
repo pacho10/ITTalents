@@ -44,13 +44,13 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	private static final String ADD_TASK_TO_SPRINT = "UPDATE tasks SET sprint_id=? WHERE id=?;";
 	private static final String GET_ALL_TASKS_FROM_ALL_SPRINTS = "SELECT count(*), sprint_id FROM tasks t join sprints s on t.sprint_id=s.id where s.project_id=? group by sprint_id;";
 	private static final String GET_ALL_TASKS_FROM_EPIC = "SELECT * from tasks where epic_id=?;";
-//	private static Set<Task> projectBacklog= new LinkedHashSet<>();
-	
-//	@Override
-//	public Collection<Task> getProjectBacklogTasks() {
-//		return Collections.unmodifiableCollection(projectBacklog);
-//	}
-	
+	// private static Set<Task> projectBacklog= new LinkedHashSet<>();
+
+	// @Override
+	// public Collection<Task> getProjectBacklogTasks() {
+	// return Collections.unmodifiableCollection(projectBacklog);
+	// }
+
 	@Override
 	public int addTask(Task task) throws EfficientProjectDAOException, DBException {
 		if (task == null) {
@@ -91,7 +91,10 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 				Type type = ITypeDAO.getDAO(SOURCE_DATABASE).getTypeById(rs.getInt(2));
 				Sprint sprint = ISprintDAO.getDAO(SOURCE_DATABASE).getSprintBId(rs.getInt(11));
 				User reporter = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(12));
-				User assignee = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(13));
+				User assignee = null;
+				if (rs.getInt(13) > 0) {
+					assignee = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(13));
+				}
 				Epic epic = IEpicDAO.getDAO(SOURCE_DATABASE).getEpicById(rs.getInt(14));
 
 				return new Task(rs.getInt(1), type, rs.getString(3), rs.getString(4), rs.getFloat(5),
@@ -99,7 +102,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 						rs.getTimestamp(10), sprint, reporter, assignee, epic);
 
 			}
-			return null;// TODO handle in servlet!
+			throw new EfficientProjectDAOException("No task was found");
 		} catch (SQLException e) {
 			throw new DBException("Cannot check for task right now!Try again later", e);
 		}
@@ -245,7 +248,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 				ps.executeUpdate();
 				return true;
 			}
-			return false;//TODO ???
+			return false;// TODO ???
 		} catch (SQLException e) {
 			throw new DBException("task can not be assigned", e);
 		}
@@ -266,43 +269,41 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 			throw new DBException("task can not be finished", e);
 		}
 	}
-	
+
 	public List<Element> getAllTaskFromAllSprints(int projectId) throws DBException {
 		List<Element> elements = new ArrayList<>();
-		
+
 		try {
 			PreparedStatement ps = getCon().prepareStatement(GET_ALL_TASKS_FROM_ALL_SPRINTS);
 			ps.setInt(1, projectId);
 			ResultSet rs = ps.executeQuery();
-			
+
 			while (rs.next()) {
 				try {
 					Sprint sprint = ISprintDAO.getDAO(SOURCE_DATABASE).getSprintBId(rs.getInt(2));
-					//String sName = "";
 					if (sprint != null) {
 						String sName = sprint.getName();
 						Element element = new Element(rs.getInt(1), sName);
-						
+
 						elements.add(element);
-					} 
-					
-					
+					}
+
 				} catch (UnsupportedDataTypeException e) {
 					e.printStackTrace();
-					
+
 					throw new DBException("can not find tasks for statistics", e);
 				} catch (EfficientProjectDAOException e) {
 					e.printStackTrace();
-					
+
 					throw new DBException("can not find tasks for statistics", e);
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 			throw new DBException("can not find tasks for statistics");
 		}
-		
+
 		return elements;
 	}
 
@@ -319,7 +320,8 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 	}
 
 	@Override
-	public List<Task> allEpicsTasks(int epicId) throws UnsupportedDataTypeException, DBException, EfficientProjectDAOException{
+	public List<Task> allEpicsTasks(int epicId)
+			throws UnsupportedDataTypeException, DBException, EfficientProjectDAOException {
 		if (epicId < 0) {
 			throw new EfficientProjectDAOException("Invalid input!");
 		}
@@ -337,7 +339,7 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 		} catch (SQLException e) {
 			throw new DBException("cannot find tasks for this epic", e);
 		}
-//		System.out.println(tasks);
-		return tasks;	
+		// System.out.println(tasks);
+		return tasks;
 	}
 }

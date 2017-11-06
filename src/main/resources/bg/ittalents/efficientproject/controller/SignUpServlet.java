@@ -68,6 +68,11 @@ public class SignUpServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 				return;
 			}
+			if(firstName.length()==0 || lastName.length()==0) {
+				request.setAttribute("errorMessage", "Empty first or last name! Try Again");
+				dispatcher.forward(request, response);
+				return;
+			}
 
 			if (!CredentialsChecks.isMailValid(email)) {
 				request.setAttribute("errorMessage", "Invalid e-mail! Try Again");
