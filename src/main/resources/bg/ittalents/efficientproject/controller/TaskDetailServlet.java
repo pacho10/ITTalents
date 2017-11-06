@@ -30,11 +30,11 @@ public class TaskDetailServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession().getAttribute("user") != null) {
 				response.sendRedirect("/LogIn");
 				return;
 			}
-			if (request.getSession().getAttribute("user")!=null || request.getParameter("projectId") != null || request.getParameter("taskId") != null) {
+			if (request.getParameter("projectId") != null || request.getParameter("taskId") != null) {
 				int projectId = Integer.parseInt(request.getParameter("projectId"));
 				User user = (User) request.getSession().getAttribute("user");
 				/**

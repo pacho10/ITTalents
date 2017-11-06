@@ -41,11 +41,10 @@ public class ReturnUnemployedWorkersS extends HttpServlet {
 			 * check if there is no session or there is but the user is different or the
 			 * user is not admin:
 			 */
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession().getAttribute("user") != null) {
 				response.sendRedirect("./LogIn");
 				return;
 			}
-			if (request.getSession().getAttribute("user") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 
 				if (!user.isAdmin()) {
@@ -54,9 +53,6 @@ public class ReturnUnemployedWorkersS extends HttpServlet {
 				}
 				String s = new Gson().toJson(IUserDAO.getDAO(DAOStorageSourse.DATABASE).getAllUnemployedWorkers());
 				response.getWriter().println(s);
-			} else {
-				request.getRequestDispatcher("error2.jsp").forward(request, response);
-			}
 		} catch (IOException | ServletException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);

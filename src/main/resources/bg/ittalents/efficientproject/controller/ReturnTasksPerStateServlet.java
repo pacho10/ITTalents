@@ -34,11 +34,10 @@ public class ReturnTasksPerStateServlet extends HttpServlet {
 			 * check if there is no session or there is but the user is different or the
 			 * user is not admin:
 			 */
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession().getAttribute("user") != null) {
 				response.sendRedirect("./LogIn");
 				return;
 			}
-			if (request.getSession().getAttribute("user") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 
 				if (!user.isAdmin()) {
@@ -50,9 +49,6 @@ public class ReturnTasksPerStateServlet extends HttpServlet {
 						.toJson(IProjectDAO.getDAO(SOURCE_DATABASE).tasksNumberPerState(projectId));
 				System.out.println(tasksPerStateJSON);
 				response.getWriter().println(tasksPerStateJSON);
-			} else {
-				request.getRequestDispatcher("error2.jsp").forward(request, response);
-			}
 		} catch (IOException | ServletException | DBException | EfficientProjectDAOException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);

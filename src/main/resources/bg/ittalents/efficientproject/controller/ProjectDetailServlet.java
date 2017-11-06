@@ -83,11 +83,6 @@ public class ProjectDetailServlet extends HttpServlet {
 						.getAllWorkersWorkingOnAProject(projectId);
 				request.setAttribute("workers", users);
 				
-
-				// get current sprintby id---->if there is no current sprint--->message and
-				// redirect to create new one
-				// if there is current sprnt--->show the sprint
-
 				RequestDispatcher rd = request.getRequestDispatcher("/projectDetail.jsp");
 				rd.forward(request, response);
 			} else {
