@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
-import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
-import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
-import bg.ittalents.efficientproject.model.pojo.Epic;
 
 /**
  * Servlet implementation class ProfileDetail

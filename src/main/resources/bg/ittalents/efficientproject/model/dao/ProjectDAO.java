@@ -143,10 +143,10 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 						rs.getDate(5).toLocalDate()));
 			}
 
+			return projects;
 		} catch (SQLException | UnsupportedEncodingException e) {
 			throw new DBException("projects can not be selected!", e);
 		}
-		return projects;
 	}
 
 	@Override
@@ -165,10 +165,10 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 				User worker = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(1));
 				workers.add(worker);
 			}
+			return workers;
 		} catch (SQLException e) {
 			throw new DBException("projects can not be selected!", e);
 		}
-		return workers;
 	}
 
 	@Override

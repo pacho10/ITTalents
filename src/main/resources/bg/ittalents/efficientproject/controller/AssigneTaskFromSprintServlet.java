@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
-import bg.ittalents.efficientproject.model.exception.EffProjectException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
+import bg.ittalents.efficientproject.model.pojo.Project;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 /**
@@ -34,15 +34,13 @@ public class AssigneTaskFromSprintServlet extends HttpServlet {
 				return;
 			}
 
-			if (request.getParameter("taskId") != null) {
 				int taskId = Integer.parseInt(request.getParameter("taskId"));
 				if(!ITaskDAO.getDAO(DAOStorageSourse.DATABASE).assignTask(taskId, user.getId())) {
 					//TODO  task already assiged --->refresh,ajax
 				}
-			} else {
-				throw new EffProjectException("parameters missing in request");
-			}
-		} catch (EfficientProjectDAOException | IOException | DBException | EffProjectException e) {
+				Project project=(Project) request.getSession().getAttribute("project");
+				response.sendRedirect("allsprinttasks?projectId="+project.getId());
+		} catch (EfficientProjectDAOException | IOException | DBException e) {
 			try {
 				response.sendRedirect("error.jsp");
 			} catch (IOException e1) {
@@ -51,10 +49,5 @@ public class AssigneTaskFromSprintServlet extends HttpServlet {
 		}
 	}
 
-	// protected void doPost(HttpServletRequest request, HttpServletResponse
-	// response) throws ServletException, IOException {
-	// // TODO Auto-generated method stub
-	// doGet(request, response);
-	// }
 
 }

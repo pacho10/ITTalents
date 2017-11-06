@@ -89,7 +89,7 @@
 								<i class="icon-hand-right"></i> Login
 							</button>
 
-							<span style="margin-left: 8px;">Do`t have a registration?<a
+							<span style="margin-left: 8px;">Don`t have a registration?<a
 								href="./SignUp"> Sign up here </a></span>
 						</div>
 					</div>
