@@ -29,12 +29,12 @@ public class AddWorkerToProjectServlet extends HttpServlet {
 			 * check if there is no session or there is but the user is different or the
 			 * user is not admin:
 			 */
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession(false).getAttribute("user")==null) {
 				response.sendRedirect("./LogIn");
 				return;
 			}
 
-			if (request.getParameter("userId") != null && request.getParameter("ProjectId") != null) {
+			if (request.getParameter("userId") != null && request.getParameter("projectId") != null) {
 			User user = (User) request.getSession().getAttribute("user");
 
 			if (!user.isAdmin()) {

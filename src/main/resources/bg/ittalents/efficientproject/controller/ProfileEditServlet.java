@@ -41,7 +41,7 @@ public class ProfileEditServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			request.setCharacterEncoding("UTF-8");
 			
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
 				response.sendRedirect("/LogIn");
 				return;
 			}
@@ -68,12 +68,11 @@ public class ProfileEditServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			request.setCharacterEncoding("UTF-8");
 
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
 				response.sendRedirect("/LogIn");
 				return;
 			}
 
-			if (request.getSession().getAttribute("user") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 				int userId = user.getId();
 
@@ -186,9 +185,6 @@ public class ProfileEditServlet extends HttpServlet {
 					request.getSession().setAttribute("user", user);
 				}
 				response.sendRedirect("./Profile");
-			} else {
-				request.getRequestDispatcher("error2.jsp").forward(request, response);
-			}
 		} catch (ServletException | IOException | DBException | EfficientProjectDAOException  e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);

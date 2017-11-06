@@ -211,7 +211,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	}
 
 	@Override
-	public boolean updateUsersDetails(User user) throws DBException, EfficientProjectDAOException {
+ 	public boolean updateUsersDetails(User user) throws DBException, EfficientProjectDAOException {
 		if (user == null) {
 			throw new EfficientProjectDAOException("Invalid input!");
 		}

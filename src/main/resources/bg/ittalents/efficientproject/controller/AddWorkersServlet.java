@@ -29,11 +29,10 @@ public class AddWorkersServlet extends HttpServlet {
 			 * check if there is no session or there is but the user is different or the
 			 * user is not admin:
 			 */
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null ||request.getSession(false).getAttribute("user") == null) {
 				response.sendRedirect("./LogIn");
 				return;
 			}
-			if (request.getSession().getAttribute("user") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 				if (!user.isAdmin()) {
 					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
@@ -57,9 +56,6 @@ public class AddWorkersServlet extends HttpServlet {
 				} else {
 					request.getRequestDispatcher("error2.jsp").forward(request, response);
 				}
-			} else {
-				request.getRequestDispatcher("error2.jsp").forward(request, response);
-			}
 
 		} catch (ServletException | IOException | DBException e) {
 			try {

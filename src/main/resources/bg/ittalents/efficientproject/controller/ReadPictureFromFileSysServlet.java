@@ -28,7 +28,7 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 		try {
 			response.addHeader("Content-Type", "image/jpeg");
 
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null ||request.getSession(false).getAttribute("user") == null) {
 				response.sendRedirect("/LogIn");
 				return;
 			}
