@@ -32,7 +32,7 @@ public class TaskDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) {
-				response.sendRedirect("/LogIn");
+				response.sendRedirect("./LogIn");
 				return;
 			}
 			String projectIdParam = request.getParameter("projectId");

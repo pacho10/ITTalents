@@ -106,7 +106,7 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 		}
 	}
 
-	public int AllTasksOfAProject(int projectId) throws EfficientProjectDAOException, DBException {
+	public int countTasksOfAProject(int projectId) throws EfficientProjectDAOException, DBException {
 		if (projectId < 0) {
 			throw new EfficientProjectDAOException("Invalid input!");
 		}
@@ -125,7 +125,8 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 
 	public Map<String, Integer> burnDownChart(int projectId) throws EfficientProjectDAOException, DBException {
 		Map<String, Integer> tasksPerSprints = tasksPerSprints(projectId);
-
+		int allTasksProject=countTasksOfAProject(projectId);
+		
 	}
 
 }

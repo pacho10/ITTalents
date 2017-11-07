@@ -18,15 +18,27 @@ public class Task {
 	private User reporter;
 	private User assignee;
 	private Epic epic;
-	private TaskState status;
+	private String status;
 	private Timestamp updatedDate;
 
 	public enum TaskState {
-		OPEN, RESOLVED, CLOSED, INPROGRESS
+		OPEN("OPEN"), RESOLVED("RESOLVED"), CLOSED("CLOSED"), INPROGRESS("IN PROGRESS");
+		private String name;
+
+		private TaskState(String name) {
+			this.name = name;
+		}
+		@Override
+		public String toString() {
+			return this.getName();
+		}
+		public String getName() {
+			return name;
+		}
 	}
 
 	public Task(Type type, String summary, String description, float estimate, User reporter, Epic epic) {
-		this.status = TaskState.OPEN;
+		this.status = TaskState.OPEN.toString();
 		this.type = type;
 		this.summary = summary;
 		this.description = description;
@@ -165,7 +177,7 @@ public class Task {
 		this.epic = epic;
 	}
 
-	public TaskState getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
@@ -176,15 +188,15 @@ public class Task {
 		Timestamp finishedDate = this.getFinishedDate();
 		// Timestamp stoppedDate = task.getStoppedDate();
 		if (finishedDate != null) {
-			this.status = TaskState.RESOLVED;
+			this.status = TaskState.RESOLVED.toString();
 			return;
 		} else {
 			if (assignedDate != null) {
-				this.status = TaskState.INPROGRESS;
+				this.status = TaskState.INPROGRESS.toString();
 				return;
 			}
 		}
-		this.status = TaskState.OPEN;
+		this.status = TaskState.OPEN.toString();
 	}
 
 	public Timestamp getUpdatedDate() {

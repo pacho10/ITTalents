@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page isELIgnored="false"%>
 <%@ page errorPage="error.jsp"%>
+<%@ page import="bg.ittalents.efficientproject.util.Datetime"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -96,11 +97,11 @@
 										<td><a
 											href="./taskdetail?taskId=${t.id}&projectId=${project.id}">${t.summary}</a></td>
 										<td>${t.status}</td>
-										<td>${t.updatedDate}</td>
-										<td>${t.reporter.firstName}</td>
+										<td>${Datetime.timestampAsString(t.updatedDate)}</td>
+										<td><a href="./profileDetail?userId=${t.reporter.id}"><span>${t.reporter.firstName}</span><span> </span><span>${t.reporter.lastName}</span></a></td>
 
 										<c:if test="${backLog==0}">
-											<td>${t.assignee.firstName}</td>
+											<td><a href="./profileDetail?userId=${t.assignee.id}"><span>${t.assignee.firstName}</span><span> </span><span>${t.assignee.lastName}</span></a></td>
 										</c:if>
 										<c:if test="${sessionScope.user.admin}">
 											<c:if test="${backLog==1}">
