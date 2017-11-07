@@ -123,7 +123,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 			ps.executeUpdate();
 			// adding to the enemployed workers list:
-			addWorkerToUnemployedWorkers(user);// TODO transaction?
+			addWorkerToUnemployedWorkers(user);
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
 				return rs.getInt(1);

@@ -25,18 +25,6 @@ import bg.ittalents.efficientproject.model.pojo.User;
 public class DashboardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public DashboardServlet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
 //
@@ -71,7 +59,6 @@ public class DashboardServlet extends HttpServlet {
 					request.getSession().setAttribute("project", project);
 				}
 				response.sendRedirect("./workertasks");
-
 			}
 		} catch (IOException | ServletException | EfficientProjectDAOException | DBException e) {
 			try {

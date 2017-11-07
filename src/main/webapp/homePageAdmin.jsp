@@ -46,20 +46,28 @@
 					<h2 class="text-center text-info">${organizationName}</h2>
 					<hr>
 					<div class="table-responsive">
-						<table class="table">
-							<thead>
-								<td>Project Name</td>
-								<td>Project deadline</td>
-							</thead>
-							<c:forEach var="p" items="${projects}">
-								<tr>
-									<td><a
-										href="/final_project/projectdetail?projectId=${p.id}">${p.name}</a>
-									</td>
-									<td>${p.deadline}</td>
-								</tr>
-							</c:forEach>
-						</table>
+
+						<c:choose>
+							<c:when test="${empty projects}">
+								<h4>There are no projects yet</h4>
+							</c:when>
+							<c:otherwise>
+								<table class="table">
+									<thead>
+										<td>Project Name</td>
+										<td>Project deadline</td>
+									</thead>
+									<c:forEach var="p" items="${projects}">
+										<tr>
+											<td><a
+												href="/final_project/projectdetail?projectId=${p.id}">${p.name}</a>
+											</td>
+											<td>${p.deadline}</td>
+										</tr>
+									</c:forEach>
+								</table>
+							</c:otherwise>
+						</c:choose>
 					</div>
 
 				</div>

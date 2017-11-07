@@ -16,8 +16,10 @@ public class ProfileShowServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			response.setCharacterEncoding("UTF-8");
+			request.setCharacterEncoding("UTF-8");
 			if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) {
-				response.sendRedirect("/LogIn");
+				response.sendRedirect("./LogIn");
 				return;
 			}
 			request.getRequestDispatcher("./profileShow.jsp").forward(request, response);
