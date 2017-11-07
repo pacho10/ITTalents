@@ -199,7 +199,7 @@
 									<tr>
 										<td><a href="./epicdetail?epicId=${e.id}"
 											class="noReLoadEpic">${e.name}</a></td>
-										<td>${e.estimate}days</td>
+										<td>${e.estimate}<span> </span>days</td>
 									</tr>
 								</c:forEach>
 							</table>
