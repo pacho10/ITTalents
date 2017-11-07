@@ -13,6 +13,6 @@
 		<%-- : <%= exception.getMessage() %> --%>
 	</p>
 
-	<a href="./index.jsp">Log in here</a>
+	<a href="./dashboard">Go back to home page</a>
 </body>
 </html>

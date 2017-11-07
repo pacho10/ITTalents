@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
@@ -68,6 +68,11 @@ public class SignUpServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 				return;
 			}
+			if(firstName.length()==0 || lastName.length()==0) {
+				request.setAttribute("errorMessage", "Empty first or last name! Try Again");
+				dispatcher.forward(request, response);
+				return;
+			}
 
 			if (!CredentialsChecks.isMailValid(email)) {
 				request.setAttribute("errorMessage", "Invalid e-mail! Try Again");
@@ -120,7 +125,7 @@ public class SignUpServlet extends HttpServlet {
 
 			request.getSession().setAttribute("user", user);
 			response.sendRedirect("./ProfileEdit");
-		} catch (EffPrjDAOException | DBException | IOException | ServletException e) {
+		} catch (EfficientProjectDAOException | DBException | IOException | ServletException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();

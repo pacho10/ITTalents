@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
@@ -19,17 +19,17 @@ import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task;
 
-
 @WebServlet("/allTasksProject")
 public class AllTasksProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			
+
 			if (request.getSession().getAttribute("user") != null) {
-				
+
 				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				boolean projectFinished = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).isProjectFinished(projectId);
 				int backLog = Integer.parseInt(request.getParameter("backLog"));
 				request.setAttribute("backLog", backLog);
 				request.setAttribute("project",
@@ -46,18 +46,21 @@ public class AllTasksProjectServlet extends HttpServlet {
 					tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksOfProject(projectId);
 				}
 				if (tasks != null) {
+					if (projectFinished && backLog == 1) {
+						request.getRequestDispatcher("./projectFinished.jsp").forward(request, response);
+						return;
+					}
 
 					request.setAttribute("tasks", tasks);
 
-					RequestDispatcher rd = request.getRequestDispatcher("./allProjectTasks.jsp");
-					rd.forward(request, response);
+					request.getRequestDispatcher("./allProjectTasks.jsp").forward(request, response);
 				} else {
 					redirecttoerrorpage(response);
 				}
 			} else {
 				redirecttoerrorpage(response);
 			}
-		} catch (EffPrjDAOException | DBException | ServletException | IOException e) {
+		} catch (EfficientProjectDAOException | DBException | ServletException | IOException e) {
 			redirecttoerrorpage(response, e);
 		}
 	}

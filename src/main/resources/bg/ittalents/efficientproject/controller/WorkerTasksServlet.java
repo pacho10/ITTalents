@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
 import bg.ittalents.efficientproject.model.pojo.Task;
@@ -26,7 +26,7 @@ public class WorkerTasksServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if (request.getSession().getAttribute("user") != null) {
+			if (request.getSession(false) != null || request.getSession(false).getAttribute("user") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 				List<Task> tasks = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getAllTasksByUser(user.getId());
 				request.setAttribute("tasks", tasks);
@@ -36,17 +36,24 @@ public class WorkerTasksServlet extends HttpServlet {
 			} else {
 				response.sendRedirect("./LogIn");
 			}
-			// EffPrjDAOException  | IOException | ServletException | DBException
+			 EffPrjDAOException  | IOException | ServletException | DBException
 		} catch (Exception e) {
-//			try {
-//				e.printStackTrace();
-//				response.sendRedirect("error.jsp");
-//				
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
+		try {
+			e.printStackTrace();
+			response.sendRedirect("error.jsp");
+			
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			
 			e.printStackTrace();
+		} catch (EfficientProjectDAOException | IOException | ServletException | DBException e) {
+			try {
+				response.sendRedirect("error.jsp");
+				e.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 

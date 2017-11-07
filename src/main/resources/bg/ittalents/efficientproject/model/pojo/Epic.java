@@ -63,6 +63,7 @@ public class Epic {
 	}
 	@Override
 	public String toString() {
-		return name;
+		return "Epic [id=" + id + ", name=" + name + ", estimate=" + estimate + ", description=" + description
+				+ ", project=" + project + "]";
 	}
 }

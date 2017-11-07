@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 
@@ -15,9 +15,9 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 	private static final String HAS_CURRENT_SPRINT = "SELECT * from sprints where project_id=? and curdate() <= date_add(start_date, interval duration day);";
 
 	@Override
-	public int createSprint(Sprint sprint) throws DBException, EffPrjDAOException {
+	public int createSprint(Sprint sprint) throws DBException, EfficientProjectDAOException {
 		if (sprint == null) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(CREATE_SPRINT, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -37,9 +37,9 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 	}
 
 	@Override
-	public Sprint getSprintBId(int sprintId) throws DBException, EffPrjDAOException {
+	public Sprint getSprintBId(int sprintId) throws DBException, EfficientProjectDAOException {
 		if (sprintId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(GET_SPRINT_BY_ID);
@@ -58,9 +58,9 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 	}
 	
 	@Override
-	public Sprint getCurrentSprint(int projectId) throws DBException, EffPrjDAOException {
+	public Sprint getCurrentSprint(int projectId) throws DBException, EfficientProjectDAOException {
 		if (projectId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(HAS_CURRENT_SPRINT);

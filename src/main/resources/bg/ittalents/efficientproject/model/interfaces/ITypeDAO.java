@@ -6,7 +6,7 @@ import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.dao.TypeDAO;
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.pojo.Type;
 
 public interface ITypeDAO {
@@ -17,7 +17,7 @@ public interface ITypeDAO {
 		throw new UnsupportedDataTypeException();
 	}
 
-	Type getTypeById(int TypeId) throws DBException, EffPrjDAOException;
+	Type getTypeById(int TypeId) throws DBException, EfficientProjectDAOException;
 
 	List<Type> getAllTypes() throws DBException;
 }

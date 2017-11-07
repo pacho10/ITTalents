@@ -6,7 +6,7 @@ import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.dao.EpicDAO;
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.pojo.Epic;
 
 public interface IEpicDAO {
@@ -17,9 +17,9 @@ public interface IEpicDAO {
 		throw new UnsupportedDataTypeException();
 	}
 
-	int createEpic(Epic epic) throws EffPrjDAOException, DBException;
+	int createEpic(Epic epic) throws EfficientProjectDAOException, DBException;
 
-	List<Epic> getAllEpicsByProject(int projectId) throws DBException, UnsupportedDataTypeException, EffPrjDAOException;
+	List<Epic> getAllEpicsByProject(int projectId) throws DBException, UnsupportedDataTypeException, EfficientProjectDAOException;
 
-	Epic getEpicById(int epicId) throws UnsupportedDataTypeException, DBException, EffPrjDAOException;
+	Epic getEpicById(int epicId) throws UnsupportedDataTypeException, DBException, EfficientProjectDAOException;
 }

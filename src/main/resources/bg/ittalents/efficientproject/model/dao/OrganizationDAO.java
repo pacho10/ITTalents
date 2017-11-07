@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.IOrganizationDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 
@@ -18,9 +18,9 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 	private static final String SELECT_ORGANIZATION_BY_NAME = "SELECT *  from organizations where name=?;";
 
 	@Override
-	public int addOrganization(Organization organization) throws EffPrjDAOException, DBException {
+	public int addOrganization(Organization organization) throws EfficientProjectDAOException, DBException {
 		if (organization == null) {
-			throw new EffPrjDAOException("There is no organization to add!");
+			throw new EfficientProjectDAOException("There is no organization to add!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(INSERT_INTO_ORGANIZATIONS,
@@ -34,13 +34,13 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 		} catch (SQLException e) {
 			throw new DBException("The organization cannot be add right now!Try again later!", e);
 		}
-		throw new EffPrjDAOException("Could not add!");
+		throw new EfficientProjectDAOException("Could not add!");
 	}
 
 	@Override
-	public Organization getOrgById(int orgId) throws EffPrjDAOException, DBException, UnsupportedDataTypeException {
+	public Organization getOrgById(int orgId) throws EfficientProjectDAOException, DBException, UnsupportedDataTypeException {
 		if (orgId < 0) {
-			throw new EffPrjDAOException("Invalid input!");
+			throw new EfficientProjectDAOException("Invalid input!");
 		}
 		try {
 			PreparedStatement ps = getCon().prepareStatement(SELECT_ORGANIZATION_BY_ID);
@@ -59,9 +59,9 @@ public class OrganizationDAO extends AbstractDBConnDAO implements IOrganizationD
 	}
 
 	@Override
-	public boolean isThereSuchOrganization(String name) throws EffPrjDAOException, DBException {
+	public boolean isThereSuchOrganization(String name) throws EfficientProjectDAOException, DBException {
 		if (name == null) {
-			throw new EffPrjDAOException("There is no name input!");
+			throw new EfficientProjectDAOException("There is no name input!");
 		}
 		PreparedStatement ps;
 		try {

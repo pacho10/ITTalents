@@ -2,7 +2,7 @@ package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,17 +11,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
-import bg.ittalents.efficientproject.model.exception.EffProjectException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IEpicDAO;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
-import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Epic;
 import bg.ittalents.efficientproject.model.pojo.Project;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
+import bg.ittalents.efficientproject.model.pojo.Task.TaskState;
+import bg.ittalents.efficientproject.util.IntegerChecker;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 /**
@@ -35,18 +36,19 @@ public class ProjectDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
 
-			if (request.getSession(false) == null) {
-				response.sendRedirect("/LogIn");
+			if (request.getSession(false) == null || request.getSession(false).getAttribute("user")==null) {
+				response.sendRedirect("./LogIn");
 				return;
 			}
-			if (request.getParameter("projectId") != null) {
+			String projectIdParam=request.getParameter("projectId");
+			if ( projectIdParam!= null && IntegerChecker.isInteger(projectIdParam)) {
 				User user = (User) request.getSession().getAttribute("user");
 
 				if (!user.isAdmin()) {
 					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
 					return;
 				}
-				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				int projectId = Integer.parseInt(projectIdParam);
 				/**
 				 * check if the project is of this admin
 				 */
@@ -59,6 +61,20 @@ public class ProjectDetailServlet extends HttpServlet {
 					request.setAttribute("currentSprint", currentSprint);
 				}
 
+				boolean projectFinished=IProjectDAO.getDAO(DAOStorageSourse.DATABASE).isProjectFinished(projectId);
+				request.setAttribute("projectFinished", projectFinished);
+				Map<TaskState, Integer> tasksNumberPerState=IProjectDAO.getDAO(SOURCE_DATABASE).tasksNumberPerState(projectId);
+				request.setAttribute("tasksOpen", tasksNumberPerState.get(TaskState.OPEN));
+				request.setAttribute("tasksDone", tasksNumberPerState.get(TaskState.RESOLVED));
+				request.setAttribute("tasksInProgress", tasksNumberPerState.get(TaskState.INPROGRESS));
+//				tasksNumberPerState
+//				response.setCharacterEncoding("UTF-8");
+//				response.setContentType("application/json");
+//				String tasksPerStateJSON = new Gson().toJson(IProjectDAO.getDAO(SOURCE_DATABASE).tasksNumberPerState(projectId));
+//				request.setAttribute("tasksPerStateJSON", tasksPerStateJSON);
+//				System.out.println(tasksPerStateJSON);
+//				response.getWriter().println(s);
+			
 				Project currentProject = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 				request.setAttribute("project", currentProject);
 
@@ -68,17 +84,13 @@ public class ProjectDetailServlet extends HttpServlet {
 				List<User> users = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
 						.getAllWorkersWorkingOnAProject(projectId);
 				request.setAttribute("workers", users);
-
-				// get current sprintby id---->if there is no current sprint--->message and
-				// redirect to create new one
-				// if there is current sprnt--->show the sprint
-
+				
 				RequestDispatcher rd = request.getRequestDispatcher("/projectDetail.jsp");
 				rd.forward(request, response);
 			} else {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
-		} catch (DBException | EffPrjDAOException | IOException | ServletException e) {
+		} catch (DBException | EfficientProjectDAOException | IOException | ServletException e) {
 			try {
 				response.sendRedirect("error.jsp");
 				e.printStackTrace();

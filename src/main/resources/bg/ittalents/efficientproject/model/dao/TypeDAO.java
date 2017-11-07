@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.ITypeDAO;
 import bg.ittalents.efficientproject.model.pojo.Type;
 
@@ -16,9 +16,9 @@ public class TypeDAO extends AbstractDBConnDAO implements ITypeDAO{
 	private static final String GET_TYPE_BY_ID = "SELECT * from types where id=?;";
 	
 	@Override
-	public Type getTypeById(int TypeId) throws DBException, EffPrjDAOException {
+	public Type getTypeById(int TypeId) throws DBException, EfficientProjectDAOException {
 		if (TypeId <0) {
-			throw new EffPrjDAOException("Invalid input");
+			throw new EfficientProjectDAOException("Invalid input");
 		}
 		Type type = null;
 		try {

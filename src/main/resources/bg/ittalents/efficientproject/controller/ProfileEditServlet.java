@@ -20,7 +20,7 @@ import javax.servlet.http.Part;
 
 import bg.ittalents.efficientproject.model.dao.INFO;
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
@@ -41,7 +41,7 @@ public class ProfileEditServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			request.setCharacterEncoding("UTF-8");
 			
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
 				response.sendRedirect("/LogIn");
 				return;
 			}
@@ -68,12 +68,11 @@ public class ProfileEditServlet extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			request.setCharacterEncoding("UTF-8");
 
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
 				response.sendRedirect("/LogIn");
 				return;
 			}
 
-			if (request.getSession().getAttribute("user") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 				int userId = user.getId();
 
@@ -113,18 +112,18 @@ public class ProfileEditServlet extends HttpServlet {
 //					}
 				}
 
-				boolean fNÐNotEmptyandDifferent = firstName.length() > 0 && !firstName.equals(user.getFirstName());
-				boolean lNNotEmptyAndDifferent = lastName.length() > 0 && !lastName.equals(user.getLastName());
+				boolean firstNameNotEmptyandDifferent = firstName.length() > 0 && !firstName.equals(user.getFirstName());
+				boolean lastNameNotEmptyAndDifferent = lastName.length() > 0 && !lastName.equals(user.getLastName());
 				boolean emailNotEmptyAndDifferent = email.length() > 0 && !email.equals(user.getEmail());
 				boolean newPassNotEmpty = newPass.trim().length() > 0;
 				boolean oldPassNotEmpty = oldPass.trim().length() > 0;
 
-				if (fNÐNotEmptyandDifferent) {
+				if (firstNameNotEmptyandDifferent) {
 					user.setFirstName(firstName);
 					System.out.println("1change done");
 				}
 
-				if (lNNotEmptyAndDifferent) {
+				if (lastNameNotEmptyAndDifferent) {
 					user.setLastName(lastName);
 					System.out.println("2change done");
 				}
@@ -180,16 +179,13 @@ public class ProfileEditServlet extends HttpServlet {
 				}
 
 
-				if (fNÐNotEmptyandDifferent || lNNotEmptyAndDifferent || emailNotEmptyAndDifferent || newPassNotEmpty) {
+				if (firstNameNotEmptyandDifferent || lastNameNotEmptyAndDifferent || emailNotEmptyAndDifferent || newPassNotEmpty) {
 					System.out.println("change done");
 					IUserDAO.getDAO(SOURCE_DATABASE).updateUsersDetails(user);
 					request.getSession().setAttribute("user", user);
 				}
 				response.sendRedirect("./Profile");
-			} else {
-				request.getRequestDispatcher("error2.jsp").forward(request, response);
-			}
-		} catch (ServletException | IOException | DBException | EffPrjDAOException  e) {
+		} catch (ServletException | IOException | DBException | EfficientProjectDAOException  e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();

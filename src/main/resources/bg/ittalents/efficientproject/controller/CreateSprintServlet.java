@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
-import bg.ittalents.efficientproject.model.exception.EffProjectException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ISprintDAO;
@@ -60,7 +59,7 @@ public class CreateSprintServlet extends HttpServlet {
 			} else {
 				response.sendRedirect("./LogIn");
 			}
-		} catch (DBException | EffPrjDAOException | IOException | ServletException e) {
+		} catch (DBException | EfficientProjectDAOException | IOException | ServletException e) {
 			try {
 				response.sendRedirect("error.jsp");
 				e.printStackTrace();
@@ -93,7 +92,7 @@ public class CreateSprintServlet extends HttpServlet {
 			ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
 
 			response.sendRedirect("./projectdetail?projectId=" + projectId);
-		} catch (DBException | IOException | EffPrjDAOException e) {
+		} catch (DBException | IOException | EfficientProjectDAOException e) {
 			try {
 				response.sendRedirect("./error.jsp");
 			} catch (IOException e1) {

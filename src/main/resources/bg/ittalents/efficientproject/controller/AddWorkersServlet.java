@@ -13,6 +13,7 @@ import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
+import bg.ittalents.efficientproject.util.IntegerChecker;
 
 /**
  * Servlet implementation class AddWorkersServlet
@@ -29,19 +30,18 @@ public class AddWorkersServlet extends HttpServlet {
 			 * check if there is no session or there is but the user is different or the
 			 * user is not admin:
 			 */
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null ||request.getSession(false).getAttribute("user") == null) {
 				response.sendRedirect("./LogIn");
 				return;
 			}
-			if (request.getSession().getAttribute("user") != null) {
 				User user = (User) request.getSession().getAttribute("user");
 				if (!user.isAdmin()) {
 					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
 					return;
 				}
-
-				if (request.getParameter("projectId") != null) {
-					int projectId = Integer.parseInt(request.getParameter("projectId"));
+				String projectIdParam=request.getParameter("projectId");
+				if ( projectIdParam!= null && IntegerChecker.isInteger(projectIdParam)) {
+						int projectId = Integer.parseInt(projectIdParam);
 					/**
 					 * check if the project is of this admin
 					 */
@@ -57,9 +57,6 @@ public class AddWorkersServlet extends HttpServlet {
 				} else {
 					request.getRequestDispatcher("error2.jsp").forward(request, response);
 				}
-			} else {
-				request.getRequestDispatcher("error2.jsp").forward(request, response);
-			}
 
 		} catch (ServletException | IOException | DBException e) {
 			try {

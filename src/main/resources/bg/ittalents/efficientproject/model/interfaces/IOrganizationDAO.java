@@ -4,7 +4,7 @@ import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.dao.OrganizationDAO;
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 
 public interface IOrganizationDAO {
@@ -15,9 +15,9 @@ public interface IOrganizationDAO {
 		throw new UnsupportedDataTypeException();
 	}
 
-	Organization getOrgById(int orgId) throws EffPrjDAOException, DBException, UnsupportedDataTypeException;
+	Organization getOrgById(int orgId) throws EfficientProjectDAOException, DBException, UnsupportedDataTypeException;
 
-	int addOrganization(Organization organization) throws EffPrjDAOException, DBException;
+	int addOrganization(Organization organization) throws EfficientProjectDAOException, DBException;
 
-	boolean isThereSuchOrganization(String name) throws EffPrjDAOException, DBException;
+	boolean isThereSuchOrganization(String name) throws EfficientProjectDAOException, DBException;
 }

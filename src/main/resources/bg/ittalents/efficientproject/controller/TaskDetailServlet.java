@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
@@ -19,6 +19,7 @@ import bg.ittalents.efficientproject.model.pojo.Project;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task;
 import bg.ittalents.efficientproject.model.pojo.User;
+import bg.ittalents.efficientproject.util.IntegerChecker;
 
 /**
  * Servlet implementation class TaskDetailServlet
@@ -30,12 +31,15 @@ public class TaskDetailServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) {
 				response.sendRedirect("/LogIn");
 				return;
 			}
-			if (request.getSession().getAttribute("user")!=null || request.getParameter("projectId") != null || request.getParameter("taskId") != null) {
-				int projectId = Integer.parseInt(request.getParameter("projectId"));
+			String projectIdParam = request.getParameter("projectId");
+			String taskIdParam = request.getParameter("taskId");
+			if (projectIdParam != null || taskIdParam != null && IntegerChecker.isInteger(taskIdParam)
+					&& IntegerChecker.isInteger(projectIdParam)) {
+				int projectId = Integer.parseInt(projectIdParam);
 				User user = (User) request.getSession().getAttribute("user");
 				/**
 				 * check if the project is of this admin if the user is admin
@@ -49,12 +53,12 @@ public class TaskDetailServlet extends HttpServlet {
 				Project currentProject = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 				request.setAttribute("project", currentProject);
 
-				int taskId = Integer.parseInt(request.getParameter("taskId"));
+				int taskId = Integer.parseInt(taskIdParam);
 				Task task = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getTaskById(taskId);
-				User assignee =task.getAssignee();
-				User reporter =task.getReporter();
-				Epic epic =task.getEpic();
-				Sprint sprint =task.getSprint();
+				User assignee = task.getAssignee();
+				User reporter = task.getReporter();
+				Epic epic = task.getEpic();
+				Sprint sprint = task.getSprint();
 				request.setAttribute("assignee", assignee);
 				System.out.println(assignee);
 				request.setAttribute("reporter", reporter);
@@ -67,7 +71,7 @@ public class TaskDetailServlet extends HttpServlet {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
 			}
 
-		} catch (IOException | DBException | EffPrjDAOException | ServletException e) {
+		} catch (IOException | DBException | EfficientProjectDAOException | ServletException e) {
 			try {
 				response.sendRedirect("error.jsp");
 				e.printStackTrace();

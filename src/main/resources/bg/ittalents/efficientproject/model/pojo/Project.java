@@ -1,26 +1,37 @@
 package bg.ittalents.efficientproject.model.pojo;
 
-import java.sql.Date;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import bg.ittalents.efficientproject.model.pojo.Task.TaskState;
 
 public class Project {
 	private int id;
 	private String name;
-	private Date deadline;
+	private LocalDate deadline;
 	private Organization organization;
 	private LocalDate startDate;
+	private int daysLeft;
+	private int duration;
+//	private  Map<TaskState,Integer> tasksNumberPerState=new ConcurrentHashMap<>();
+	
 
-	public Project(String name, Date deadline, Organization organization) {
+	public Project(String name, LocalDate deadline, Organization organization) {
 		this.name = name;
 		this.deadline = deadline;
 		this.organization = organization;
 		this.setStartDate(LocalDate.now());
+
 	}
 
-	public Project(int id, String name, Date deadline, Organization organization,LocalDate startDate) {
+	public Project(int id, String name, LocalDate deadline, Organization organization,LocalDate startDate) {
 		this(name, deadline, organization);
 		this.id = id;
 		this.setStartDate(startDate);
+		this.setDaysLeft(deadline);
+		this.setDuration(startDate,deadline);
 	}
 
 	public Organization getOrganization() {
@@ -39,11 +50,11 @@ public class Project {
 		this.name = name;
 	}
 
-	public Date getDeadline() {
+	public LocalDate getDeadline() {
 		return deadline;
 	}
 
-	public void setDeadline(Date deadline) {
+	public void setDeadline(LocalDate deadline) {
 		this.deadline = deadline;
 	}
 
@@ -61,5 +72,21 @@ public class Project {
 
 	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
+	}
+
+	public int getDaysLeft() {
+		return daysLeft;
+	}
+
+	private void setDaysLeft(LocalDate deadline) {
+		this.daysLeft = (int) ChronoUnit.DAYS.between(LocalDate.now(), deadline);;
+	}
+
+	public int getDuration() {
+		return duration;
+	}
+
+	private void setDuration(LocalDate startDate,LocalDate deadline) {
+		this.duration = (int) ChronoUnit.DAYS.between(startDate, deadline);
 	}
 }

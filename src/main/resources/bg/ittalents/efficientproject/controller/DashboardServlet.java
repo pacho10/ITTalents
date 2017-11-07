@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
-import bg.ittalents.efficientproject.model.exception.EffPrjDAOException;
+import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
@@ -39,47 +39,41 @@ public class DashboardServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-
-			if (request.getSession(false) == null) {
-				response.sendRedirect("/LogIn");
+//
+			if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
+				response.sendRedirect("./LogIn");
 				return;
 			}
-			if (request.getSession().getAttribute("user") != null) {
 
-				User user = (User) request.getSession().getAttribute("user");
-				// if the user is admin forward to admins page
-				if (user.isAdmin()) {
-					int intorganizationId = user.getOrganization().getId();
-					List<Project> projects = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
-							.getAllProjectsFromOrganization(intorganizationId);
-					if (projects != null) {
-						request.setAttribute("projects", projects);
-					} else {
-						request.getRequestDispatcher("error2.jsp").forward(request, response);
-					}
+			User user = (User) request.getSession().getAttribute("user");
+			// if the user is admin forward to admins page
+			if (user.isAdmin()) {
+				int intorganizationId = user.getOrganization().getId();
+				List<Project> projects = IProjectDAO.getDAO(DAOStorageSourse.DATABASE)
+						.getAllProjectsFromOrganization(intorganizationId);
+				if (projects != null) {
+					request.setAttribute("projects", projects);
+				} else {
+					request.getRequestDispatcher("error2.jsp").forward(request, response);
+				}
 
-					String organizationName = user.getOrganization().getName();
-					request.setAttribute("organizationName", organizationName);
+				String organizationName = user.getOrganization().getName();
+				request.setAttribute("organizationName", organizationName);
 
 				request.setCharacterEncoding("UTF-8");
 				response.setCharacterEncoding("UTF-8");
-					request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
-					response.setContentType("text/html");
-				} else {//if the user is worker:
-					int CurrentProjectId= IUserDAO.getDAO(DAOStorageSourse.DATABASE).returnCurrentWorkersProject(user);
-					Project project = null;
-					if (CurrentProjectId > 0) {
-						project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(CurrentProjectId);
-					}
+				request.getRequestDispatcher("./homePageAdmin.jsp").forward(request, response);
+				response.setContentType("text/html");
+			} else {// if the user is worker:
+				if (IUserDAO.getDAO(DAOStorageSourse.DATABASE).isThereCurrentProjectForThisWorker(user)) {
+					int CurrentProjectId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).returnCurrentWorkersProject(user);
+					Project project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(CurrentProjectId);
 					request.getSession().setAttribute("project", project);
-
-					response.sendRedirect("./workertasks");
-
 				}
-			} else {
-				request.getRequestDispatcher("error2.jsp").forward(request, response);
+				response.sendRedirect("./workertasks");
+
 			}
-		} catch (IOException | ServletException | EffPrjDAOException | DBException e) {
+		} catch (IOException | ServletException | EfficientProjectDAOException | DBException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();

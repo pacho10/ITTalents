@@ -21,7 +21,10 @@
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
-
+<script type="text/javascript" src="js/Chart.bundle.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
+<c:if test="${projectFinished}">
+</c:if>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -32,6 +35,80 @@
 			return false;
 		});
 	});
+	
+	$(document).ready(function() {
+		$("a.noReLoadEpic").click(function() {
+			var myhref = $(this).attr('href');
+			 $("#epicDetail").empty(); 
+			$('#epicDetail').load(myhref);
+			return false;
+		});
+	});
+	
+	function closeEpicDetail(){
+		$("#epicDetail").empty();
+	}
+	
+	var daysLeft;
+	var daysPast;
+	var isProjectFinished=${projectFinished};
+	if(isProjectFinished){
+		daysLeft=0;
+		daysPast=${project.duration};
+	}else{
+		daysLeft=${project.daysLeft};
+		daysPast= ${project.duration}-(${project.daysLeft}); 
+	};
+	
+	var config = {
+		type : 'pie',
+		data : {
+			datasets : [ {
+				data : [ daysPast,  daysLeft ],
+				backgroundColor : [ window.chartColors.orange,
+						window.chartColors.blue, ],
+				label : 'Dataset 1'
+			} ],
+			labels : [ "Days past", "Days left" ]
+		},
+		options : {
+			responsive : true
+		}
+	};
+		
+	
+	var tasksOpen=${tasksOpen};
+	var tasksDone=${tasksDone};
+	var tasksInProgress=${tasksInProgress};
+	/* var projectId="./returnTasksPerState?projectId="+${project.id};
+	$.getJSON(projectId).success(function(states) {
+		$.each(states, function(key, val){
+			if(key=="OPEN"){
+				tasksOpen=val;
+			}
+		});
+	}); */
+	var config2 = {
+			type : 'pie',
+			data : {
+				datasets : [ {
+					data : [ tasksOpen,  tasksDone, tasksInProgress],
+					backgroundColor : [ window.chartColors.orange,
+							window.chartColors.blue, window.chartColors.red],
+					label : 'Dataset 1'
+				} ],
+				labels : ["Open tasks", "Tasks done", "Tasks in progress" ]
+			},
+			options : {
+				responsive : true
+			}
+		};
+	window.onload = function() {
+		var ctx = document.getElementById("chart-area").getContext("2d");
+		window.myPie = new Chart(ctx, config);
+		var ctx2 = document.getElementById("chart-area2").getContext("2d");
+		window.myPie = new Chart(ctx2, config2);
+	};
 </script>
 
 
@@ -47,7 +124,14 @@
 	<jsp:include page="navBarAdmin.jsp"></jsp:include>
 
 	<div id="wrapper" class="toggled">
-		<jsp:include page="sidebarProjectDetailed.jsp"></jsp:include>
+		<c:choose>
+			<c:when test="${projectFinished}">
+				<jsp:include page="sidebarProject.jsp"></jsp:include>
+			</c:when>
+			<c:otherwise>
+				<jsp:include page="sidebarProjectDetailed.jsp"></jsp:include>
+			</c:otherwise>
+		</c:choose>
 
 		<div id="page-content-wrapper">
 			<div class="container-fluid">
@@ -57,23 +141,47 @@
 
 				<div id="content">
 					<div>
-						<%-- <span>${project.name}</span> --%>
+						<div>
+							<c:choose>
+								<c:when test="${projectFinished}">
+									<span>Project is finished</span>
+								</c:when>
+
+								<c:otherwise>
+									<c:choose>
+										<c:when test="${currentSprint != null}">
+											<span>Current sprint: ${currentSprint.name}</span>
+										</c:when>
+
+										<c:otherwise>
+											<div>
+												No current sprint, <a
+													href="./createsprint?projectId=${project.id}&all=1">start
+													new one here</a>
+											</div>
+										</c:otherwise>
+									</c:choose>
+								</c:otherwise>
+
+							</c:choose>
+						</div>
+						<div>
+							<span>Start date: ${project.startDate}</span>
+						</div>
 						<div>
 							<span> Deadline: ${project.deadline}</span>
 						</div>
-						<div>
-							<c:choose>
-								<c:when test="${currentSprint != null}">
-									<span>Current sprint: ${currentSprint.name}</span>
-								</c:when>
-								<c:otherwise>
-									<div>
-										No current sprint, <a
-											href="./createsprint?projectId=${project.id}&all=1">start
-											new one here</a>
-									</div>
-								</c:otherwise>
-							</c:choose>
+						<div id="canvas-holder" style="width: 40%">
+							<div>
+								<h4 class="text-center text-info">Time log</h4>
+							</div>
+							<canvas id="chart-area" />
+						</div>
+						<div id="canvas-holder" style="width: 40%">
+							<div>
+								<h4 class="text-center text-info">Tasks statistics</h4>
+							</div>
+							<canvas id="chart-area2" />
 						</div>
 					</div>
 					<div>
@@ -85,14 +193,17 @@
 								<thead>
 									<td>Epic Name</td>
 									<td>Epic Estimate</td>
+									<td></td>
 								</thead>
 								<c:forEach var="e" items="${epics}">
 									<tr>
-										<td><a href="./epicdetail?epicId=${e.id}">${e.name}</a></td>
-										<td>${e.estimate}</td>
+										<td><a href="./epicdetail?epicId=${e.id}"
+											class="noReLoadEpic">${e.name}</a></td>
+										<td>${e.estimate}days</td>
 									</tr>
 								</c:forEach>
 							</table>
+							<div id="epicDetail"></div>
 						</div>
 
 						<hr>
@@ -110,7 +221,7 @@
 											<td><img id="avatar2"
 												src="./ImgOutputServlet?userid=${u.id}" class="img-rounded"></td>
 											<%-- <td>${u.avatarPath}</td> --%>
-											<td>${u.firstName} ${u.lastName}</td>
+											<td><a href="./profileDetail?userId=${u.id}"><span>${u.firstName}</span><span> </span><span>${u.lastName}</span></a></td>
 											<td>${u.email}</td>
 										</tr>
 									</c:if>
