@@ -37,8 +37,8 @@ public class CreateProjectServlet extends HttpServlet {
 		String organizationName = user.getOrganization().getName();
 		request.setAttribute("organizationName", organizationName);
 		
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
+		//request.setCharacterEncoding("UTF-8");
+		//response.setCharacterEncoding("UTF-8");
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("./createProject.jsp");
 		dispatcher.forward(request, response);
@@ -62,7 +62,7 @@ public class CreateProjectServlet extends HttpServlet {
 			
 
 			request.setCharacterEncoding("UTF-8");
-			response.setCharacterEncoding("UTF-8");
+			//response.setCharacterEncoding("UTF-8");
 
 			Project projectToAdd = new Project(name, date, org);
 

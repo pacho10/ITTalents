@@ -2,7 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page isELIgnored="false"%>
-<%@ page errorPage="error.jsp"%>
+<!-- <%@ page errorPage="error.jsp"%>-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -68,8 +68,15 @@
 											<td>${t.updatedDate}</td>
 											<td>${t.reporter.firstName}</td>
 											<td>${t.assignee.firstName}</td>
-											<td><a class="btn btn-info"
-												href="./finishtask?taskId=${t.id}">Finish</a></td>
+											
+											<!--<c:choose>
+												<c:when test="${t.finished_date == null}">
+													<td><button id="finsh-btn" class="btn btn-info" onclick="finishTask()">Finish</button></td>
+												</c:when>
+												<c:otherwise>
+													<td><span>Finished</span></td>
+												</c:otherwise>
+											</c:choose>-->
 											<%-- <td>Cancel Button</td> --%>
 										</tr>
 									</c:forEach>
@@ -83,16 +90,21 @@
 						<jsp:include page="hasNOTCurrentProject.jsp"></jsp:include>
 					</c:otherwise>
 				</c:choose>
-
 			</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 	</div>
 	<!-- /#wrapper -->
-	<div>
-		
-	</div>
+	<!--<script type="text/javascript">
+		function finishTask() {
+			$.ajax({
+				type: "GET",
+				url: "http://127.0.0.1:8080/final_project/finishtask?taskId=${t.id}"
+			});
+			
+			//$("#finsh-btn").attr("disabled", true);
+		}
 	
-	
+	</script>-->
 </body>
 </html>

@@ -111,7 +111,7 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 			while (rs.next()) {
 				//String name = URLEncoder.encode(rs.getString(2), "ISO-8859-1");
 				String name = URLDecoder.decode(rs.getString(2), "UTF-8");
-				projects.add(new Project(rs.getInt(1), name, rs.getDate(3), organization,rs.getDate(5).toLocalDate()));
+				projects.add(new Project(rs.getInt(1), name, rs.getDate(3), organization,rs.getDate(4).toLocalDate()));
 			}
 
 		} catch (SQLException | UnsupportedEncodingException e) {
