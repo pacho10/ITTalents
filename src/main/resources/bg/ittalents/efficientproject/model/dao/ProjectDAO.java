@@ -15,6 +15,8 @@ import java.util.Map;
 
 import javax.activation.UnsupportedDataTypeException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
@@ -139,6 +141,7 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 			while (rs.next()) {
 				// String name = URLEncoder.encode(rs.getString(2), "ISO-8859-1");
 				String name = URLDecoder.decode(rs.getString(2), "UTF-8");
+				name = StringEscapeUtils.escapeHtml4(name);
 				projects.add(new Project(rs.getInt(1), name, rs.getDate(3).toLocalDate(), organization,
 						rs.getDate(5).toLocalDate()));
 			}

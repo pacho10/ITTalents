@@ -1,6 +1,8 @@
 package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
@@ -67,7 +71,9 @@ public class CreateEpicServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			String name = request.getParameter("name");
+			String name = StringEscapeUtils.escapeHtml4(request.getParameter("name"));
+			name = URLEncoder.encode(name, "ISO-8859-1");
+			name = URLDecoder.decode(name, "UTF-8");
 			int estimate = Integer.parseInt(request.getParameter("estimate"));
 			String description = request.getParameter("description");
 			int projectId = Integer.parseInt(request.getParameter("projectId"));
@@ -78,7 +84,10 @@ public class CreateEpicServlet extends HttpServlet {
 			project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 			Epic epicToAdd = new Epic(name, estimate, description, project);
 			int id = IEpicDAO.getDAO(DAOStorageSourse.DATABASE).createEpic(epicToAdd);
+			
+			request.setCharacterEncoding("utf-8");
 
+			response.setCharacterEncoding("utf-8");
 			response.sendRedirect("./projectdetail?projectId=" + project.getId());
 		} catch (EfficientProjectDAOException | IOException | DBException e) {
 			try {

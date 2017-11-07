@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
@@ -51,7 +53,7 @@ public class CreateProjectServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			String name = request.getParameter("name");
+			String name = StringEscapeUtils.escapeHtml4(request.getParameter("name"));
 			name = URLEncoder.encode(name, "ISO-8859-1");
 			name = URLDecoder.decode(name, "UTF-8");
 			String deadline = request.getParameter("deadline");
