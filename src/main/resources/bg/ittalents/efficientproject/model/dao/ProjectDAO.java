@@ -30,7 +30,7 @@ import bg.ittalents.efficientproject.model.pojo.User;
 
 public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
-	private static final String INSERT_PROJECT_INTO_DB = "INSERT into projects values(null,?,?,?);";
+	private static final String INSERT_PROJECT_INTO_DB = "INSERT into projects values(null,?,?,?,?);";
 	private static final String GET_PROJECT_BY_ID = "SELECT * FROM projects WHERE id =?;";
 	private static final String GET_ALLPROJECTS_FROM_0RGANIZATION = "SELECT * from projects WHERE organization_id=?";
 	private static final String GET_ALLUSERS_FROM_PROJECT = "Select * from users_projects_history where project_id=?;";
@@ -70,6 +70,7 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 			ps.setString(1, project.getName());
 			ps.setDate(2, Date.valueOf(project.getDeadline()));
 			ps.setInt(3, project.getOrganization().getId());
+			ps.setDate(4, Date.valueOf(project.getStartDate()));
 			ps.executeUpdate();
 
 			ResultSet rs = ps.getGeneratedKeys();
@@ -192,15 +193,15 @@ public class ProjectDAO extends AbstractDBConnDAO implements IProjectDAO {
 		int inprogree = 0;
 		int resolved = 0;
 		for (Task t : allProjectTasks) {
-			TaskState taskState = t.getStatus();
+			String taskState = t.getStatus().toString();
 			switch (taskState) {
-			case OPEN:
+			case "OPEN":
 				open++;
 				break;
-			case INPROGRESS:
+			case "IN PROGRESS":
 				inprogree++;
 				break;
-			case RESOLVED:
+			case "RESOLVED":
 				resolved++;
 				break;
 			}

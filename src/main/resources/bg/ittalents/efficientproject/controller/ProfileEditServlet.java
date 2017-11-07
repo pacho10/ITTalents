@@ -69,7 +69,7 @@ public class ProfileEditServlet extends HttpServlet {
 			request.setCharacterEncoding("UTF-8");
 
 			if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
-				response.sendRedirect("/LogIn");
+				response.sendRedirect("./LogIn");
 				return;
 			}
 
@@ -86,7 +86,8 @@ public class ProfileEditServlet extends HttpServlet {
 
 				RequestDispatcher dispatcher = request.getRequestDispatcher("./profileEdit.jsp");
 				// check if there is actually uploaded file:
-				if (avatarPart.getSize() != 0) {
+				boolean avatarPartNotEmpty = avatarPart.getSize() != 0;
+				if (avatarPartNotEmpty) {
 					String avatarPath = IMAGES_PATH + File.separator + userId + ".jpg";
 					File myFile = new File(avatarPath);
 
@@ -179,7 +180,7 @@ public class ProfileEditServlet extends HttpServlet {
 				}
 
 
-				if (firstNameNotEmptyandDifferent || lastNameNotEmptyAndDifferent || emailNotEmptyAndDifferent || newPassNotEmpty) {
+				if (firstNameNotEmptyandDifferent || lastNameNotEmptyAndDifferent || emailNotEmptyAndDifferent || newPassNotEmpty || avatarPartNotEmpty) {
 					System.out.println("change done");
 					IUserDAO.getDAO(SOURCE_DATABASE).updateUsersDetails(user);
 					request.getSession().setAttribute("user", user);
