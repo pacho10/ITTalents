@@ -14,6 +14,7 @@ import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.ITaskDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
+import bg.ittalents.efficientproject.util.IntegerChecker;
 
 /**
  * Servlet implementation class AddTaskToSprintServlet
@@ -31,38 +32,42 @@ public class AddTaskToSprintServlet extends HttpServlet {
 			 * check if there is no session or there is but the user is different or the
 			 * user is not admin:
 			 */
-			if (request.getSession(false) == null ||request.getSession().getAttribute("user") == null) {
+			if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) {
 				response.sendRedirect("./LogIn");
 				return;
 			}
-				User user = (User) request.getSession().getAttribute("user");
+			User user = (User) request.getSession().getAttribute("user");
 
-				if (!user.isAdmin()) {
+			if (!user.isAdmin()) {
+				request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
+				return;
+			}
+
+			String taskIdParam = request.getParameter("taskId");
+			String sprintIdParam = request.getParameter("sprintId");
+			String projectIdParam = request.getParameter("projectId");
+			if (taskIdParam != null && sprintIdParam != null && projectIdParam != null
+					&& IntegerChecker.isInteger(projectIdParam) && IntegerChecker.isInteger(sprintIdParam)
+					&& IntegerChecker.isInteger(taskIdParam)) {
+
+				int projectId = Integer.parseInt(projectIdParam);
+				/**
+				 * check if the project is of this admin
+				 */
+				if (!IProjectDAO.getDAO(SOURCE_DATABASE).isThisProjectOfThisUser(projectId, user.getId())) {
 					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
 					return;
 				}
+				int taskId = Integer.parseInt(taskIdParam);
+				int sprintId = Integer.parseInt(sprintIdParam);
 
-				if (request.getParameter("taskId") != null && request.getParameter("sprintId") != null
-						&& request.getParameter("projectId") != null) {
+				ITaskDAO.getDAO(SOURCE_DATABASE).addTaskToSprint(taskId, sprintId);
+				response.sendRedirect("./allTasksProject?projectId=" + projectId + "&backLog=1");
+			} else {
+				request.getRequestDispatcher("error2.jsp").forward(request, response);
+			}
 
-					int projectId = Integer.parseInt(request.getParameter("projectId"));
-					/**
-					 * check if the project is of this admin
-					 */
-					if (!IProjectDAO.getDAO(SOURCE_DATABASE).isThisProjectOfThisUser(projectId, user.getId())) {
-						request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
-						return;
-					}
-					int taskId = Integer.parseInt(request.getParameter("taskId"));
-					int sprintId = Integer.parseInt(request.getParameter("sprintId"));
-
-					ITaskDAO.getDAO(SOURCE_DATABASE).addTaskToSprint(taskId, sprintId);
-					response.sendRedirect("./allTasksProject?projectId=" + projectId + "&backLog=1");
-				} else {
-					request.getRequestDispatcher("error2.jsp").forward(request, response);
-				}
-
-		} catch (DBException | EfficientProjectDAOException | IOException | ServletException  e) {
+		} catch (DBException | EfficientProjectDAOException | IOException | ServletException e) {
 			try {
 				request.getRequestDispatcher("error.jsp").forward(request, response);
 				e.printStackTrace();

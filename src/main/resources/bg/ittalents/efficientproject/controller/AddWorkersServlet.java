@@ -13,6 +13,7 @@ import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
+import bg.ittalents.efficientproject.util.IntegerChecker;
 
 /**
  * Servlet implementation class AddWorkersServlet
@@ -38,9 +39,9 @@ public class AddWorkersServlet extends HttpServlet {
 					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
 					return;
 				}
-
-				if (request.getParameter("projectId") != null) {
-					int projectId = Integer.parseInt(request.getParameter("projectId"));
+				String projectIdParam=request.getParameter("projectId");
+				if ( projectIdParam!= null && IntegerChecker.isInteger(projectIdParam)) {
+						int projectId = Integer.parseInt(projectIdParam);
 					/**
 					 * check if the project is of this admin
 					 */

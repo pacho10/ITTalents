@@ -13,6 +13,7 @@ import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOExceptio
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
+import bg.ittalents.efficientproject.util.IntegerChecker;
 
 /**
  * Servlet implementation class ProfileDetail
@@ -35,14 +36,15 @@ public class ProfileDetailServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-
 			if (request.getSession(false) == null || request.getSession(false).getAttribute("user")==null) {
 				response.sendRedirect("./LogIn");
 				return;
 			}
-			if (request.getParameter("userId") != null) {
+			
+			String userIdParam = request.getParameter("userId");
+			if (userIdParam != null && IntegerChecker.isInteger(userIdParam)) {
 
-				int userId = Integer.parseInt(request.getParameter("userId"));
+				int userId = Integer.parseInt(userIdParam);
 				User user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserById(userId);
 				request.setAttribute("user", user);
 				request.getRequestDispatcher("./userDetail.jsp").forward(request, response);

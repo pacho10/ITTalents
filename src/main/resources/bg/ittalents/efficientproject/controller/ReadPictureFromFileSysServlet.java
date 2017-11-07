@@ -18,6 +18,7 @@ import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOExceptio
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
+import bg.ittalents.efficientproject.util.IntegerChecker;
 
 @WebServlet("/ImgOutputServlet")
 public class ReadPictureFromFileSysServlet extends HttpServlet {
@@ -32,15 +33,10 @@ public class ReadPictureFromFileSysServlet extends HttpServlet {
 				response.sendRedirect("/LogIn");
 				return;
 			}
-
-			if (request.getParameter("userid") != null) {
-//				User user = (User) request.getSession().getAttribute("user");
-				int userId = Integer.parseInt(request.getParameter("userid"));
+			String userIdParam=request.getParameter("userid");
+			if ( userIdParam!= null && IntegerChecker.isInteger(userIdParam)) {
+				int userId = Integer.parseInt(userIdParam);
 				User user = IUserDAO.getDAO(DAOStorageSourse.DATABASE).getUserById(userId);
-//				if (user.getId() != userId) {
-//					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
-//					return;
-//				}
 
 				String avatarPath = user.getAvatarPath();
 				File imgFile = new File(avatarPath);

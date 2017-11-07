@@ -19,6 +19,7 @@ import bg.ittalents.efficientproject.model.pojo.Project;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task;
 import bg.ittalents.efficientproject.model.pojo.User;
+import bg.ittalents.efficientproject.util.IntegerChecker;
 
 /**
  * Servlet implementation class TaskDetailServlet
@@ -34,8 +35,11 @@ public class TaskDetailServlet extends HttpServlet {
 				response.sendRedirect("/LogIn");
 				return;
 			}
-			if (request.getParameter("projectId") != null || request.getParameter("taskId") != null) {
-				int projectId = Integer.parseInt(request.getParameter("projectId"));
+			String projectIdParam = request.getParameter("projectId");
+			String taskIdParam = request.getParameter("taskId");
+			if (projectIdParam != null || taskIdParam != null && IntegerChecker.isInteger(taskIdParam)
+					&& IntegerChecker.isInteger(projectIdParam)) {
+				int projectId = Integer.parseInt(projectIdParam);
 				User user = (User) request.getSession().getAttribute("user");
 				/**
 				 * check if the project is of this admin if the user is admin
@@ -49,12 +53,12 @@ public class TaskDetailServlet extends HttpServlet {
 				Project currentProject = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 				request.setAttribute("project", currentProject);
 
-				int taskId = Integer.parseInt(request.getParameter("taskId"));
+				int taskId = Integer.parseInt(taskIdParam);
 				Task task = ITaskDAO.getDAO(DAOStorageSourse.DATABASE).getTaskById(taskId);
-				User assignee =task.getAssignee();
-				User reporter =task.getReporter();
-				Epic epic =task.getEpic();
-				Sprint sprint =task.getSprint();
+				User assignee = task.getAssignee();
+				User reporter = task.getReporter();
+				Epic epic = task.getEpic();
+				Sprint sprint = task.getSprint();
 				request.setAttribute("assignee", assignee);
 				System.out.println(assignee);
 				request.setAttribute("reporter", reporter);

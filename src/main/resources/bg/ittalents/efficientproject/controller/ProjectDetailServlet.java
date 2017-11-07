@@ -22,6 +22,7 @@ import bg.ittalents.efficientproject.model.pojo.Epic;
 import bg.ittalents.efficientproject.model.pojo.Project;
 import bg.ittalents.efficientproject.model.pojo.Sprint;
 import bg.ittalents.efficientproject.model.pojo.Task.TaskState;
+import bg.ittalents.efficientproject.util.IntegerChecker;
 import bg.ittalents.efficientproject.model.pojo.User;
 
 /**
@@ -39,14 +40,15 @@ public class ProjectDetailServlet extends HttpServlet {
 				response.sendRedirect("./LogIn");
 				return;
 			}
-			if ( request.getParameter("projectId") != null) {
+			String projectIdParam=request.getParameter("projectId");
+			if ( projectIdParam!= null && IntegerChecker.isInteger(projectIdParam)) {
 				User user = (User) request.getSession().getAttribute("user");
 
 				if (!user.isAdmin()) {
 					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
 					return;
 				}
-				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				int projectId = Integer.parseInt(projectIdParam);
 				/**
 				 * check if the project is of this admin
 				 */
