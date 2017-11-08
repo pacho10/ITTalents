@@ -32,18 +32,16 @@ public class TaskDetailServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if (request.getSession(false) == null || request.getSession().getAttribute("user") == null) {
-				response.sendRedirect("/LogIn");
+				response.sendRedirect("./LogIn");
 				return;
 			}
+			
 			String projectIdParam = request.getParameter("projectId");
 			String taskIdParam = request.getParameter("taskId");
-			if (projectIdParam != null || taskIdParam != null && IntegerChecker.isInteger(taskIdParam)
+			if (projectIdParam != null && taskIdParam != null && IntegerChecker.isInteger(taskIdParam)
 					&& IntegerChecker.isInteger(projectIdParam)) {
 				int projectId = Integer.parseInt(projectIdParam);
 				User user = (User) request.getSession().getAttribute("user");
-				/**
-				 * check if the project is of this admin if the user is admin
-				 */
 
 				if (user.isAdmin()
 						&& !IProjectDAO.getDAO(SOURCE_DATABASE).isThisProjectOfThisUser(projectId, user.getId())) {

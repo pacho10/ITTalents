@@ -36,31 +36,10 @@ public class WorkerTasksServlet extends HttpServlet {
 			} else {
 				response.sendRedirect("./LogIn");
 			}
-			 //EffPrjDAOException  | IOException | ServletException | DBException
 		} catch (Exception e) {
-//		try {
-//			try {
-//				response.sendRedirect("error.jsp");
-//				e.printStackTrace();
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
-//			
-//			e.printStackTrace();
-//		} catch (EfficientProjectDAOException | IOException | ServletException | DBException e1) {
-//			try {
-//				response.sendRedirect("error.jsp");
-//				e1.printStackTrace();
-//			} catch (IOException e11) {
-//				e11.printStackTrace();
-//			}
-//		}
-//	}
-			
 			try {
 				response.sendRedirect("./error.jsp");
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			e.printStackTrace();

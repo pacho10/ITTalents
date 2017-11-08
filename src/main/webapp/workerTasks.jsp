@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page isELIgnored="false"%>
+<%@ page import="bg.ittalents.efficientproject.util.Datetime"%>
 <%@ page errorPage="error.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -63,15 +64,14 @@
 									<c:forEach var="t" items="${tasks}">
 										<tr>
 											<td>${t.type.name}</td>
-											<td>${t.summary}</td>
+											<td><a href="./taskdetail?taskId=${t.id}&projectId=${project.id}">${t.summary}</a></td>
 											<td>${t.status}</td>
-											<td>${t.updatedDate}</td>
-											<td>${t.reporter.firstName}</td>
-											<td>${t.assignee.firstName}</td>
-											<td>
-											<a class="btn btn-info" href="http://127.0.0.1/final_project/finishtask?taskId=${t.id}">Finish</a>
-											</td>
-										</tr>
+											<td>${Datetime.timestampAsString(t.updatedDate)}</td>
+											<td><a href="./profileDetail?userId=${t.reporter.id}"><span>${t.reporter.firstName}</span><span> </span><span>${t.reporter.lastName}</span></a></td>
+											<td><a href="./profileDetail?userId=${t.assignee.id}"><span>${t.assignee.firstName}</span><span> </span><span>${t.assignee.lastName}</span></a></td>
+											<td><a class="btn btn-info"
+												href="./finishtask?taskId=${t.id}">Finish</a></td>
+											<%-- <td>Cancel Button</td> --%>
 									</c:forEach>
 								</table>
 							</div>

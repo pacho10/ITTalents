@@ -17,6 +17,7 @@ import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 import bg.ittalents.efficientproject.model.pojo.User;
 import bg.ittalents.efficientproject.util.CredentialsChecks;
+import bg.ittalents.efficientproject.util.SendingMails;
 
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
@@ -24,13 +25,13 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 public class SignUpServlet extends HttpServlet {
 
+	private static final String SEND_EMAIL_SUBJECT = "efficientproject sign up";
 	private static final int MAX_LENGTH_INPUT_CHARACTERS = 45;
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
+	
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-
-			// dissable cache:
 			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
 			response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
 			response.setHeader("Expires", "0"); // Proxies.
@@ -63,66 +64,56 @@ public class SignUpServlet extends HttpServlet {
 			if (firstName.length() > MAX_LENGTH_INPUT_CHARACTERS || lastName.length() > MAX_LENGTH_INPUT_CHARACTERS
 					|| email.length() > MAX_LENGTH_INPUT_CHARACTERS || password.length() > MAX_LENGTH_INPUT_CHARACTERS
 					|| organization.length() > MAX_LENGTH_INPUT_CHARACTERS) {
-				request.setAttribute("errorMessage",
-						"Characters number limit reached-no more than " + MAX_LENGTH_INPUT_CHARACTERS + "allowed");
-				dispatcher.forward(request, response);
+				forwardWithErrorMessage(request, response, dispatcher,"Characters number limit reached-no more than " + MAX_LENGTH_INPUT_CHARACTERS + "allowed");
 				return;
 			}
 			if(firstName.length()==0 || lastName.length()==0) {
-				request.setAttribute("errorMessage", "Empty first or last name! Try Again");
-				dispatcher.forward(request, response);
+				forwardWithErrorMessage(request, response, dispatcher,"Empty first or last name! Try Again");
 				return;
 			}
 
 			if (!CredentialsChecks.isMailValid(email)) {
-				request.setAttribute("errorMessage", "Invalid e-mail! Try Again");
-				dispatcher.forward(request, response);
+				forwardWithErrorMessage(request, response, dispatcher,"Invalid e-mail! Try Again");
 				return;
 			}
 
 			if (!password.equals(reppassword)) {
-				request.setAttribute("errorMessage", "Passwords do no match please make sure they do!");
-				dispatcher.forward(request, response);
+				forwardWithErrorMessage(request, response, dispatcher,"Passwords do no match please make sure they do!");
 				return;
 			}
 
 			if (!CredentialsChecks.isPaswordStrong(password)) {
-				request.setAttribute("errorMessage",
-						"Password must contain 5 symbols and at least one number and letter");
-				dispatcher.forward(request, response);
+				forwardWithErrorMessage(request, response, dispatcher,"Password must contain 5 symbols and at least one number and letter");
 				return;
 			}
 
 			if (IUserDAO.getDAO(SOURCE_DATABASE).isThereSuchAUser(email)) {
-				request.setAttribute("errorMessage", "User with such email already exists, use another email !");
-				dispatcher.forward(request, response);
+				forwardWithErrorMessage(request, response, dispatcher,"User with such email already exists, use another email !");
 				return;
 			}
 
 			if (IOrganizationDAO.getDAO(SOURCE_DATABASE).isThereSuchOrganization(organization)) {
-				request.setAttribute("errorMessage", "This organization is already registered !");
-				dispatcher.forward(request, response);
+				forwardWithErrorMessage(request, response, dispatcher,"This organization is already registered !");
 				return;
 			}
 
-			if (isAdmin && organization.equals("")) {
-				request.setAttribute("errorMessage", "This organization name is empty !");
-				dispatcher.forward(request, response);
+			if (isAdmin && organization.length()==0) {
+				forwardWithErrorMessage(request, response, dispatcher,"This organization name is empty !");
 				return;
 			}
 
 			// adding the user to the database:
 			User user = null;
+			int UserId; 
 			if (!isAdmin) {
 				user = new User(firstName, lastName, email, password, false);
-				int UserId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserWorker(user);
-				user.setId(UserId);
+				UserId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserWorker(user);
 			} else {
 				user = new User(firstName, lastName, email, password, true, new Organization(organization));
-				int UserId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserAdmin(user);
-				user.setId(UserId);
+				UserId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserAdmin(user);
 			}
-
+			user.setId(UserId);
+			SendingMails.sendEmail(email, SEND_EMAIL_SUBJECT, messageContent(firstName,lastName,password));
 			request.getSession().setAttribute("user", user);
 			response.sendRedirect("./ProfileEdit");
 		} catch (EfficientProjectDAOException | DBException | IOException | ServletException e) {
@@ -134,6 +125,14 @@ public class SignUpServlet extends HttpServlet {
 			}
 		}
 	}
-
+	private void forwardWithErrorMessage(HttpServletRequest request, HttpServletResponse response,
+			RequestDispatcher dispatcher, String errorMessage) throws ServletException, IOException {
+		request.setAttribute("errorMessage", errorMessage);
+		dispatcher.forward(request, response);
+	}
 	
+	private String messageContent(String firstName,String lastName,String password) {
+		return "Dear "+firstName+" "+lastName+", "+"\n\n you succesfully signed into our website efficientproject.bj!"
+				+ "\n\n Your password is: "+password;
+	}
 }

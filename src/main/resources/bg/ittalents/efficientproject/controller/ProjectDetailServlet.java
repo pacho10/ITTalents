@@ -49,9 +49,6 @@ public class ProjectDetailServlet extends HttpServlet {
 					return;
 				}
 				int projectId = Integer.parseInt(projectIdParam);
-				/**
-				 * check if the project is of this admin
-				 */
 				if (!IProjectDAO.getDAO(SOURCE_DATABASE).isThisProjectOfThisUser(projectId, user.getId())) {
 					request.getRequestDispatcher("errorNotAuthorized.jsp").forward(request, response);
 					return;
@@ -67,13 +64,6 @@ public class ProjectDetailServlet extends HttpServlet {
 				request.setAttribute("tasksOpen", tasksNumberPerState.get(TaskState.OPEN));
 				request.setAttribute("tasksDone", tasksNumberPerState.get(TaskState.RESOLVED));
 				request.setAttribute("tasksInProgress", tasksNumberPerState.get(TaskState.INPROGRESS));
-//				tasksNumberPerState
-//				response.setCharacterEncoding("UTF-8");
-//				response.setContentType("application/json");
-//				String tasksPerStateJSON = new Gson().toJson(IProjectDAO.getDAO(SOURCE_DATABASE).tasksNumberPerState(projectId));
-//				request.setAttribute("tasksPerStateJSON", tasksPerStateJSON);
-//				System.out.println(tasksPerStateJSON);
-//				response.getWriter().println(s);
 			
 				Project currentProject = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
 				request.setAttribute("project", currentProject);

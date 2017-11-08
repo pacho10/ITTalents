@@ -93,4 +93,5 @@ public class EpicDAO extends AbstractDBConnDAO implements IEpicDAO {
 		}
 		return epic;
 	}
+
 }

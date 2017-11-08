@@ -63,7 +63,6 @@
 				<h4 class="text-center text-info">Task details</h4>
 				<div id="content">
 					<div>
-						<%-- <span>${project.name}</span> <span>${project.deadline}</span> --%>
 						<div>
 							<div class="table-responsive">
 								<table class="table"  width= 50>
@@ -83,7 +82,7 @@
 										<td>Reporter:</td>
 										<td><img id="avatar2"
 											src="./ImgOutputServlet?userid=${reporter.id}"
-											class="img-rounded"> ${reporter.firstName}</td>
+											class="img-rounded"><a href="./profileDetail?userId=${reporter.id}"><span>${reporter.firstName}</span><span> </span><span>${reporter.lastName}</span></a></td>
 									</tr>
 									<tr>
 										<td>Assignee:</td>
@@ -91,7 +90,7 @@
 											<c:when test="${not empty assignee}">
 												<td><img id="avatar2"
 													src="./ImgOutputServlet?userid=${assignee.id}"
-													class="img-rounded"> ${assignee.firstName}</td>
+													class="img-rounded"><a href="./profileDetail?userId=${assignee.id}"><span>${assignee.firstName}</span><span> </span><span>${assignee.lastName}</span></a></td>
 											</c:when>
 											<c:otherwise>
 												<td>Not assigned yet</td>

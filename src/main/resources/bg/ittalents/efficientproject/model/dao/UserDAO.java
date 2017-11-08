@@ -33,6 +33,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	private static final String UPDATE_WORKER_STATE_TO_UNEMPLOYED = "UPDATE users SET `is_employed`='0' WHERE `id`=?;";
 	private static final String INSERT_WORKER_INTO_PROJECTS_WORKERS_HISTORY = "insert into users_projects_history values (?,?);";
 	private static final String RETURN_CURRENT_PROJECT_OF_WORKER = "select h.project_id from users_projects_history h join projects p on p.id=h.project_id where h.users_id=? and p.deadline > CURDATE();";
+	private static final String DELETE_WORKER_FROM_USERS = "delete from users where id=";
 
 	private static final Set<User> allUnemployedWorkers = new LinkedHashSet<>();
 
@@ -52,6 +53,21 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 			} catch (DBException e1) {
 				e1.printStackTrace();
 			}
+		}
+	}
+
+	public boolean removeUser(int userId) throws EfficientProjectDAOException, DBException {
+		if (userId < 0) {
+			throw new EfficientProjectDAOException("There is no user to remove!");
+		}
+		try {
+			Statement st = getCon().createStatement();
+			if (st.executeUpdate(DELETE_WORKER_FROM_USERS + userId) > 0) {
+				return true;
+			}
+			throw new EfficientProjectDAOException("could not remove the user");
+		} catch (SQLException e) {
+			throw new DBException("remove user failed", e);
 		}
 	}
 
@@ -123,7 +139,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 
 			ps.executeUpdate();
 			// adding to the enemployed workers list:
-			addWorkerToUnemployedWorkers(user);// TODO transaction?
+			addWorkerToUnemployedWorkers(user);
 			ResultSet rs = ps.getGeneratedKeys();
 			if (rs.next()) {
 				return rs.getInt(1);
@@ -211,7 +227,7 @@ public class UserDAO extends AbstractDBConnDAO implements IUserDAO {
 	}
 
 	@Override
- 	public boolean updateUsersDetails(User user) throws DBException, EfficientProjectDAOException {
+	public boolean updateUsersDetails(User user) throws DBException, EfficientProjectDAOException {
 		if (user == null) {
 			throw new EfficientProjectDAOException("Invalid input!");
 		}

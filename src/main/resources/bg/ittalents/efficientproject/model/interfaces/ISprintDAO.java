@@ -1,5 +1,7 @@
 package bg.ittalents.efficientproject.model.interfaces;
 
+import java.util.Map;
+
 import javax.activation.UnsupportedDataTypeException;
 
 import bg.ittalents.efficientproject.model.dao.SprintDAO;
@@ -20,4 +22,6 @@ public interface ISprintDAO {
 	Sprint getSprintBId(int sprintId) throws DBException, EfficientProjectDAOException;
 
 	int createSprint(Sprint sprint) throws DBException, EfficientProjectDAOException;
+
+	Map<String, Integer> tasksPerSprints(int projectId) throws EfficientProjectDAOException, DBException;
 }
