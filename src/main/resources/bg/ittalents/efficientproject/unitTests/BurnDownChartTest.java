@@ -23,7 +23,13 @@ public class BurnDownChartTest {
 	@Test
 	public void testReturnAllTasksOfAProjectCount() throws UnsupportedDataTypeException, EfficientProjectDAOException, DBException {
 		int projectId=3;
-		int allTasksProject =ISprintDAO.getDAO(DAOStorageSourse.DATABASE).AllTasksOfAProject(projectId);
+		int allTasksProject =ISprintDAO.getDAO(DAOStorageSourse.DATABASE).countTasksOfAProject(projectId);
 		System.out.println(allTasksProject);
+	}
+	@Test
+	public void testBurnDownChartData() throws UnsupportedDataTypeException, EfficientProjectDAOException, DBException {
+		int projectId=3;
+		Map<String,Integer> values=ISprintDAO.getDAO(DAOStorageSourse.DATABASE).burnDownChart(projectId);
+		System.out.println(values);
 	}
 }

@@ -4,8 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
@@ -99,7 +102,7 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 			while (rs.next()) {
 				tasksPerSprints.put(rs.getString(2), rs.getInt(3));
 			}
-			return tasksPerSprints;//TODO mozhe da vyrne prazen map---->?ili po dobre da hvyrli exceprion??????
+			return tasksPerSprints;
 
 		} catch (SQLException e) {
 			throw new DBException("cannot find project", e);
@@ -116,7 +119,7 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 			if (rs.next()) {
 				return rs.getInt(1);
 			}
-			throw new EfficientProjectDAOException("No tasks found for this project");
+			return 0;
 
 		} catch (SQLException e) {
 			throw new DBException("cannot find current sprint", e);
@@ -124,9 +127,20 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 	}
 
 	public Map<String, Integer> burnDownChart(int projectId) throws EfficientProjectDAOException, DBException {
+		int allTasksProject = countTasksOfAProject(projectId);
+
+		Map<String, Integer> burndownChartData = new LinkedHashMap<>();
+		burndownChartData.put("all tasks count", allTasksProject);
+
 		Map<String, Integer> tasksPerSprints = tasksPerSprints(projectId);
-		int allTasksProject=countTasksOfAProject(projectId);
-		
+		int previous = allTasksProject;
+		for (Entry e : tasksPerSprints.entrySet()) {
+			int sprintTasksCount = (Integer) e.getValue();
+			String sprintName=(String) e.getKey();
+			burndownChartData.put(sprintName, previous - sprintTasksCount);
+			previous -= sprintTasksCount;
+		}
+		return burndownChartData;
 	}
 
 }
