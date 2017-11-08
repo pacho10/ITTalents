@@ -103,7 +103,7 @@
 									</tr>
 									<tr>
 										<td>Estimate time :</td>
-										<td>${task.estimate}</td>
+										<td>${task.estimate} hours</td>
 									</tr>
 									<tr>
 										<td>Remaining time:</td>

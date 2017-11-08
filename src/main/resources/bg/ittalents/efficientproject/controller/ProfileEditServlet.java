@@ -28,8 +28,7 @@ import bg.ittalents.efficientproject.util.CredentialsChecks;
 import bg.ittalents.efficientproject.util.Encrypter;
 
 @WebServlet("/ProfileEdit")
-@MultipartConfig(maxFileSize = 16177215) // upload file's size up to 16MB
-
+@MultipartConfig(maxFileSize = 16177215)     
 public class ProfileEditServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public static final String IMAGES_PATH = INFO.IMAGES_PATH;
@@ -73,13 +72,24 @@ public class ProfileEditServlet extends HttpServlet {
 			
 			User user = (User) request.getSession().getAttribute("user");
 			int userId = user.getId();
-
-			String firstName = escapeHtml4(request.getParameter("first-name")).trim();
-			String lastName = escapeHtml4(request.getParameter("last-name")).trim();
-			String email = escapeHtml4(request.getParameter("email")).trim();
-			String oldPass = escapeHtml4(request.getParameter("old-password"));
-			String newPass = escapeHtml4(request.getParameter("new-password"));
-			String reNewPass = escapeHtml4(request.getParameter("rep-new-password"));
+			
+			String firstNameParam = request.getParameter("first-name");
+			String lastNameParam = request.getParameter("last-name");
+			String emailParam = request.getParameter("email");
+			String oldPassParam = request.getParameter("old-password");
+			String newPassParam = request.getParameter("new-password");
+			String reNewPassParam = request.getParameter("rep-new-password");
+			
+			if(firstNameParam == null  && lastNameParam == null && emailParam == null && oldPassParam == null && newPassParam == null && reNewPassParam == null) {
+				request.getRequestDispatcher("error2.jsp").forward(request, response);
+				return;
+			}
+			String firstName = escapeHtml4(firstNameParam).trim();
+			String lastName = escapeHtml4(lastNameParam).trim();
+			String email = escapeHtml4(emailParam).trim();
+			String oldPass = escapeHtml4(oldPassParam);
+			String newPass = escapeHtml4(newPassParam);
+			String reNewPass = escapeHtml4(reNewPassParam);
 			Part avatarPart = request.getPart("avatar");
 			
 			boolean firstNameNotEmptyandDifferent = firstName.length() > 0 && !firstName.equals(user.getFirstName());
@@ -93,10 +103,6 @@ public class ProfileEditServlet extends HttpServlet {
 				String avatarPath = IMAGES_PATH + File.separator + userId + ".jpg";
 				File myFile = new File(avatarPath);
 
-				// TODO String mimeType = Magic.getMagicMatch(myFile, false).getMimeType();//
-				// TODO size and type check!!!
-				// System.out.println(mimeType);
-				// if (!mimeType.equals("jpeg") || !mimeType.equals("png")) {
 				if (!myFile.exists()) {
 					myFile.createNewFile();
 				}
@@ -109,12 +115,6 @@ public class ProfileEditServlet extends HttpServlet {
 					}
 				}
 				user.setAvatarPath(avatarPath);
-				// } else {
-				// request.setAttribute("errorMessage", "This file should be .jpeg or .png
-				// format!");
-				// dispatcher.forward(request, response);
-				// return;
-				// }
 			}
 
 
