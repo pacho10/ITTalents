@@ -30,7 +30,7 @@
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
 
-	<jsp:include page="navBarAdmin.jsp"></jsp:include>
+	<jsp:include page="navBarWorker.jsp"></jsp:include>
 
 	<div id="wrapper" class="toggled">
 		<jsp:include page="sidebarProject.jsp"></jsp:include>
@@ -42,7 +42,7 @@
 				<hr>
 
 				<div id="content">
-					<h3 class="text-center text-danger">No current sprint, <a href ="./createsprint?projectId=${project.id}&all=1">start new one here</a></h3>
+					<h3 class="text-center text-danger">No current sprint now!</h3>
 				</div>
 
 			</div>
