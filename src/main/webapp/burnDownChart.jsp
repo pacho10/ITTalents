@@ -45,12 +45,13 @@ canvas {
 }
 </style>
 <script>
+	var myObj;
 	window.onload = function() {
 		$.ajax({
 			type : "GET",
 			url : "./burnDownChart?projectId=${projectId}",
 			success : function(burndown) {
-				var myObj = burndown;
+				myObj = burndown;
 				var keyNames = Object.keys(myObj);
 				console.log(keyNames);
 				var values = Object.values(myObj);
@@ -73,7 +74,7 @@ canvas {
 					container.appendChild(div);
 
 					var ctx = canvas.getContext('2d');
-					var config = createConfig(details, values,keyNames);
+					var config = createConfig(details, values, keyNames);
 					new Chart(ctx, config);
 				});
 
@@ -88,7 +89,7 @@ canvas {
 		return {
 			type : 'line',
 			data : {
-				labels :  keyNames ,
+				labels : keyNames,
 				datasets : [ {
 					label : 'tasks number: ',
 					steppedLine : details.steppedLine,
@@ -105,6 +106,18 @@ canvas {
 				}
 			}
 		};
+	}
+
+	function myFunction1() {
+		var stringJson = JSON.stringify(myObj);
+		$.ajax({
+			type : "POST",
+			url : "./SaveStatistics",
+			data : {
+				statistics : stringJson
+			}
+
+		});
 	}
 </script>
 
@@ -127,7 +140,11 @@ canvas {
 
 					<div class="container"></div>
 				</div>
+				<div>
+					<button onclick="myFunction1()" class="btn btn-info btn-sm">Generate
+						PDF</button>
 
+				</div>
 			</div>
 
 		</div>
