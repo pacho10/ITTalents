@@ -1,4 +1,3 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:if test="${all==1}">
 	<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -24,7 +23,7 @@
 
 </head>
 <body>
-	<c:if test="${ sessionScope.user == null }">
+	<c:if test="${ sessionScope.user == null && not sessionScope.user.admin }">
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
 

@@ -3,7 +3,9 @@
 	pageEncoding="UTF-8"%>
 <div id="createproject" style="margin-top: 50px;"
 	class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-
+	<c:if test="${ sessionScope.user == null && not sessionScope.user.admin }">
+		<c:redirect url="/LogIn"></c:redirect>
+	</c:if>
 	<div class="panel panel-info">
 		<div class="panel-heading">
 

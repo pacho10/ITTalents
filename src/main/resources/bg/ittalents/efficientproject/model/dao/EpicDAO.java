@@ -86,7 +86,7 @@ public class EpicDAO extends AbstractDBConnDAO implements IEpicDAO {
 
 			if (rs.next()) {
 				Project project = IProjectDAO.getDAO(SOURCE_DATABASE).getProjectByID(rs.getInt(5));
-				epic = new Epic(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), project);
+				epic = new Epic(rs.getInt(1), StringEscapeUtils.escapeHtml4(rs.getString(2)), rs.getInt(3), rs.getString(4), project);
 			}
 		} catch (SQLException e) {
 			throw new DBException("can not find this epic",e);
