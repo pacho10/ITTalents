@@ -1,6 +1,8 @@
 package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
@@ -42,7 +46,7 @@ public class CreateEpicServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if (request.getSession().getAttribute("user") != null) {
+			if (request.getSession() != null && request.getSession().getAttribute("user") != null) {
 				int projectId = Integer.parseInt(request.getParameter("projectId"));
 				request.setAttribute("projectId", projectId);
 				List<Project> projects = new ArrayList<>();
@@ -53,6 +57,8 @@ public class CreateEpicServlet extends HttpServlet {
 				request.setAttribute("projects", projects);
 				RequestDispatcher rd = request.getRequestDispatcher("./createEpic.jsp");
 				rd.forward(request, response);
+			} else {
+				response.sendRedirect("./LogIn");
 			}
 		} catch (EfficientProjectDAOException | DBException | ServletException | IOException e) {
 			try {
@@ -67,19 +73,28 @@ public class CreateEpicServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			String name = request.getParameter("name");
-			int estimate = Integer.parseInt(request.getParameter("estimate"));
-			String description = request.getParameter("description");
-			int projectId = Integer.parseInt(request.getParameter("projectId"));
-			// int projectId = Integer.parseInt(request.getParameter("projects"));
+			if (request.getSession() != null && request.getSession().getAttribute("user") != null) {
+				String name = request.getParameter("name");
+				name = URLEncoder.encode(name, "ISO-8859-1");
+				name = URLDecoder.decode(name, "UTF-8");
+				int estimate = Integer.parseInt(request.getParameter("estimate"));
+				String description = request.getParameter("description");
+				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				// int projectId = Integer.parseInt(request.getParameter("projects"));
 
-			Project project = null;
+				Project project = null;
 
-			project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
-			Epic epicToAdd = new Epic(name, estimate, description, project);
-			int id = IEpicDAO.getDAO(DAOStorageSourse.DATABASE).createEpic(epicToAdd);
+				project = IProjectDAO.getDAO(DAOStorageSourse.DATABASE).getProjectByID(projectId);
+				Epic epicToAdd = new Epic(name, estimate, description, project);
+				int id = IEpicDAO.getDAO(DAOStorageSourse.DATABASE).createEpic(epicToAdd);
+				
+				request.setCharacterEncoding("utf-8");
 
-			response.sendRedirect("./projectdetail?projectId=" + project.getId());
+				response.setCharacterEncoding("utf-8");
+				response.sendRedirect("./projectdetail?projectId=" + project.getId());
+			} else {
+
+			}
 		} catch (EfficientProjectDAOException | IOException | DBException e) {
 			try {
 				response.sendRedirect("error.jsp");

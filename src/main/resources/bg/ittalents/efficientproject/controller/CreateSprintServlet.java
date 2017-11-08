@@ -1,9 +1,10 @@
 package bg.ittalents.efficientproject.controller;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -11,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
@@ -75,23 +78,21 @@ public class CreateSprintServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if (request.getSession().getAttribute("user") != null) {
-				int projectId = Integer.parseInt(request.getParameter("projectId"));
+			if (request.getSession() != null && request.getSession().getAttribute("user") != null) {
 				String name = request.getParameter("name");
+				name = URLEncoder.encode(name, "ISO-8859-1");
+				name = URLDecoder.decode(name, "UTF-8");
 				int duration = Integer.parseInt(request.getParameter("duration"));
-				Sprint sprintToAdd = new Sprint(name, duration, projectId);
+				int projectId = Integer.parseInt(request.getParameter("projectId"));
+				Date startDate = new Date(System.currentTimeMillis());
+				Sprint sprintToAdd = new Sprint(name,startDate, duration, projectId);
+				
 				int id = ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
+				
+				response.sendRedirect("./projectdetail?projectId=" + projectId);
 			} else {
 				response.sendRedirect("./LogIn");
 			}
-			String name = request.getParameter("name");
-			int duration = Integer.parseInt(request.getParameter("duration"));
-			int projectId = Integer.parseInt(request.getParameter("projectId"));
-
-			Sprint sprintToAdd = new Sprint(name, duration, projectId);
-			ISprintDAO.getDAO(DAOStorageSourse.DATABASE).createSprint(sprintToAdd);
-
-			response.sendRedirect("./projectdetail?projectId=" + projectId);
 		} catch (DBException | IOException | EfficientProjectDAOException e) {
 			try {
 				response.sendRedirect("./error.jsp");

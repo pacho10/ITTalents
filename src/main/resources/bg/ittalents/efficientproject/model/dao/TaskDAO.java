@@ -1,5 +1,8 @@
 package bg.ittalents.efficientproject.model.dao;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.activation.UnsupportedDataTypeException;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
@@ -90,8 +95,18 @@ public class TaskDAO extends AbstractDBConnDAO implements ITaskDAO {
 					assignee = IUserDAO.getDAO(SOURCE_DATABASE).getUserById(rs.getInt(13));
 				}
 				Epic epic = IEpicDAO.getDAO(SOURCE_DATABASE).getEpicById(rs.getInt(14));
-
-				return new Task(rs.getInt(1), type, rs.getString(3), rs.getString(4), rs.getFloat(5),
+				String summary = StringEscapeUtils.escapeHtml4(rs.getString(3));
+				try {
+					summary = URLEncoder.encode(summary, "ISO-8859-1");
+					summary = URLDecoder.decode(summary, "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+					throw new DBException("Cannot check for task right now!Try again later", e);
+				}
+				
+				
+				return new Task(rs.getInt(1), type, summary, 
+						StringEscapeUtils.escapeHtml4(rs.getString(4)), rs.getFloat(5),
 						rs.getTimestamp(6), rs.getTimestamp(7), rs.getTimestamp(8), rs.getTimestamp(9),
 						rs.getTimestamp(10), sprint, reporter, assignee, epic);
 

@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.activation.UnsupportedDataTypeException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
 import bg.ittalents.efficientproject.model.interfaces.DAOStorageSourse;
@@ -62,7 +64,7 @@ public class EpicDAO extends AbstractDBConnDAO implements IEpicDAO {
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				epics.add(new Epic(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), project));
+				epics.add(new Epic(rs.getInt(1), StringEscapeUtils.escapeHtml4(rs.getString(2)), rs.getInt(3), rs.getString(4), project));
 			}
 		} catch (SQLException e) {
 			throw new DBException("can not find epics for this project",e);
@@ -84,7 +86,7 @@ public class EpicDAO extends AbstractDBConnDAO implements IEpicDAO {
 
 			if (rs.next()) {
 				Project project = IProjectDAO.getDAO(SOURCE_DATABASE).getProjectByID(rs.getInt(5));
-				epic = new Epic(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getString(4), project);
+				epic = new Epic(rs.getInt(1), StringEscapeUtils.escapeHtml4(rs.getString(2)), rs.getInt(3), rs.getString(4), project);
 			}
 		} catch (SQLException e) {
 			throw new DBException("can not find this epic",e);

@@ -1,5 +1,7 @@
 package bg.ittalents.efficientproject.model.dao;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import bg.ittalents.efficientproject.model.exception.DBException;
 import bg.ittalents.efficientproject.model.exception.EfficientProjectDAOException;
@@ -63,7 +67,7 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 
 			Sprint sprint = null;
 			if (rs.next()) {
-				sprint = new Sprint(rs.getInt(1), rs.getString(2), rs.getDate(3), rs.getInt(4), rs.getInt(5));
+				sprint = new Sprint(rs.getInt(1), StringEscapeUtils.escapeHtml4(rs.getString(2)), rs.getDate(3), rs.getInt(4), rs.getInt(5));
 			}
 			return sprint;// TODO handle in servlet
 		} catch (SQLException e) {
@@ -82,7 +86,7 @@ public class SprintDAO extends AbstractDBConnDAO implements ISprintDAO {
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()) {
-				return new Sprint(rs.getInt(1), rs.getString(2), rs.getDate(3), rs.getInt(4), rs.getInt(5));
+				return new Sprint(rs.getInt(1), StringEscapeUtils.escapeHtml4(rs.getString(2)), rs.getDate(3), rs.getInt(4), rs.getInt(5));
 			}
 		} catch (SQLException e) {
 			throw new DBException("cannot find current sprint");

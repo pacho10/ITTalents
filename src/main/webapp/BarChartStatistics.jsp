@@ -37,13 +37,13 @@
 		<jsp:include page="sidebarWorker.jsp"></jsp:include>
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-			<div id="content">
+			<div id="content" style="width: 50%">
 				<div class="container-fluid" id="dashboard">
 					<h3 class="text-center text-info">${project.name}</h3>
 					<h4 class="text-center text-info">My open tasks</h4>
 					<hr>
 				</div>
-				<canvas id="chart" width="100px" height="100px"></canvas>
+				<canvas id="chart"></canvas>
 			</div>
 		</div>
 		<!-- /#page-content-wrapper -->

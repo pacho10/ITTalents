@@ -36,15 +36,13 @@ public class WorkerTasksServlet extends HttpServlet {
 			} else {
 				response.sendRedirect("./LogIn");
 			}
-		} catch (EfficientProjectDAOException | IOException | ServletException | DBException e) {
+		} catch (Exception e) {
 			try {
-				response.sendRedirect("error.jsp");
-				e.printStackTrace();
+				response.sendRedirect("./error.jsp");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-
+			e.printStackTrace();
 		}
 	}
-
 }

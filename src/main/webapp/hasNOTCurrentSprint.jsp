@@ -30,7 +30,7 @@
 		<c:redirect url="/LogIn"></c:redirect>
 	</c:if>
 
-	<jsp:include page="navBarAdmin.jsp"></jsp:include>
+	<jsp:include page="navBarWorker.jsp"></jsp:include>
 
 	<div id="wrapper" class="toggled">
 		<jsp:include page="sidebarProject.jsp"></jsp:include>

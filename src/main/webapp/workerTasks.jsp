@@ -72,7 +72,6 @@
 											<td><a class="btn btn-info"
 												href="./finishtask?taskId=${t.id}">Finish</a></td>
 											<%-- <td>Cancel Button</td> --%>
-										</tr>
 									</c:forEach>
 								</table>
 							</div>
@@ -84,16 +83,9 @@
 						<jsp:include page="hasNOTCurrentProject.jsp"></jsp:include>
 					</c:otherwise>
 				</c:choose>
-
 			</div>
 		</div>
 		<!-- /#page-content-wrapper -->
 	</div>
-	<!-- /#wrapper -->
-	<div>
-		
-	</div>
-	
-	
 </body>
 </html>

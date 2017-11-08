@@ -83,7 +83,7 @@
 				<div class="form-group">
 					<label for="estimate" class="col-md-3 control-label">Estimate</label>
 					<div class="col-md-9">
-						<input type="text" id="estimate" class="form-control"
+						<input type="number" id="estimate" class="form-control"
 							name="estimate" placeholder="Estimate" required>
 					</div>
 				</div>

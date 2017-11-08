@@ -10,7 +10,7 @@ public class Sprint {
 	private int duration;
 	private int project_id;
 
-	public Sprint(String name, int duration,int project_id) {
+	public Sprint(String name, Date startDate, int duration,int project_id) {
 		this.name = name;
 		this.duration = duration;
 		this.setProject_id(project_id);
@@ -18,7 +18,7 @@ public class Sprint {
 	}
 
 	public Sprint(int id, String name, Date startDate, int duration,int project_id) {
-		this(name, duration, project_id);
+		this(name, startDate, duration, project_id);
 		this.id = id;
 		this.startDate=startDate;
 		
