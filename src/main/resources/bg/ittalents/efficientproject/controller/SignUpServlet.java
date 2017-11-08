@@ -17,6 +17,7 @@ import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 import bg.ittalents.efficientproject.model.pojo.User;
 import bg.ittalents.efficientproject.util.CredentialsChecks;
+import bg.ittalents.efficientproject.util.SendingMails;
 
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
@@ -24,8 +25,10 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 public class SignUpServlet extends HttpServlet {
 
+	private static final String SEND_EMAIL_SUBJECT = "efficientproject sign up";
 	private static final int MAX_LENGTH_INPUT_CHARACTERS = 45;
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
+	
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -101,16 +104,16 @@ public class SignUpServlet extends HttpServlet {
 
 			// adding the user to the database:
 			User user = null;
+			int UserId; 
 			if (!isAdmin) {
 				user = new User(firstName, lastName, email, password, false);
-				int UserId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserWorker(user);
-				user.setId(UserId);
+				UserId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserWorker(user);
 			} else {
 				user = new User(firstName, lastName, email, password, true, new Organization(organization));
-				int UserId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserAdmin(user);
-				user.setId(UserId);
+				UserId = IUserDAO.getDAO(DAOStorageSourse.DATABASE).addUserAdmin(user);
 			}
-
+			user.setId(UserId);
+			SendingMails.sendEmail(email, SEND_EMAIL_SUBJECT, messageContent(firstName,lastName,password));
 			request.getSession().setAttribute("user", user);
 			response.sendRedirect("./ProfileEdit");
 		} catch (EfficientProjectDAOException | DBException | IOException | ServletException e) {
@@ -128,4 +131,8 @@ public class SignUpServlet extends HttpServlet {
 		dispatcher.forward(request, response);
 	}
 	
+	private String messageContent(String firstName,String lastName,String password) {
+		return "Dear "+firstName+" "+lastName+", "+"\n\n you succesfully signed into our website efficientproject.bj!"
+				+ "\n\n Your password is: "+password;
+	}
 }

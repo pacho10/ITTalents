@@ -15,6 +15,7 @@ import bg.ittalents.efficientproject.model.interfaces.IProjectDAO;
 import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.User;
 import bg.ittalents.efficientproject.util.IntegerChecker;
+import bg.ittalents.efficientproject.util.SendingMails;
 
 /**
  * Servlet implementation class addWorkerToProjectServlet
@@ -23,6 +24,7 @@ import bg.ittalents.efficientproject.util.IntegerChecker;
 public class AddWorkerToProjectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final DAOStorageSourse SOURCE_DATABASE = DAOStorageSourse.DATABASE;
+	private static final String SEND_EMAIL_SUBJECT = "added to new efficient project";
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -56,6 +58,9 @@ public class AddWorkerToProjectServlet extends HttpServlet {
 
 				int userId = Integer.parseInt(userIdParam);
 				IUserDAO.getDAO(SOURCE_DATABASE).addWorkerToProject(userId, projectId);
+				
+				User recepient=IUserDAO.getDAO(SOURCE_DATABASE).getUserById(userId);
+				SendingMails.sendEmail(recepient.getEmail(), SEND_EMAIL_SUBJECT, messageContent(user.getFirstName(),user.getLastName()));
 				response.sendRedirect("./projectdetail?projectId=" + projectId);
 			} else {
 				request.getRequestDispatcher("error2.jsp").forward(request, response);
@@ -68,6 +73,10 @@ public class AddWorkerToProjectServlet extends HttpServlet {
 			}
 		}
 
+	}
+	private String messageContent(String firstName,String lastName) {
+		return "Dear "+firstName+" "+lastName+", "+"\n\n you you have been added to new project, for extra information, please log in efficientproject.bg";
+				
 	}
 
 }
