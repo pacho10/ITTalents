@@ -17,6 +17,7 @@ import bg.ittalents.efficientproject.model.interfaces.IUserDAO;
 import bg.ittalents.efficientproject.model.pojo.Organization;
 import bg.ittalents.efficientproject.model.pojo.User;
 import bg.ittalents.efficientproject.util.CredentialsChecks;
+import bg.ittalents.efficientproject.util.Encrypter;
 import bg.ittalents.efficientproject.util.SendingMails;
 
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
@@ -114,6 +115,7 @@ public class SignUpServlet extends HttpServlet {
 			}
 			user.setId(UserId);
 			SendingMails.sendEmail(email, SEND_EMAIL_SUBJECT, messageContent(firstName,lastName,password));
+			user.setPassword(Encrypter.encrypt(password));
 			request.getSession().setAttribute("user", user);
 			response.sendRedirect("./ProfileEdit");
 		} catch (EfficientProjectDAOException | DBException | IOException | ServletException e) {

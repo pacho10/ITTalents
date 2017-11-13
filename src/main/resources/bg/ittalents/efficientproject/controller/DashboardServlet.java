@@ -27,7 +27,7 @@ public class DashboardServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-//
+
 			if (request.getSession(false) == null || request.getSession(false).getAttribute("user") == null) {
 				response.sendRedirect("./LogIn");
 				return;
